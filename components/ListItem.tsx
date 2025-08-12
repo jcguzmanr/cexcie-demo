@@ -16,9 +16,9 @@ export function ListItem({ title, subtitle, end, selected, onClick }: Props) {
       aria-selected={selected}
       onClick={onClick}
       className={cx(
-        "flex items-center justify-between gap-3 p-4 border-b",
-        onClick && "cursor-pointer hover:bg-gray-50",
-        selected && "bg-gray-100"
+        "flex items-center justify-between gap-3 p-4 border-b border-[var(--border)] text-[var(--foreground)]",
+        onClick && "cursor-pointer hover:bg-[var(--uc-lilac)]/10",
+        selected && "bg-[var(--surface-2)]"
       )}
     >
       <div>

@@ -91,7 +91,9 @@ export default function ComparadorPage() {
               onClick={() => setActive(s.key)}
               className={cx(
                 "px-4 py-2 rounded-full border whitespace-nowrap",
-                active === s.key ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]" : "bg-white hover:bg-[var(--uc-lilac)]/10 border-black/10"
+                active === s.key
+                  ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]"
+                  : "bg-[var(--surface)] hover:bg-[var(--uc-lilac)]/10 border-[var(--border)] text-[var(--foreground)]"
               )}
             >
               <span className="mr-2" aria-hidden>{s.emoji}</span>
@@ -111,7 +113,7 @@ export default function ComparadorPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {section.careers.map((card, idx) => (
-              <div key={card.id} className="rounded-3xl p-6 bg-white border shadow-sm">
+              <div key={card.id} className="rounded-3xl p-6 bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] shadow-sm">
                 <div className="text-lg font-semibold text-center mb-3">
                   {interpolate(card.name, careerNames) || selected[idx]?.nombre || `Carrera ${idx + 1}`}
                 </div>
@@ -153,7 +155,7 @@ export default function ComparadorPage() {
         </div>
         <div className="grid gap-3">
           {facultades.map((f) => (
-            <button key={f.id} className="w-full px-4 py-4 rounded-2xl border bg-white hover:bg-[var(--uc-lilac)]/10" onClick={() => setOpenCarrerasOf(f.id)}>
+            <button key={f.id} className="w-full px-4 py-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10" onClick={() => setOpenCarrerasOf(f.id)}>
               {f.nombre}
             </button>
           ))}
@@ -191,7 +193,7 @@ export default function ComparadorPage() {
                     onClick={() => toggleCarrera(c)}
                     className={cx(
                       "flex items-center gap-3 text-left rounded-full px-4 py-3 border",
-                      isChecked ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]" : "bg-white hover:bg-[var(--uc-lilac)]/10"
+                      isChecked ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]" : "bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10 border-[var(--border)]"
                     )}
                   >
                     <span className="font-medium leading-tight">{c.nombre}</span>
@@ -224,7 +226,7 @@ function Field({ label, value, onChange, type = "text", placeholder, error }: { 
         onChange={(e) => onChange(e.target.value)}
         type={type}
         placeholder={placeholder}
-        className={cx("px-4 py-3 rounded-xl border bg-white", error ? "border-red-500 focus-visible:ring-red-500/40" : undefined)}
+        className={cx("px-4 py-3 rounded-xl border bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)]", error ? "border-red-500 focus-visible:ring-red-500/40" : undefined)}
       />
       {error && <span className="text-xs text-red-600">{error}</span>}
     </label>

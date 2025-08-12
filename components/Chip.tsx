@@ -13,7 +13,7 @@ export function Chip({ selected, className, ...props }: Props) {
         "px-3 py-2 rounded-full border text-sm",
         selected
           ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]"
-          : "bg-white hover:bg-[var(--uc-lilac)]/10 border-black/10",
+          : "bg-[var(--surface)] hover:bg-[var(--uc-lilac)]/10 border-[var(--border)] text-[var(--foreground)]",
         className
       )}
       aria-pressed={!!selected}
