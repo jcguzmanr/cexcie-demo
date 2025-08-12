@@ -1,0 +1,8 @@
+[
+  { "id": "ing", "nombre": "Facultad de Ingeniería", "modalidades": ["presencial", "semipresencial"] },
+  { "id": "emp", "nombre": "Facultad de Ciencias de la Empresa", "modalidades": ["presencial", "semipresencial", "distancia"] },
+  { "id": "salud", "nombre": "Facultad de Ciencias de la Salud", "modalidades": ["presencial"] },
+  { "id": "hum", "nombre": "Facultad de Humanidades", "modalidades": ["presencial", "distancia"] },
+  { "id": "der", "nombre": "Facultad de Derecho", "modalidades": ["presencial", "semipresencial", "distancia"] }
+]
+

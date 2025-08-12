@@ -1,0 +1,45 @@
+[
+  {
+    "id": "arequipa",
+    "imagen": "/campus/campus-arequipa.png",
+    "direccion": "La Canseco II / Sector Valle Chili José Luis Bustamante y Rivero",
+    "ciudad": "Arequipa",
+    "mapUrl": "https://maps.example/arequipa"
+  },
+  {
+    "id": "cusco",
+    "imagen": "/campus/campus-cusco.png",
+    "direccion": "Sector Angostura km. 10, San Jerónimo",
+    "ciudad": "Cusco",
+    "mapUrl": "https://maps.example/cusco"
+  },
+  {
+    "id": "huancayo",
+    "imagen": "/campus/campus-huancayo.png",
+    "direccion": "Av. (por confirmar)",
+    "ciudad": "Huancayo",
+    "mapUrl": "https://maps.example/huancayo"
+  },
+  {
+    "id": "los-olivos",
+    "imagen": "/campus/campus-losolivos.png",
+    "direccion": "(por confirmar)",
+    "ciudad": "Lima (Los Olivos)",
+    "mapUrl": "https://maps.example/losolivos"
+  },
+  {
+    "id": "miraflores",
+    "imagen": "/campus/campus-miraflores.png",
+    "direccion": "(por confirmar)",
+    "ciudad": "Lima (Miraflores)",
+    "mapUrl": "https://maps.example/miraflores"
+  },
+  {
+    "id": "ica",
+    "imagen": "/campus/campus-ica.png",
+    "direccion": "(por confirmar)",
+    "ciudad": "Ica",
+    "mapUrl": "https://maps.example/ica"
+  }
+]
+

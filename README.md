@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## CExCIE – Catálogo y Comparador de Carreras (Next.js)
 
-## Getting Started
+Aplicación web para explorar campus, facultades y carreras, con comparador y ficha detallada por carrera. Construida con Next.js (App Router), Tailwind CSS 4, Zustand y Zod, consumiendo datos JSON estáticos bajo `public/data` y validándolos al vuelo.
 
-First, run the development server:
+Repositorio: [`jcguzmanr/cexcie-demo`](https://github.com/jcguzmanr/cexcie-demo)  
+Deploy recomendado: Vercel
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Características principales
+- Catálogo navegable: `Campus → Facultades → Carreras → Modalidades`.
+- Comparador de hasta 3 carreras.
+- Vista detallada de carrera.
+- Estado global con persistencia en memoria (Zustand).
+- Validación de datos con Zod; ingestión inicial desde JSON locales y `public/data`.
+
+### Stack técnico
+- Next.js 15 (App Router), React 19, TypeScript.
+- Tailwind CSS 4.
+- Zustand (estado global), Zod (validación), clsx (estilos condicionales).
+
+---
+
+## Estructura relevante
+
+- `app/` – Rutas del App Router (páginas y layouts).
+  - `app/campus`, `app/facultades`, `app/carreras`, `app/carrera/[id]`, `app/comparador`, `app/modalidad`.
+- `components/` – UI atómica: `AppShell`, `Chip`, `Modal`, `Toolbar`, etc.
+- `data/` – Tipos y esquemas Zod (`schemas.ts`) y JSON de soporte (opcionalmente bundleados).
+- `public/data/` – Fuentes JSON servidas por el servidor (`/data/*.json`).
+- `lib/ingest.ts` – Lógica de ingestión y validación de datos; expone `window.cexcieIngest` en cliente.
+- `store/` – Zustand store y selectores.
+
+---
+
+## Datos y validación
+
+Los datos se cargan idempotentemente al iniciar la app:
+
+- Si el store está vacío, se intenta usar JSON bundleado (import) y luego `fetch('/data/*.json')`.
+- Validación con Zod asegura que la estructura coincida con `Campus`, `Facultad`, `Carrera`, `CampusMeta`.
+
+Puedes inyectar datos en tiempo de ejecución desde la consola del navegador con la API global:
+
+```js
+// Disponible en el navegador
+window.cexcieIngest(
+  "/carreras", // ScreenId: '/campus' | '/facultades' | '/carreras' | '/carreras-popup' | '/modalidad' | '/carrera/[id]' | '/campus-meta'
+  [
+    { id: "ing-sistemas", nombre: "Ingeniería de Sistemas", facultadId: "ing", modalidades: ["presencial"] }
+  ]
+);
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Retorna `{ appliedTo: string[]; warnings?: string[] }` con advertencias de validación si las hubiera.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Requisitos
+- Node.js 18+ (recomendado 20+)
+- npm 9+ (o pnpm/yarn/bun si prefieres)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Desarrollo local
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+# abre http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Scripts disponibles:
 
-## Deploy on Vercel
+```bash
+npm run dev     # entorno de desarrollo
+npm run build   # build de producción
+npm run start   # ejecutar build
+npm run lint    # lint con eslint-config-next
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Despliegue en Vercel
+
+1) Sube el código al repo GitHub `cexcie-demo` (rama `main`).  
+2) En Vercel, crea un nuevo proyecto y selecciona el repo.  
+3) Configuración por defecto suele ser suficiente:
+- Framework: Next.js
+- Comando de build: `next build`
+- Directorio de salida: `.next` (automático)
+
+Sin variables de entorno obligatorias. Los datos provienen de `public/data/*.json`.
+
+Documentación útil: [Deploy Next.js en Vercel](https://nextjs.org/docs/app/building-your-application/deploying).
+
+---
+
+## Notas de implementación
+- UI con Tailwind 4 y componentes ligeros.
+- Navegación con breadcrumbs y modales para seleccionar carreras por facultad y modalidad.
+- Comparador habilitado cuando hay ≥2 carreras seleccionadas; navegación a detalle cuando hay exactamente 1.
+
+---
+
+## Licencia
+Uso interno/demostración.
+

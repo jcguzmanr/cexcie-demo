@@ -1,0 +1,87 @@
+{
+    "meta": { "component": "ComparadorDeCarreras", "version": "1.1.0" },
+    "state": { "activeSection": "aprender" },
+  
+    "ui": {
+      "sections": [
+        { "key": "aprender",     "label": "Aprender",     "emoji": "🧠" },
+        { "key": "futuro",       "label": "Futuro",       "emoji": "🚀" },
+        { "key": "herramientas", "label": "Herramientas", "emoji": "🧰" },
+        { "key": "experiencia",  "label": "Experiencia",  "emoji": "📍" },
+        { "key": "perfil",       "label": "Perfil",       "emoji": "👩🏾‍🎓" },
+        { "key": "laboral",      "label": "Laboral",      "emoji": "🌎" }
+      ],
+      "cta": {
+        "helper": "Envía tus resultados por correo electrónico",
+        "label": "Envía tus resultados"
+      }
+    },
+  
+    "content": {
+      "aprender": {
+        "title": "🧠 Lo que vas a aprender",
+        "subtitle": "Conoce las habilidades que realmente vas a dominar. Más allá del título, esto es lo que sabrás hacer.",
+        "careers": [
+          { "id": "c1", "name": "{{selectedCareers[0].name}}", "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c2", "name": "{{selectedCareers[1].name}}", "summary": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c3", "name": "{{selectedCareers[2].name}}", "summary": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] }
+        ]
+      },
+  
+      "futuro": {
+        "title": "🚀 Qué podrías estar haciendo en 3 años",
+        "subtitle": "Imagina tu primer trabajo. Estas son las oportunidades reales que se abren con esta carrera.",
+        "careers": [
+          { "id": "c1", "name": "{{selectedCareers[0].name}}", "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c2", "name": "{{selectedCareers[1].name}}", "summary": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c3", "name": "{{selectedCareers[2].name}}", "summary": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] }
+        ]
+      },
+  
+      "herramientas": {
+        "title": "🧰 Herramientas",
+        "subtitle": "Software, laboratorios y recursos que usarás durante tu formación.",
+        "careers": [
+          { "id": "c1", "name": "{{selectedCareers[0].name}}", "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c2", "name": "{{selectedCareers[1].name}}", "summary": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c3", "name": "{{selectedCareers[2].name}}", "summary": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] }
+        ]
+      },
+  
+      "experiencia": {
+        "title": "📍 Cómo es estudiar esta carrera",
+        "subtitle": "¿Clases prácticas o teóricas? ¿En laboratorio o desde tu casa? Te mostramos cómo se vive esta experiencia.",
+        "careers": [
+          { "id": "c1", "name": "{{selectedCareers[0].name}}", "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c2", "name": "{{selectedCareers[1].name}}", "summary": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c3", "name": "{{selectedCareers[2].name}}", "summary": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] }
+        ]
+      },
+  
+      "perfil": {
+        "title": "👩🏾‍🎓 ¿Este camino es para ti?",
+        "subtitle": "Cada carrera tiene su estilo. Te ayudamos a entender si esta forma de aprender y trabajar va contigo.",
+        "careers": [
+          { "id": "c1", "name": "{{selectedCareers[0].name}}", "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c2", "name": "{{selectedCareers[1].name}}", "summary": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c3", "name": "{{selectedCareers[2].name}}", "summary": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] }
+        ]
+      },
+  
+      "laboral": {
+        "title": "🌎 Dónde podrías trabajar",
+        "subtitle": "Estas son las industrias, tipos de empresas y entornos en los que suelen terminar nuestros egresados.",
+        "careers": [
+          { "id": "c1", "name": "{{selectedCareers[0].name}}", "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c2", "name": "{{selectedCareers[1].name}}", "summary": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] },
+          { "id": "c3", "name": "{{selectedCareers[2].name}}", "summary": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...", "bullets": ["Lorem ipsum","Lorem ipsum","Lorem ipsum","Lorem ipsum"] }
+        ]
+      }
+    },
+  
+    "placeholders": {
+      "career_1_name": "{{selectedCareers[0].name}}",
+      "career_2_name": "{{selectedCareers[1].name}}",
+      "career_3_name": "{{selectedCareers[2].name}}"
+    }
+  }

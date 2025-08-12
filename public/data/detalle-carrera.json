@@ -1,0 +1,77 @@
+{
+    "id": "ciencia-de-la-computacion",
+    "nombre": "Ciencia de la Computación",
+    "facultad": "Ingeniería",
+    "campus": ["Lima", "Huancayo", "Arequipa", "Cusco"],
+    "modalidades": ["presencial", "semipresencial", "distancia"],
+  
+    "secciones": {
+      "sobre": {
+        "titulo": "Sobre la carrera",
+        "descripcion": "Si te apasiona resolver problemas complejos, crear software, proteger sistemas y trabajar con datos, esta carrera abre puertas en desarrollo de software, ciberseguridad, cloud computing, ciencia de datos, videojuegos y simulación, entre otros. Campo en crecimiento con oportunidades de impacto en múltiples industrias.",
+        "media": {
+          "type": "image",
+          "alt": "Estudiante en laboratorio de computación",
+          "src": "/detallecarrera.png"
+        }
+      },
+  
+      "planEstudios": {
+        "legendEtapas": {
+          "adaptacion": { "label": "Etapa de adaptación", "color": "#B9E1FF" },
+          "profundizacion": { "label": "Etapa de profundización", "color": "#9169FF" },
+          "consolidacion": { "label": "Etapa de consolidación", "color": "#FAAAFA" }
+        },
+        "ciclos": [
+          { "numero": 1, "creditos": 22, "etapa": "adaptacion", "cursos": ["Comprensión y Producción de Textos 1", "Laboratorio de Liderazgo e Innovación", "Estrategias y Herramientas Digitales para el Aprendizaje", "Matemática Básica", "Matemática Discreta 1", "Fundamentos de Programación", "Introducción a Ciencia de la Computación"], "notas": ["Accede a la Bolsa de Trabajo desde el primer día"] },
+          { "numero": 2, "creditos": 22, "etapa": "adaptacion", "cursos": ["Comprensión y Producción de Textos 2", "Álgebra Lineal y Geometría Analítica", "Matemática Superior", "Matemática Discreta Avanzada", "Lenguaje de la Programación 1", "Electivo General 1"], "notas": ["Participa en talleres y actividades extracurriculares"] },
+          { "numero": 3, "creditos": 23, "etapa": "adaptacion", "cursos": ["Laboratorio de Liderazgo e Innovación Intermedio", "Estadística y Probabilidades", "Cálculo Diferencial", "Física 1", "Teoría de la Computación", "Lenguaje de la Programación 2", "Electivo General 2"], "notas": ["Potencia tu mentalidad emprendedora"] },
+          { "numero": 4, "creditos": 22, "etapa": "profundizacion", "cursos": ["English Course 1", "Cálculo Integral", "Base de Datos", "Física Aplicada", "Estructura de Datos y Algoritmos", "Electivo General 3", "Electivo General 4"], "notas": ["Fortalece tu espíritu innovador"] },
+          { "numero": 5, "creditos": 22, "etapa": "profundizacion", "cursos": ["Arquitectura de Computadoras", "Sistemas Operativos", "Ingeniería de Software 1", "Redes de Computadoras", "Programación Orientada a Objetos", "Electivo Tecnológico 1"], "notas": ["DummyData"] },
+          { "numero": 6, "creditos": 22, "etapa": "profundizacion", "cursos": ["Diseño y Análisis de Algoritmos", "Bases de Datos Avanzadas", "Ingeniería de Software 2", "Computación en la Nube", "Seguridad Informática", "Electivo Tecnológico 2"], "notas": ["DummyData"] },
+          { "numero": 7, "creditos": 22, "etapa": "profundizacion", "cursos": ["Inteligencia Artificial", "Desarrollo de Aplicaciones Móviles", "Arquitectura de Software", "DevOps y Automatización", "Computación Paralela y HPC", "Electivo Tecnológico 3"], "notas": ["DummyData"] },
+          { "numero": 8, "creditos": 22, "etapa": "consolidacion", "cursos": ["Aprendizaje Automático", "Minería de Datos", "Computación Distribuida", "Gestión de Proyectos de TI", "Ética y Responsabilidad Profesional", "Electivo Libre 1"], "notas": ["DummyData"] },
+          { "numero": 9, "creditos": 22, "etapa": "consolidacion", "cursos": ["Visión por Computadora", "Procesamiento de Lenguaje Natural", "Ciberseguridad Avanzada", "Emprendimiento Tecnológico", "Investigación Aplicada", "Electivo Libre 2"], "notas": ["DummyData"] },
+          { "numero": 10, "creditos": 22, "etapa": "consolidacion", "cursos": ["Proyecto Integrador (Capstone)", "Arquitecturas en la Nube a Escala", "Gobierno y Calidad de Datos", "Optativo Profesional", "Prácticas Preprofesionales"], "notas": ["DummyData"] }
+        ]
+      },
+  
+      "internacional": {
+        "cards": [
+          {
+            "titulo": "Doble título internacional",
+            "texto": "Obtén un Bachelor Degree por Continental University of Florida y un título universitario en la Universidad Continental en 5 años. Clases multiculturales, pasantías y visitas empresariales en Miami, Barcelona o Madrid.",
+            "cta": { "label": "VER VIDEO", "action": "openModal", "payload": "video-doble-titulo" },
+            "videoUrl": "https://www.youtube.com/watch?v=96WG_sz5V5M"
+          },
+          {
+            "titulo": "Vive una experiencia internacional de aprendizaje",
+            "texto": "Accede a programas de intercambio, clases espejo, streaming y docente AVATAR. Opción de doble titulación: Perú + Estados Unidos con Continental University of Florida.",
+            "cta": { "label": "VER VIDEO", "action": "openModal", "payload": "video-experiencia-internacional" },
+            "videoUrl": "https://www.youtube.com/watch?v=2qCYDf-yjLI"
+          }
+        ]
+      },
+  
+      "beneficios": {
+        "bloques": [
+          {
+            "titulo": "Certificaciones Progresivas",
+            "items": ["Infraestructura para computación de alta performance (HPC)", "Gestor de Base de Datos Distribuidas", "Ciberseguridad", "Arquitectura de entornos virtuales", "Machine Learning", "Transformación digital"]
+          },
+          {
+            "titulo": "Microcredenciales",
+            "items": ["CPA: Programming Essentials in C++", "CPP: Advancing Programming in C++", "NDG Linux Unhatched", "NDG Linux Essentials", "Project Management Ready", "Networking Security", "Introduction to IoT & Digital Transformation", "Cloud Security", "Cybersecurity Essentials"]
+          },
+          {
+            "titulo": "Experiencias Prácticas",
+            "items": ["Proyectos integradores con empresas reales", "Laboratorios de innovación y tecnología", "Participación en hackathons y competencias internacionales"]
+          },
+          {
+            "titulo": "Apoyo y Mentoría",
+            "items": ["Tutorías personalizadas", "Asesoría en empleabilidad", "Red de egresados para networking profesional"]
+          }
+        ]
+      }
+    }
+  }

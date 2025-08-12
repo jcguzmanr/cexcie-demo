@@ -1,0 +1,44 @@
+"use client";
+import { ReactNode, useEffect } from "react";
+import { cx, HIT_MIN } from "@/lib/ui";
+
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  title?: string;
+  children: ReactNode;
+  footer?: ReactNode;
+};
+
+export function Modal({ open, onClose, title, children, footer }: Props) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  if (!open) return null;
+  return (
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-50">
+      <div
+        className="absolute inset-0 bg-black/40"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 flex items-stretch md:items-center justify-center p-4" onClick={(e)=>e.stopPropagation()}>
+        <div className="w-full max-w-5xl h-[90vh] md:h-auto rounded-2xl bg-white shadow-xl border flex flex-col">
+          <div className="p-4 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+            <h2 className="text-lg font-semibold">{title}</h2>
+            <button aria-label="Cerrar" className={cx(HIT_MIN, "p-2 -m-2")} onClick={onClose}>
+              ✕
+            </button>
+          </div>
+          <div className="p-4 overflow-auto flex-1">{children}</div>
+          {footer && <div className="p-4 border-t bg-gray-50 sticky bottom-0">{footer}</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
