@@ -29,10 +29,28 @@ function Field({ label, value, onChange, type = "text", placeholder, error }: { 
   );
 }
 
+function SelectField({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
+  return (
+    <label className="grid gap-1">
+      <span className="text-sm font-medium opacity-80">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="px-4 py-3 rounded-xl border bg-white"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 export function SendResultsModal({ open, onClose, careerNames }: Props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [contactMethod, setContactMethod] = useState<"whatsapp" | "correo">("correo");
   const [sent, setSent] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
 
@@ -66,7 +84,13 @@ export function SendResultsModal({ open, onClose, careerNames }: Props) {
               <div className="text-sm opacity-80">Pronto nos pondremos en contacto contigo para resolver tus dudas y acompañarte en el proceso de admisión.</div>
             </div>
           </div>
-          <div className="text-sm opacity-80">Se enviará un resumen a <strong>{email}</strong>.</div>
+          <div className="text-sm opacity-80">
+            {contactMethod === "correo" ? (
+              <>Se enviará un resumen a <strong>{email}</strong>.</>
+            ) : (
+              <>Te contactaremos por WhatsApp al <strong>{phone}</strong>.</>
+            )}
+          </div>
           <div className="flex justify-end">
             <Button onClick={onClose}>Cerrar</Button>
           </div>
@@ -74,12 +98,21 @@ export function SendResultsModal({ open, onClose, careerNames }: Props) {
       ) : (
         <div className="grid gap-4">
           <p className="opacity-80 text-sm">
-            Completa tus datos para enviarte por correo un resumen de tu comparación de {careerNames.filter(Boolean).join(", ")}. 
+            Completa tus datos para enviarte un resumen de tu comparación de {careerNames.filter(Boolean).join(", ")}. 
           </p>
           <div className="grid gap-3">
             <Field label="Nombre" value={name} onChange={setName} placeholder="Nombres y apellidos" error={errors.name} />
             <Field label="Teléfono" value={phone} onChange={setPhone} placeholder="+51 999 999 999" error={errors.phone} />
             <Field label="Email" value={email} onChange={setEmail} type="email" placeholder="tucorreo@ejemplo.com" error={errors.email} />
+            <SelectField
+              label="Medio de contacto"
+              value={contactMethod}
+              onChange={(v) => setContactMethod(v as "whatsapp" | "correo")}
+              options={[
+                { value: "whatsapp", label: "WhatsApp" },
+                { value: "correo", label: "Correo" },
+              ]}
+            />
           </div>
           <div className="text-xs opacity-60">
             Al enviar, aceptas ser contactado con información sobre admisión. Tus datos serán tratados conforme a nuestras políticas.
