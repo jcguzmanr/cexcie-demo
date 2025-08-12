@@ -134,8 +134,7 @@ export default function ComparadorPage() {
         <div className="sticky bottom-4 inset-x-0">
           <div className="max-w-6xl mx-auto rounded-2xl bg-gradient-to-r from-[var(--uc-lilac)]/30 to-[var(--uc-sky)]/30 p-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3 border">
             <div className="flex items-center gap-3 justify-center md:justify-start">
-              <Button variant="secondary" shape="pill" onClick={() => { clearComparador(); setOpenFacs(true); }}>Elegir carreras</Button>
-              <div className="hidden md:block text-sm opacity-80">{cfg.ui.cta.helper}</div>
+              <Button variant="primary" size="lg" shape="pill" onClick={() => { clearComparador(); setOpenFacs(true); }}>Elegir carreras</Button>
             </div>
             <div className="flex items-center justify-center">
               <Button onClick={() => setSendOpen(true)} size="lg" shape="pill">{cfg.ui.cta.label}</Button>
