@@ -44,11 +44,11 @@ export default function CarrerasPage() {
         ))}
       </div>
 
-      <div className="rounded-3xl border bg-white/60 p-6">
+      <div className="rounded-3xl border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface),transparent_40%)] p-6">
         <div className="text-[var(--uc-purple)] font-semibold mb-2">MODALIDAD {String(modalidad).toUpperCase()}</div>
-        <p className="opacity-80 mb-4 max-w-3xl">{DESCS[modalidad as keyof typeof DESCS]}</p>
+        <p className="opacity-80 mb-4 max-w-3xl text-[var(--foreground)]">{DESCS[modalidad as keyof typeof DESCS]}</p>
 
-        <div className="rounded-2xl overflow-hidden border divide-y">
+        <div className="rounded-2xl overflow-hidden border border-[var(--border)] divide-y" style={{ borderColor: "var(--border)" }}>
           {filtered.map((f) => (
             <button
               key={f.id}
@@ -56,7 +56,7 @@ export default function CarrerasPage() {
                 clearComparador();
                 setOpen(f.id);
               }}
-              className="w-full text-left px-4 py-4 hover:bg-[var(--uc-lilac)]/10"
+              className="w-full text-left px-4 py-4 hover:bg-[var(--uc-lilac)]/10 bg-[var(--surface)] text-[var(--foreground)]"
             >
               {f.nombre}
             </button>
@@ -93,7 +93,7 @@ export default function CarrerasPage() {
                   <button
                     key={c.id}
                     onClick={() => toggleCarrera(c)}
-                    className={`flex items-center gap-3 text-left rounded-full px-4 py-3 border ${isChecked ? "bg-[var(--uc-purple)] text-white" : "bg-white hover:bg-[var(--uc-lilac)]/10"}`}
+                    className={`flex items-center gap-3 text-left rounded-full px-4 py-3 border ${isChecked ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]" : "bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10 border-[var(--border)]"}`}
                   >
                     {/* Imagen desactivada en el listado */}
                     <span className="font-medium leading-tight">{c.nombre}</span>

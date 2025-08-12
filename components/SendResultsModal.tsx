@@ -25,7 +25,7 @@ function Field({ label, value, onChange, type = "text", placeholder, error }: { 
         onChange={(e) => onChange(e.target.value)}
         type={type}
         placeholder={placeholder}
-        className={cx("px-4 py-3 rounded-xl border bg-white", error ? "border-red-500 focus-visible:ring-red-500/40" : undefined)}
+        className={cx("px-4 py-3 rounded-xl border bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)]", error ? "border-red-500 focus-visible:ring-red-500/40" : undefined)}
       />
       {error && <span className="text-xs text-red-600">{error}</span>}
     </label>
@@ -39,7 +39,7 @@ function SelectField({ label, value, onChange, options }: { label: string; value
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="px-4 py-3 rounded-xl border bg-white"
+        className="px-4 py-3 rounded-xl border bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)]"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>

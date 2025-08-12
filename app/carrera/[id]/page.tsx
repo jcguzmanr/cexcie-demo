@@ -72,7 +72,7 @@ export default function CarreraDetallePage() {
         <h1 className="text-2xl md:text-3xl font-semibold">{carrera.nombre}</h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
         <div className="grid gap-3">
           {["sobre", "planEstudios", "internacional", "beneficios"].map((k) => (
             <Button key={k} variant={tab === k ? "primary" : "secondary"} shape="pill" className="justify-center" onClick={() => setTab(k as typeof tab)}>
@@ -86,7 +86,7 @@ export default function CarreraDetallePage() {
           ))}
         </div>
 
-        <div className="rounded-2xl bg-white/60 border p-4 min-h-[360px] overflow-hidden">
+        <div className="rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-4 min-h-[360px] overflow-hidden text-[var(--foreground)]">
           {tab === "sobre" && (
             <div className="grid gap-4">
               <div className="text-lg font-semibold">{detalle?.secciones.sobre.titulo ?? "Sobre la carrera"}</div>
@@ -104,10 +104,10 @@ export default function CarreraDetallePage() {
               <div className="text-lg font-semibold">PLAN DE ESTUDIOS</div>
               {/* Contenedor con scroll vertical; leyenda sticky como ancla */}
               <div className="max-h-[560px] overflow-y-auto pr-2 rounded-xl">
-                <div className="sticky top-0 z-[1] bg-white/95 backdrop-blur p-2">
+                <div className="sticky top-0 z-[1] bg-[var(--surface)]/95 backdrop-blur p-2">
                   <div className="flex flex-wrap gap-3">
                     {Object.values(detalle?.secciones.planEstudios.legendEtapas ?? {}).map((l, i) => (
-                      <span key={i} className="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-sm bg-white/80">
+                      <span key={i} className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-[var(--border)] text-sm bg-[var(--surface-2)]">
                         <span className="inline-block w-3 h-3 rounded-sm" style={{ background: l.color }} /> {l.label}
                       </span>
                     ))}
@@ -118,14 +118,14 @@ export default function CarreraDetallePage() {
                   {detalle?.secciones.planEstudios.ciclos.map((c) => {
                     const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
                     return (
-                      <div key={c.numero} className="rounded-2xl border bg-white p-3">
-                        <div className="text-sm font-semibold mb-3">{String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                      <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                        <div className="text-sm font-semibold mb-3 text-[var(--foreground)]">{String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
                         <div className="w-full flex flex-wrap gap-3">
                           {c.cursos.map((cu, i) => (
                             <div
                               key={i}
-                              className="rounded-xl px-3 py-2 text-sm border whitespace-nowrap"
-                              style={{ background: etapaColor }}
+                              className="rounded-xl px-3 py-2 text-sm border whitespace-nowrap text-black"
+                              style={{ background: etapaColor, borderColor: "var(--border)" as any }}
                             >
                               {cu}
                             </div>
@@ -143,7 +143,7 @@ export default function CarreraDetallePage() {
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {detalle?.secciones.internacional.cards.map((card, i) => (
-                  <div key={i} className="rounded-2xl bg-white p-4 border">
+                  <div key={i} className="rounded-2xl bg-[var(--surface)] text-[var(--foreground)] p-4 border border-[var(--border)]">
                     <div className="text-lg font-semibold mb-2">{card.titulo}</div>
                     <p className="opacity-80 mb-4">{card.texto}</p>
                     {card.videoUrl && (
@@ -160,7 +160,7 @@ export default function CarreraDetallePage() {
           {tab === "beneficios" && (
             <div className="w-full flex gap-4 overflow-x-auto pb-2">
               {detalle?.secciones.beneficios.bloques.map((b, i) => (
-                <div key={i} className="shrink-0 w-[380px] rounded-2xl bg-white p-4 border">
+                <div key={i} className="shrink-0 w-[380px] rounded-2xl bg-[var(--surface)] text-[var(--foreground)] p-4 border border-[var(--border)]">
                   <div className="text-lg font-semibold mb-2">{b.titulo}</div>
                   <ul className="list-disc pl-5 space-y-1">
                     {b.items.map((it, j) => (
@@ -227,7 +227,7 @@ export default function CarreraDetallePage() {
                   <button
                     key={c.id}
                     onClick={() => toggleCarrera(c)}
-                    className={`flex items-center gap-3 text-left rounded-full px-4 py-3 border ${isChecked ? "bg-[var(--uc-purple)] text-white" : "bg-white hover:bg-[var(--uc-lilac)]/10"}`}
+                    className={`flex items-center gap-3 text-left rounded-full px-4 py-3 border ${isChecked ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]" : "bg-[var(--surface)] hover:bg-[var(--uc-lilac)]/10 text-[var(--foreground)] border-[var(--border)]"}`}
                   >
                     <span className="font-medium leading-tight">{c.nombre}</span>
                   </button>

@@ -19,7 +19,7 @@ export function Button({
   const variants = {
     primary: "bg-[var(--uc-purple)] text-white hover:brightness-110",
     secondary: "bg-[var(--uc-sky)] text-black hover:brightness-95",
-    ghost: "bg-transparent text-black hover:bg-[var(--uc-lilac)]/10",
+    ghost: "bg-transparent text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10",
   } as const;
   const sizes = {
     sm: "px-3 py-2 text-sm",

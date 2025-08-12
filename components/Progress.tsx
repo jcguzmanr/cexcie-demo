@@ -26,7 +26,7 @@ export function Progress({ currentPath }: { currentPath: string }) {
   const currentIndex = indexFor(currentPath);
   return (
     <div className="w-full">
-      <div className="max-w-[1024px] mx-auto px-4 py-3 flex items-center gap-2 overflow-x-auto">
+      <div className="max-w-[1024px] mx-auto px-0 py-1 flex items-center gap-2 overflow-x-auto">
         {steps.map((s, i) => (
           <div key={s.path} className="flex items-center gap-2">
             <Link href={s.path} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-black/40 rounded-full">
@@ -35,14 +35,14 @@ export function Progress({ currentPath }: { currentPath: string }) {
                   "px-3 py-1 rounded-full text-sm border",
                   i <= currentIndex
                     ? "bg-[var(--uc-purple)] text-white border-[var(--uc-purple)]"
-                    : "bg-white hover:bg-[var(--uc-lilac)]/10 border-black/10"
+                    : "bg-[var(--surface)] hover:bg-[var(--uc-lilac)]/10 border-[var(--border)] text-[var(--foreground)]"
                 )}
                 aria-current={i === currentIndex ? "step" : undefined}
               >
                 {s.label}
               </div>
             </Link>
-            {i < steps.length - 1 && <div className="w-8 h-[2px] bg-gray-200" />}
+            {i < steps.length - 1 && <div className="w-8 h-[2px]" style={{ backgroundColor: "var(--border)" }} />}
           </div>
         ))}
       </div>

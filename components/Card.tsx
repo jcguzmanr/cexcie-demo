@@ -15,9 +15,9 @@ export function Card({ children, onClick, selected, className }: Props) {
       aria-pressed={selected}
       onClick={onClick}
       className={cx(
-        "rounded-xl border bg-white p-4 shadow-sm hover:shadow-md transition-shadow",
+        "rounded-xl border bg-[var(--surface)] p-4 shadow-sm hover:shadow-md transition-shadow text-[var(--foreground)] border-[var(--border)]",
         onClick && "cursor-pointer",
-        selected && "ring-2 ring-black",
+        selected && "ring-2 ring-[var(--foreground)]/60",
         className
       )}
     >
