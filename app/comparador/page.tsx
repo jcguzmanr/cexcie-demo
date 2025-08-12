@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAppStore, getFacultadList } from "@/store";
 import { Button } from "@/components/Button";
 import { Breadcrumb } from "@/components/Breadcrumb";
@@ -33,6 +34,7 @@ function interpolate(template: string, names: string[]) {
 }
 
 export default function ComparadorPage() {
+  const router = useRouter();
   const facultades = useAppStore((s) => getFacultadList(s));
   const carrerasMap = useAppStore((s) => s.carreraById);
   const selected = useAppStore((s) => s.selectedCarreras);
@@ -144,7 +146,7 @@ export default function ComparadorPage() {
       )}
 
       {/* Modal: selección de facultades */}
-      <Modal open={openFacs} onClose={() => { if (selected.length === 3) setOpenFacs(false); }} title="Comparador de Carreras">
+      <Modal open={openFacs} onClose={() => { router.push("/campus"); }} title="Comparador de Carreras">
         <div className="text-center mb-4">
           <div className="text-2xl font-semibold mb-2">Comparador de Carreras</div>
           <div className="opacity-70">Selecciona una facultad para ver las carreras disponibles</div>
@@ -164,7 +166,7 @@ export default function ComparadorPage() {
         <Modal
           key={f.id}
           open={openCarrerasOf === f.id}
-          onClose={() => setOpenCarrerasOf(null)}
+          onClose={() => { setOpenCarrerasOf(null); router.push("/campus"); }}
           title={`Carreras: ${f.nombre}`}
           footer={
             <div className="flex items-center justify-between gap-3">
