@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
 import { AppShell } from "@/components/AppShell";
@@ -62,6 +63,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <Script
+        id="theme-init"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `(() => {
+  try {
+    var key = 'cexcie-theme';
+    var theme = localStorage.getItem(key);
+    if (!theme) {
+      var m = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+      theme = m && m.matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (_) {}
+})();`,
+        }}
+      />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen`}>
         <AppShell>{children}</AppShell>
       </body>

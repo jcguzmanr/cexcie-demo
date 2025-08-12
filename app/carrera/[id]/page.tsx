@@ -125,7 +125,7 @@ export default function CarreraDetallePage() {
                             <div
                               key={i}
                               className="rounded-xl px-3 py-2 text-sm border whitespace-nowrap text-black"
-                              style={{ background: etapaColor, borderColor: "var(--border)" as any }}
+                              style={{ background: etapaColor, borderColor: "var(--border)" }}
                             >
                               {cu}
                             </div>
