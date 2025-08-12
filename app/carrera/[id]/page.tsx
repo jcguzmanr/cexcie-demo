@@ -206,6 +206,7 @@ export default function CarreraDetallePage() {
           open={selectOpen}
           onClose={() => setSelectOpen(false)}
           title="Selecciona carreras para comparar"
+          subtitle="Selecciona 3 carreras de la misma facultad para comparar"
           footer={
             <div className="flex items-center justify-between gap-3">
               <div className="text-sm opacity-70">Selecciona 3 carreras de la misma facultad para comparar</div>

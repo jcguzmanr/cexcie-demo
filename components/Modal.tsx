@@ -6,11 +6,12 @@ type Props = {
   open: boolean;
   onClose: () => void;
   title?: string;
+  subtitle?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
 };
 
-export function Modal({ open, onClose, title, children, footer }: Props) {
+export function Modal({ open, onClose, title, subtitle, children, footer }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -28,8 +29,11 @@ export function Modal({ open, onClose, title, children, footer }: Props) {
       />
       <div className="absolute inset-0 flex items-stretch md:items-center justify-center p-4" onClick={(e)=>e.stopPropagation()}>
         <div className="w-full max-w-5xl h-[90vh] md:h-auto rounded-2xl bg-white shadow-xl border flex flex-col">
-          <div className="p-4 border-b flex items-center justify-between sticky top-0 bg-white z-10">
-            <h2 className="text-lg font-semibold">{title}</h2>
+          <div className="p-4 border-b flex items-center justify-between gap-3 sticky top-0 bg-white z-10">
+            <div className="min-w-0">
+              <h2 className="text-lg font-semibold truncate">{title}</h2>
+              {subtitle && <p className="text-sm opacity-70 mt-0.5">{subtitle}</p>}
+            </div>
             <button aria-label="Cerrar" className={cx(HIT_MIN, "p-2 -m-2")} onClick={onClose}>
               ✕
             </button>
