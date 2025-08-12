@@ -32,6 +32,14 @@ export default function CampusPage() {
     }
   }, [campus.length]);
 
+  // Auto-select Huancayo by default once data is loaded and nothing is selected
+  useEffect(() => {
+    if (!selected && campus.length > 0) {
+      const preferred = campus.find((c) => c.id === "huancayo") ?? campus[0];
+      if (preferred) setCampus(preferred);
+    }
+  }, [selected, campus, setCampus]);
+
   return (
     <div className="p-6 grid gap-6">
       <Breadcrumb items={[{ label: "Inicio", href: "/" }, { label: "Campus" }]} />
