@@ -185,12 +185,14 @@ export default function CarreraDetallePage() {
                 toggleCarrera(carrera);
                 setSelectOpen(true);
               }}
+              size="lg"
+              shape="pill"
             >
               Comparar carreras
             </Button>
           </div>
           <div>
-            <Button size="lg" shape="pill" onClick={() => setSendOpen(true)}>Enviar a mi correo</Button>
+            <Button size="lg" shape="pill" onClick={() => setSendOpen(true)}>Quiero la información</Button>
           </div>
         </div>
       </div>
