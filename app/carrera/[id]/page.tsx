@@ -205,7 +205,7 @@ export default function CarreraDetallePage() {
         <Modal
           open={selectOpen}
           onClose={() => setSelectOpen(false)}
-          title={`Selecciona carreras de ${carrera.nombre.split(" ")[0]} (${Object.values(carrerasMap).filter(c=>c.facultadId===carrera.facultadId).length})`}
+          title="Selecciona carreras para comparar"
           footer={
             <div className="flex items-center justify-between gap-3">
               <div className="text-sm opacity-70">Selecciona 3 carreras de la misma facultad para comparar</div>
