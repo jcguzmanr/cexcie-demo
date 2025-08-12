@@ -102,8 +102,8 @@ export default function CarreraDetallePage() {
           {tab === "planEstudios" && (
             <div className="grid gap-4">
               <div className="text-lg font-semibold">PLAN DE ESTUDIOS</div>
-              {/* Leyenda fija */}
-              <div className="sticky top-2 z-[1] bg-transparent">
+              {/* Leyenda */}
+              <div>
                 <div className="flex flex-wrap gap-3">
                   {Object.values(detalle?.secciones.planEstudios.legendEtapas ?? {}).map((l, i) => (
                     <span key={i} className="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-sm bg-white/80 backdrop-blur">
@@ -112,30 +112,27 @@ export default function CarreraDetallePage() {
                   ))}
                 </div>
               </div>
-              {/* Scroll vertical solo para la malla */}
-              <div className="max-h-[520px] overflow-y-auto pr-2 rounded-xl">
-                <div className="grid grid-cols-1 gap-4">
-                  {detalle?.secciones.planEstudios.ciclos.map((c) => {
-                    const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
-                    return (
-                      <div key={c.numero} className="rounded-2xl border bg-white p-3">
-                        <div className="text-sm font-semibold mb-3">{String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
-                        {/* Scroll horizontal de cursos por fila */}
-                        <div className="w-full flex gap-3 overflow-x-auto pb-2">
-                          {c.cursos.map((cu, i) => (
-                            <div
-                              key={i}
-                              className="shrink-0 rounded-xl px-3 py-2 text-sm border"
-                              style={{ background: etapaColor }}
-                            >
-                              {cu}
-                            </div>
-                          ))}
-                        </div>
+              {/* Ciclos apilados verticalmente; cursos con wrap para evitar scroll horizontal */}
+              <div className="grid grid-cols-1 gap-4">
+                {detalle?.secciones.planEstudios.ciclos.map((c) => {
+                  const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                  return (
+                    <div key={c.numero} className="rounded-2xl border bg-white p-3">
+                      <div className="text-sm font-semibold mb-3">{String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                      <div className="w-full flex flex-wrap gap-3">
+                        {c.cursos.map((cu, i) => (
+                          <div
+                            key={i}
+                            className="rounded-xl px-3 py-2 text-sm border"
+                            style={{ background: etapaColor }}
+                          >
+                            {cu}
+                          </div>
+                        ))}
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
