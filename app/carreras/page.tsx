@@ -75,7 +75,7 @@ export default function CarrerasPage() {
               <div className="text-sm opacity-70">Toca para seleccionar (hasta 3). Con 1 activo, puedes ver la carrera.</div>
               <div className="flex gap-3">
                 <Link href={selectedCarreras.length === 1 ? `/carrera/${selectedCarreras[0].id}` : "#"} className={selectedCarreras.length !== 1 ? "pointer-events-none opacity-50" : undefined}>
-                  <span className="inline-flex px-4 py-2 rounded-full border bg-white">Ver carrera</span>
+                  <span className="inline-flex px-4 py-2 rounded-full border bg-[var(--uc-sky)] text-black">Ver carrera</span>
                 </Link>
                 <Link href="/comparador" className={selectedCarreras.length < 2 ? "pointer-events-none opacity-50" : undefined}>
                   <span className="inline-flex px-4 py-2 rounded-full border bg-[var(--uc-purple)] text-white">Comparar ({selectedCarreras.length}/3)</span>
