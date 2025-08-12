@@ -110,11 +110,11 @@ export function createIngestGlobal() {
   const hasCarreras = state.carreraIds.length > 0;
 
   if (!hasCampus) {
-    try { ingestScreenData("/campus", campusJson as unknown); } catch (e) {}
+    try { ingestScreenData("/campus", campusJson as unknown); } catch {}
     fetch("/data/campus.json").then(r=>r.json()).then(j=>ingestScreenData("/campus", j)).catch(()=>{});
   }
   if (!hasCampusMeta) {
-    try { ingestScreenData("/campus-meta", campusMetaJson as unknown); } catch (e) {}
+    try { ingestScreenData("/campus-meta", campusMetaJson as unknown); } catch {}
     fetch("/data/campusMeta.json").then(r=>r.json()).then(j=>ingestScreenData("/campus-meta", j)).catch(()=>{});
   }
   if (!hasFacultades) {

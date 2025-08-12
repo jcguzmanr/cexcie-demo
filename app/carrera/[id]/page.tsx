@@ -2,7 +2,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useAppStore } from "@/store";
 import { Button } from "@/components/Button";
-import Link from "next/link";
+// import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { Modal } from "@/components/Modal";
@@ -62,7 +62,7 @@ export default function CarreraDetallePage() {
     );
   }
 
-  const inComp = selected.some((c) => c.id === carrera.id);
+  // const inComp = selected.some((c) => c.id === carrera.id);
 
   return (
     <div className="p-6 grid gap-6">

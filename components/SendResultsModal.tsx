@@ -6,6 +6,9 @@ import { cx } from "@/lib/ui";
 
 type Props = { open: boolean; onClose: () => void; careerNames: string[] };
 
+// Shape mínima del JSON de comparador para evitar `any`
+type ComparadorUI = { ui?: { cta?: { helper?: string; label?: string } } };
+
 function validateEmail(value: string) {
   return /.+@.+\..+/.test(value);
 }
@@ -58,7 +61,7 @@ export function SendResultsModal({ open, onClose, careerNames }: Props) {
   useEffect(() => {
     fetch("/data/comparador-data.json")
       .then((r) => r.json())
-      .then((j: any) => setCta(j?.ui?.cta ?? null))
+      .then((j: ComparadorUI) => setCta(j.ui?.cta ?? null))
       .catch(() => {});
   }, []);
 

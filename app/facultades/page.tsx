@@ -3,7 +3,7 @@ import { Card } from "@/components/Card";
 import { DataEmpty } from "@/components/DataEmpty";
 import { Modal } from "@/components/Modal";
 // import { Button } from "@/components/Button";
-import { ListItem } from "@/components/ListItem";
+// import { ListItem } from "@/components/ListItem";
 import { useState } from "react";
 import { useAppStore, getFacultadList } from "@/store";
 import Link from "next/link";
