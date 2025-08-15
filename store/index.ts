@@ -60,6 +60,15 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (state.selectedCarreras.length >= 3) {
           return state; // ignore beyond 3
         }
+        
+        // Verificar que sea de la misma facultad si ya hay carreras seleccionadas
+        if (state.selectedCarreras.length > 0) {
+          const primeraFacultad = state.selectedCarreras[0].facultadId;
+          if (c.facultadId !== primeraFacultad) {
+            return state; // ignore si es de diferente facultad
+          }
+        }
+        
         return { selectedCarreras: [...state.selectedCarreras, c] };
       }),
     clearComparador: () => set({ selectedCarreras: [] }),

@@ -22,7 +22,7 @@ type DetalleCarrera = {
       media?: { type: "image" | "video"; alt?: string; src?: string };
     };
     planEstudios: {
-      legendEtapas: Record<string, { label: string; color: string }>;
+      legendEtapas: Record<string, { label: string; color: string; descripcion: string }>;
       ciclos: { numero: number; creditos: number; etapa: string; cursos: string[]; notas?: string[] }[];
     };
     internacional: {
@@ -33,6 +33,16 @@ type DetalleCarrera = {
     };
   };
 };
+
+
+
+// Función para verificar si una carrera tiene suficientes cursos para comparar
+function carreraTieneSuficientesCursos(carreraId: string): boolean {
+  // TODO: Implementar lógica para verificar número de cursos por carrera
+  // Por ahora retorna true para todas las carreras
+  // En el futuro, verificar si la carrera tiene más de 1 curso
+  return true;
+}
 
 export default function CarreraDetallePage() {
   const params = useParams<{ id: string }>();
@@ -46,6 +56,9 @@ export default function CarreraDetallePage() {
   const [sendOpen, setSendOpen] = React.useState(false);
   const [selectOpen, setSelectOpen] = React.useState(false);
   const router = useRouter();
+  
+  // Verificar si la carrera actual puede ser comparada
+  const puedeComparar = carreraTieneSuficientesCursos(carrera?.id || "");
 
   React.useEffect(() => {
     fetch("/data/detalle-carrera.json")
@@ -105,35 +118,129 @@ export default function CarreraDetallePage() {
               {/* Contenedor con scroll vertical; leyenda sticky como ancla */}
               <div className="max-h-[560px] overflow-y-auto pr-2 rounded-xl">
                 <div className="sticky top-0 z-[1] bg-[var(--surface)]/95 backdrop-blur p-2">
-                  <div className="flex flex-wrap gap-3">
-                    {Object.values(detalle?.secciones.planEstudios.legendEtapas ?? {}).map((l, i) => (
-                      <span key={i} className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-[var(--border)] text-sm bg-[var(--surface-2)]">
-                        <span className="inline-block w-3 h-3 rounded-sm" style={{ background: l.color }} /> {l.label}
-                      </span>
+                  {/* Descripciones de las etapas */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {Object.entries(detalle?.secciones.planEstudios.legendEtapas ?? {}).map(([key, l], i) => (
+                      <button 
+                        key={i} 
+                        onClick={() => {
+                          const element = document.getElementById(`etapa-${key}`);
+                          element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                        className="text-center p-3 rounded-lg bg-[var(--surface-2)]/50 border border-[var(--border)] hover:bg-[var(--surface-2)] transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          <span className="inline-block w-3 h-3 rounded-sm" style={{ background: l.color }} />
+                          <span className="font-medium text-sm">{l.label}</span>
+                        </div>
+                        <p className="text-xs opacity-80 leading-relaxed">{l.descripcion}</p>
+                      </button>
                     ))}
                   </div>
                 </div>
-                {/* Ciclos apilados verticalmente; cursos con wrap y sin cortes de línea internos */}
-                <div className="grid grid-cols-1 gap-4 p-2 pt-3">
-                  {detalle?.secciones.planEstudios.ciclos.map((c) => {
-                    const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
-                    return (
-                      <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
-                        <div className="text-sm font-semibold mb-3 text-[var(--foreground)]">{String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
-                        <div className="w-full flex flex-wrap gap-3">
-                          {c.cursos.map((cu, i) => (
-                            <div
-                              key={i}
-                              className="rounded-xl px-3 py-2 text-sm border whitespace-nowrap text-black"
-                              style={{ background: etapaColor, borderColor: "var(--border)" }}
-                            >
-                              {cu}
+                {/* Ciclos agrupados por etapas */}
+                <div className="grid grid-cols-1 gap-6 p-2 pt-3">
+                  {/* Etapa de Adaptación */}
+                  <div id="etapa-adaptacion" className="scroll-mt-4">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span 
+                        className="inline-block w-4 h-4 rounded-sm" 
+                        style={{ background: detalle?.secciones.planEstudios.legendEtapas?.adaptacion?.color ?? "#B9E1FF" }}
+                      />
+                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Adaptación</h3>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      {detalle?.secciones.planEstudios.ciclos
+                        .filter(c => c.etapa === "adaptacion")
+                        .map((c) => {
+                          const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                          return (
+                            <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                              <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                              <div className="grid grid-cols-1 gap-2">
+                                {c.cursos.map((cu, i) => (
+                                  <div
+                                    key={i}
+                                    className="rounded-xl px-3 py-2 text-sm border text-black"
+                                    style={{ background: etapaColor, borderColor: "var(--border)" }}
+                                  >
+                                    {cu}
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })}
+                          );
+                        })}
+                    </div>
+                  </div>
+
+                  {/* Etapa de Profundización */}
+                  <div id="etapa-profundizacion" className="scroll-mt-4">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span 
+                        className="inline-block w-4 h-4 rounded-sm" 
+                        style={{ background: detalle?.secciones.planEstudios.legendEtapas?.profundizacion?.color ?? "#9169FF" }}
+                      />
+                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Profundización</h3>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      {detalle?.secciones.planEstudios.ciclos
+                        .filter(c => c.etapa === "profundizacion")
+                        .map((c) => {
+                          const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                          return (
+                            <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                              <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                              <div className="grid grid-cols-1 gap-2">
+                                {c.cursos.map((cu, i) => (
+                                  <div
+                                    key={i}
+                                    className="rounded-xl px-3 py-2 text-sm border text-black"
+                                    style={{ background: etapaColor, borderColor: "var(--border)" }}
+                                  >
+                                    {cu}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+
+                  {/* Etapa de Consolidación */}
+                  <div id="etapa-consolidacion" className="scroll-mt-4">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span 
+                        className="inline-block w-4 h-4 rounded-sm" 
+                        style={{ background: detalle?.secciones.planEstudios.legendEtapas?.consolidacion?.color ?? "#FAAAFA" }}
+                      />
+                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Consolidación</h3>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      {detalle?.secciones.planEstudios.ciclos
+                        .filter(c => c.etapa === "consolidacion")
+                        .map((c) => {
+                          const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                          return (
+                            <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                              <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                              <div className="grid grid-cols-1 gap-2">
+                                {c.cursos.map((cu, i) => (
+                                  <div
+                                    key={i}
+                                    className="rounded-xl px-3 py-2 text-sm border text-black"
+                                    style={{ background: etapaColor, borderColor: "var(--border)" }}
+                                  >
+                                    {cu}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -186,6 +293,8 @@ export default function CarreraDetallePage() {
               }}
               size="lg"
               shape="pill"
+              disabled={!puedeComparar}
+              title={!puedeComparar ? "Esta carrera no tiene suficientes cursos para comparar" : undefined}
             >
               Comparar carreras
             </Button>
@@ -205,13 +314,13 @@ export default function CarreraDetallePage() {
           open={selectOpen}
           onClose={() => setSelectOpen(false)}
           title="Selecciona carreras para comparar"
-          subtitle="Selecciona 3 carreras de la misma facultad para comparar"
+          subtitle="Selecciona 2-3 carreras de la misma facultad para comparar"
           footer={
             <div className="flex items-center justify-between gap-3">
-              <div className="text-sm opacity-70">Selecciona 3 carreras de la misma facultad para comparar</div>
+              <div className="text-sm opacity-70">Selecciona 2-3 carreras de la misma facultad para comparar</div>
               <div className="flex gap-3">
                 <Button variant="secondary" onClick={() => { clearComparador(); toggleCarrera(carrera); }}>Limpiar</Button>
-                <Button onClick={() => { setSelectOpen(false); router.push('/comparador'); }} disabled={selected.length < 3}>
+                <Button onClick={() => { setSelectOpen(false); router.push('/comparador'); }} disabled={selected.length < 2}>
                   Continuar ({selected.length}/3)
                 </Button>
               </div>

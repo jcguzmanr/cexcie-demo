@@ -56,17 +56,16 @@ export default function ComparadorPage() {
 
   const careerNames = useMemo(() => selected.map((c) => c.nombre), [selected]);
 
-  // Control de selección inicial (forzar 3)
-  const [openFacs, setOpenFacs] = useState(true);
+  // Control de selección inicial
+  const [openFacs, setOpenFacs] = useState(selected.length < 2);
   const [openCarrerasOf, setOpenCarrerasOf] = useState<string | null>(null);
 
+  // Si no hay suficientes carreras seleccionadas, mostrar selección de facultades
   useEffect(() => {
-    // Cerrar selección cuando estén las 3
-    if (selected.length >= 3) {
-      setOpenCarrerasOf(null);
-      setOpenFacs(false);
+    if (selected.length < 2 && !openFacs && !openCarrerasOf) {
+      setOpenFacs(true);
     }
-  }, [selected.length]);
+  }, [selected.length, openFacs, openCarrerasOf]);
 
   const section = cfg?.content?.[active];
 
@@ -78,7 +77,7 @@ export default function ComparadorPage() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Comparador de Carreras</h1>
-          <div className="text-sm opacity-70">Selecciona 3 carreras para comparar. Actualmente: {selected.length}/3</div>
+          <div className="text-sm opacity-70">Selecciona 2-3 carreras de la misma facultad para comparar. Actualmente: {selected.length}/3</div>
         </div>
       </div>
 
@@ -111,8 +110,8 @@ export default function ComparadorPage() {
             {section.subtitle && <p className="opacity-70">{interpolate(section.subtitle, careerNames)}</p>}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {section.careers.map((card, idx) => (
+          <div className={`grid gap-6 ${selected.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+            {section.careers.slice(0, selected.length).map((card, idx) => (
               <div key={card.id} className="rounded-3xl p-6 bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] shadow-sm">
                 <div className="text-lg font-semibold text-center mb-3">
                   {interpolate(card.name, careerNames) || selected[idx]?.nombre || `Carrera ${idx + 1}`}
@@ -160,7 +159,7 @@ export default function ComparadorPage() {
             </button>
           ))}
         </div>
-        <div className="mt-4 text-sm opacity-70 text-center">Seleccionadas: {selected.length}/3</div>
+        <div className="mt-4 text-sm opacity-70 text-center">Seleccionadas: {selected.length}/3 (mínimo 2, misma facultad)</div>
       </Modal>
 
       {/* Modal: carreras de una facultad */}
@@ -172,10 +171,10 @@ export default function ComparadorPage() {
           title={`Carreras: ${f.nombre}`}
           footer={
             <div className="flex items-center justify-between gap-3">
-              <div className="text-sm opacity-70">Selecciona 3 carreras para continuar</div>
+              <div className="text-sm opacity-70">Selecciona 2-3 carreras de la misma facultad para continuar</div>
               <div className="flex gap-3">
                 <Button variant="secondary" onClick={() => clearComparador()}>Limpiar</Button>
-                <Button onClick={() => { setOpenCarrerasOf(null); setOpenFacs(selected.length < 3); }} disabled={selected.length < 3}>
+                <Button onClick={() => { setOpenCarrerasOf(null); setOpenFacs(selected.length < 2); }} disabled={selected.length < 2}>
                   Continuar ({selected.length}/3)
                 </Button>
               </div>
