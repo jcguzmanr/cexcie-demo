@@ -127,9 +127,9 @@ export default function CarreraDetallePage() {
                           const element = document.getElementById(`etapa-${key}`);
                           element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }}
-                        className="text-center p-3 rounded-lg bg-[var(--surface-2)]/50 border border-[var(--border)] hover:bg-[var(--surface-2)] transition-colors cursor-pointer"
+                        className="text-left p-3 rounded-lg bg-[var(--surface-2)]/50 border border-[var(--border)] hover:bg-[var(--surface-2)] transition-colors cursor-pointer"
                       >
-                        <div className="flex items-center justify-center gap-2 mb-2">
+                        <div className="flex items-center justify-start gap-2 mb-2">
                           <span className="inline-block w-3 h-3 rounded-sm" style={{ background: l.color }} />
                           <span className="font-medium text-sm">{l.label}</span>
                         </div>

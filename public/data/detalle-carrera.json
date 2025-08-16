@@ -18,9 +18,21 @@
   
       "planEstudios": {
         "legendEtapas": {
-          "adaptacion": { "label": "Etapa de adaptación", "color": "#B9E1FF" },
-          "profundizacion": { "label": "Etapa de profundización", "color": "#9169FF" },
-          "consolidacion": { "label": "Etapa de consolidación", "color": "#FAAAFA" }
+          "adaptacion": { 
+            "label": "Etapa de adaptación", 
+            "color": "#B9E1FF",
+            "descripcion": "Desarrolla las bases sólidas que necesitas para construir tu carrera profesional con confianza."
+          },
+          "profundizacion": { 
+            "label": "Etapa de profundización", 
+            "color": "#9169FF",
+            "descripcion": "Adquiere conocimientos especializados que te permitirán destacar en el mercado laboral."
+          },
+          "consolidacion": { 
+            "label": "Etapa de consolidación", 
+            "color": "#FAAAFA",
+            "descripcion": "Integra todo tu aprendizaje en proyectos reales que definirán tu futuro profesional."
+          }
         },
         "ciclos": [
           { "numero": 1, "creditos": 22, "etapa": "adaptacion", "cursos": ["Comprensión y Producción de Textos 1", "Laboratorio de Liderazgo e Innovación", "Estrategias y Herramientas Digitales para el Aprendizaje", "Matemática Básica", "Matemática Discreta 1", "Fundamentos de Programación", "Introducción a Ciencia de la Computación"], "notas": ["Accede a la Bolsa de Trabajo desde el primer día"] },
