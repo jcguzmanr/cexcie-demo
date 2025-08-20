@@ -4,9 +4,15 @@ import { usePathname } from "next/navigation";
 import { Progress } from "@/components/Progress";
 import { createIngestGlobal } from "@/lib/ingest";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { TelemetryLogger } from "@/components/TelemetryLogger";
+import { useTelemetryRouteTracking } from "@/lib/useTelemetry";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  
+  // Initialize telemetry route tracking
+  useTelemetryRouteTracking();
+  
   useEffect(() => {
     createIngestGlobal();
   }, []);
@@ -19,6 +25,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       <main className="flex-1">{children}</main>
+      
+      {/* Telemetry Logger - Only show in development or when explicitly enabled */}
+      {process.env.NODE_ENV === 'development' && <TelemetryLogger />}
     </div>
   );
 }

@@ -204,7 +204,13 @@ export default function ComparadorPage() {
       ))}
 
       {/* Modal: enviar resultados */}
-      <SendResultsModal open={sendOpen} onClose={() => setSendOpen(false)} careerNames={careerNames} />
+      <SendResultsModal 
+        open={sendOpen} 
+        onClose={() => setSendOpen(false)} 
+        careerNames={careerNames}
+        source="comparator"
+        selectedCarreras={selected}
+      />
     </div>
   );
 }

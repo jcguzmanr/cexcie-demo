@@ -1,0 +1,72 @@
+{
+  "currency": "PEN",
+  "didactics": {
+    "porQueEscalas": {
+      "titulo": "¿Por qué existen escalas?",
+      "bullets": [
+        "Las escalas permiten adecuar el costo por crédito a la situación socioeconómica del estudiante.",
+        "La Escala 4 refleja el costo real del crédito.",
+        "Las Escalas 1–3 implican un subsidio otorgado por la universidad."
+      ]
+    },
+    "comoAsignan": {
+      "titulo": "¿Cómo me asignan la escala?",
+      "bullets": [
+        "La evaluación la realiza el área de Servicio Social.",
+        "Se revisa la situación socioeconómica del estudiante y su familia.",
+        "Es posible solicitar recategorización si cambian tus condiciones y cumples requisitos académicos."
+      ]
+    },
+    "comoCalculan": {
+      "titulo": "¿Cómo se calculan mis pagos?",
+      "bullets": [
+        "No existen mensualidades fijas: se calcula el costo por periodo académico.",
+        "La primera cuota corresponde a un número de créditos iniciales más matrícula y seguro.",
+        "Las cuotas siguientes prorratean el costo de los créditos restantes del periodo."
+      ]
+    },
+    "porQueCampus": {
+      "titulo": "¿Por qué varía entre campus o modalidad?",
+      "bullets": [
+        "Cada campus tiene costos de operación distintos.",
+        "La modalidad (presencial, semipresencial o a distancia) también influye en el valor por crédito.",
+        "Por eso es importante revisar las tablas oficiales de tu sede y modalidad."
+      ]
+    },
+    "conceptosFijos": {
+      "titulo": "Conceptos fijos de matrícula",
+      "bullets": [
+        "Matrícula (se paga en cada periodo académico).",
+        "Seguro contra accidentes o IAFAS (obligatorio salvo exoneración).",
+        "Examen médico (solo para ingresantes)."
+      ]
+    },
+    "beneficios": {
+      "titulo": "Beneficios y descuentos",
+      "bullets": [
+        "Bono del Buen Pagador por pago puntual.",
+        "Programas de recategorización como 'Gente que Trabaja'.",
+        "Posibilidad de exonerar el seguro si ya cuentas con uno vigente."
+      ]
+    }
+  },
+  "explicacionCalculo": {
+    "pasos": [
+      "Identifica el costo por crédito según tu carrera, sede y escala.",
+      "Define cuántos créditos llevarás en el periodo.",
+      "Calcula la primera cuota (créditos iniciales × costo por crédito + conceptos fijos).",
+      "Prorratea las cuotas restantes con los créditos restantes."
+    ],
+    "nota": "El total del periodo siempre es: (créditos × costo por crédito) + conceptos fijos."
+  },
+  "fuentes": [
+    {
+      "label": "Escalas y costos educativos",
+      "url": "https://estudiantes.ucontinental.edu.pe/oficinas/bienestar-universitario/servicio-social/escalas-costos-educativos/"
+    },
+    {
+      "label": "Cronograma y cálculo de pagos",
+      "url": "https://estudiantes.ucontinental.edu.pe/oficinas/tesoreria-creditos-y-cobranzas/cronograma-de-pagos-de-periodo-academico/"
+    }
+  ]
+}

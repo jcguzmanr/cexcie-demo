@@ -1,0 +1,210 @@
+{
+  "database": "cexcie",
+  "description": "Sistema de gestión académica para campus, facultades, carreras y precios",
+  "tables": [
+    {
+      "name": "campus",
+      "description": "Sedes universitarias disponibles",
+      "columns": [
+        { "name": "id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "nombre", "type": "text", "nullable": false }
+      ]
+    },
+    {
+      "name": "campus_meta",
+      "description": "Información adicional de campus (imágenes, ubicación)",
+      "columns": [
+        { "name": "id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "imagen", "type": "text", "nullable": true },
+        { "name": "direccion", "type": "text", "nullable": true },
+        { "name": "ciudad", "type": "text", "nullable": true },
+        { "name": "map_url", "type": "text", "nullable": true }
+      ],
+      "foreignKeys": [
+        { "column": "id", "references": "campus", "referencedColumn": "id", "onDelete": "CASCADE" }
+      ]
+    },
+    {
+      "name": "facultad",
+      "description": "Facultades académicas",
+      "columns": [
+        { "name": "id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "nombre", "type": "text", "nullable": false, "unique": true }
+      ]
+    },
+    {
+      "name": "modalidad",
+      "description": "Modalidades de estudio disponibles",
+      "columns": [
+        { 
+          "name": "id", 
+          "type": "text", 
+          "primaryKey": true, 
+          "nullable": false,
+          "check": "id IN ('presencial','semipresencial','distancia')"
+        }
+      ]
+    },
+    {
+      "name": "carrera",
+      "description": "Programas académicos ofrecidos",
+      "columns": [
+        { "name": "id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "nombre", "type": "text", "nullable": false },
+        { "name": "facultad_id", "type": "text", "nullable": false },
+        { "name": "duracion", "type": "text", "nullable": true },
+        { "name": "malla_resumen_json", "type": "jsonb", "nullable": true },
+        { "name": "grado", "type": "text", "nullable": true },
+        { "name": "titulo", "type": "text", "nullable": true },
+        { "name": "imagen", "type": "text", "nullable": true }
+      ],
+      "foreignKeys": [
+        { 
+          "column": "facultad_id", 
+          "references": "facultad", 
+          "referencedColumn": "id", 
+          "onUpdate": "CASCADE", 
+          "onDelete": "RESTRICT" 
+        }
+      ],
+      "indexes": [
+        { "name": "uq_carrera_facultad_nombre", "columns": ["facultad_id", "nombre"], "unique": true }
+      ]
+    },
+    {
+      "name": "carrera_campus",
+      "description": "Disponibilidad de carreras por campus",
+      "columns": [
+        { "name": "carrera_id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "campus_id", "type": "text", "primaryKey": true, "nullable": false }
+      ],
+      "foreignKeys": [
+        { "column": "carrera_id", "references": "carrera", "referencedColumn": "id", "onDelete": "CASCADE" },
+        { "column": "campus_id", "references": "campus", "referencedColumn": "id", "onDelete": "CASCADE" }
+      ],
+      "indexes": [
+        { "name": "ix_carrera_campus_by_campus", "columns": ["campus_id", "carrera_id"] }
+      ]
+    },
+    {
+      "name": "carrera_modalidad",
+      "description": "Modalidades disponibles por carrera",
+      "columns": [
+        { "name": "carrera_id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "modalidad_id", "type": "text", "primaryKey": true, "nullable": false }
+      ],
+      "foreignKeys": [
+        { "column": "carrera_id", "references": "carrera", "referencedColumn": "id", "onDelete": "CASCADE" },
+        { "column": "modalidad_id", "references": "modalidad", "referencedColumn": "id", "onDelete": "RESTRICT" }
+      ],
+      "indexes": [
+        { "name": "ix_carrera_modalidad_by_modalidad", "columns": ["modalidad_id", "carrera_id"] }
+      ]
+    },
+    {
+      "name": "oferta",
+      "description": "Combinaciones reales carrera×campus×modalidad",
+      "columns": [
+        { "name": "carrera_id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "campus_id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "modalidad_id", "type": "text", "primaryKey": true, "nullable": false },
+        { 
+          "name": "estado", 
+          "type": "text", 
+          "nullable": false, 
+          "default": "activa",
+          "check": "estado IN ('activa','pausada','cerrada')"
+        },
+        { "name": "extras", "type": "jsonb", "nullable": true }
+      ],
+      "foreignKeys": [
+        { "column": "carrera_id", "references": "carrera", "referencedColumn": "id", "onDelete": "CASCADE" },
+        { "column": "campus_id", "references": "campus", "referencedColumn": "id", "onDelete": "CASCADE" },
+        { "column": "modalidad_id", "references": "modalidad", "referencedColumn": "id", "onDelete": "RESTRICT" }
+      ],
+      "indexes": [
+        { "name": "ix_oferta_campus_modalidad_carrera", "columns": ["campus_id", "modalidad_id", "carrera_id"] }
+      ]
+    },
+    {
+      "name": "periodo",
+      "description": "Periodos académicos",
+      "columns": [
+        { "name": "id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "anio", "type": "int", "nullable": false, "check": "anio >= 2000" },
+        { "name": "ciclo", "type": "int", "nullable": false, "check": "ciclo IN (1,2)" },
+        { "name": "inicio", "type": "date", "nullable": true },
+        { "name": "fin", "type": "date", "nullable": true }
+      ]
+    },
+    {
+      "name": "moneda",
+      "description": "Monedas para sistema de precios",
+      "columns": [
+        { "name": "codigo", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "simbolo", "type": "text", "nullable": true }
+      ]
+    },
+    {
+      "name": "precio",
+      "description": "Precios por oferta, periodo y concepto",
+      "columns": [
+        { "name": "carrera_id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "campus_id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "modalidad_id", "type": "text", "primaryKey": true, "nullable": false },
+        { "name": "periodo_id", "type": "text", "primaryKey": true, "nullable": false },
+        { 
+          "name": "item", 
+          "type": "text", 
+          "primaryKey": true, 
+          "nullable": false,
+          "check": "item IN ('matricula','pension_mensual','credito','cuota')"
+        },
+        { "name": "monto", "type": "numeric(12,2)", "nullable": false, "check": "monto > 0" },
+        { "name": "moneda_codigo", "type": "text", "nullable": false },
+        { "name": "vigente_desde", "type": "date", "nullable": true },
+        { "name": "vigente_hasta", "type": "date", "nullable": true }
+      ],
+      "foreignKeys": [
+        { 
+          "columns": ["carrera_id", "campus_id", "modalidad_id"], 
+          "references": "oferta", 
+          "referencedColumns": ["carrera_id", "campus_id", "modalidad_id"], 
+          "onUpdate": "CASCADE", 
+          "onDelete": "RESTRICT" 
+        },
+        { "column": "periodo_id", "references": "periodo", "referencedColumn": "id", "onUpdate": "CASCADE", "onDelete": "RESTRICT" },
+        { "column": "moneda_codigo", "references": "moneda", "referencedColumn": "codigo", "onUpdate": "CASCADE" }
+      ],
+      "indexes": [
+        { "name": "ix_precio_carrera_periodo", "columns": ["carrera_id", "periodo_id"] },
+        { "name": "ix_precio_campus_modalidad_periodo", "columns": ["campus_id", "modalidad_id", "periodo_id"] }
+      ]
+    }
+  ],
+  "seedData": [
+    {
+      "table": "modalidad",
+      "data": [
+        { "id": "presencial" },
+        { "id": "semipresencial" },
+        { "id": "distancia" }
+      ]
+    },
+    {
+      "table": "moneda",
+      "data": [
+        { "codigo": "PEN", "simbolo": "S/." },
+        { "codigo": "USD", "simbolo": "$" }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "name": "vw_precio_vigente",
+      "description": "Vista para precios vigentes",
+      "definition": "SELECT p.* FROM precio p WHERE (p.vigente_desde IS NULL OR p.vigente_desde <= now()::date) AND (p.vigente_hasta IS NULL OR p.vigente_hasta >= now()::date)"
+    }
+  ]
+}
+

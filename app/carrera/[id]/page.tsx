@@ -20,6 +20,13 @@ type DetalleCarrera = {
       titulo: string;
       descripcion: string;
       media?: { type: "image" | "video"; alt?: string; src?: string };
+      infoCards?: Array<{
+        id: string;
+        icon: string;
+        titulo: string;
+        contenido: string | string[];
+        descripcion: string;
+      }>;
     };
     planEstudios: {
       legendEtapas: Record<string, { label: string; color: string; descripcion: string }>;
@@ -51,10 +58,16 @@ export default function CarreraDetallePage() {
   const carrerasMap = useAppStore((s) => s.carreraById);
   const { toggleCarrera, clearComparador } = useAppStore((s) => s.actions);
   const [detalle, setDetalle] = React.useState<DetalleCarrera | null>(null);
-  const [tab, setTab] = React.useState<"sobre" | "planEstudios" | "internacional" | "beneficios">("sobre");
+  const [tab, setTab] = React.useState<"sobre" | "planEstudios" | "internacional" | "beneficios" | "costos">("sobre");
   const [videoUrl, setVideoUrl] = React.useState<string | null>(null);
   const [sendOpen, setSendOpen] = React.useState(false);
   const [selectOpen, setSelectOpen] = React.useState(false);
+  const [didactics, setDidactics] = React.useState<{
+    anchors?: Array<{ id: string; label: string; icon: string; description: string }>;
+    didactics: Record<string, { id: string; titulo: string; bullets: string[] }>;
+    explicacionCalculo: { id: string; pasos: string[]; nota: string };
+    fuentes: Array<{ label: string; url: string }>;
+  } | null>(null);
   const router = useRouter();
   
   // Verificar si la carrera actual puede ser comparada
@@ -65,6 +78,11 @@ export default function CarreraDetallePage() {
       .then((r) => r.json())
       .then((j: DetalleCarrera) => setDetalle(j))
       .catch(() => setDetalle(null));
+    
+    fetch("/data/didactics.json")
+      .then((r) => r.json())
+      .then((j) => setDidactics(j))
+      .catch(() => setDidactics(null));
   }, []);
 
   if (!carrera) {
@@ -87,13 +105,14 @@ export default function CarreraDetallePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
         <div className="grid gap-3">
-          {["sobre", "planEstudios", "internacional", "beneficios"].map((k) => (
+          {["sobre", "planEstudios", "internacional", "beneficios", "costos"].map((k) => (
             <Button key={k} variant={tab === k ? "primary" : "secondary"} shape="pill" className="justify-center" onClick={() => setTab(k as typeof tab)}>
               <span className={tab === k ? "text-white" : "text-[var(--uc-purple)]"}>
                 {k === "sobre" && "Sobre la carrera"}
                 {k === "planEstudios" && "Plan de estudios"}
                 {k === "internacional" && "Internacional"}
                 {k === "beneficios" && "Beneficios"}
+                {k === "costos" && "Costos"}
               </span>
             </Button>
           ))}
@@ -101,144 +120,238 @@ export default function CarreraDetallePage() {
 
         <div className="rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-4 min-h-[360px] overflow-hidden text-[var(--foreground)]">
           {tab === "sobre" && (
-            <div className="grid gap-4">
+            <div className="grid gap-6">
               <div className="text-lg font-semibold">{detalle?.secciones.sobre.titulo ?? "Sobre la carrera"}</div>
-              {detalle?.secciones.sobre.media?.type === "image" && detalle.secciones.sobre.media.src && (
-                <div className="relative w-full max-w-[560px] aspect-[16/9] rounded-xl overflow-hidden">
-                  <Image src={detalle.secciones.sobre.media.src} alt={detalle.secciones.sobre.media.alt ?? ""} fill className="object-cover" />
+              
+              {/* Imagen y descripción */}
+              <div className="grid gap-4">
+                {detalle?.secciones.sobre.media?.type === "image" && detalle.secciones.sobre.media.src && (
+                  <div className="relative w-full max-w-[560px] aspect-[16/9] rounded-xl overflow-hidden">
+                    <Image src={detalle.secciones.sobre.media.src} alt={detalle.secciones.sobre.media.alt ?? ""} fill className="object-cover" />
+                  </div>
+                )}
+                <p className="max-w-3xl opacity-85">{detalle?.secciones.sobre.descripcion}</p>
+              </div>
+
+              {/* Anclas informativas */}
+              {detalle?.secciones.sobre.infoCards && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {detalle.secciones.sobre.infoCards.map((card) => (
+                    <div
+                      key={card.id}
+                      id={card.id}
+                      className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                      onClick={() => {
+                        // Aquí podrías implementar un modal o expandir la información
+                        console.log(`Card clicked: ${card.titulo}`);
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl text-[var(--uc-purple)] group-hover:scale-110 transition-transform duration-200">
+                          {card.icon}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-[var(--foreground)] mb-2 text-sm">
+                            {card.titulo}
+                          </h3>
+                          <div className="space-y-1">
+                            {Array.isArray(card.contenido) ? (
+                              card.contenido.map((item, index) => (
+                                <div key={index} className="text-xs opacity-80 leading-relaxed">
+                                  • {item}
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-xs opacity-80 leading-relaxed">
+                                {card.contenido}
+                              </div>
+                            )}
+                          </div>
+                          <div className="mt-2 text-xs opacity-60 italic">
+                            {card.descripcion}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
-              <p className="max-w-3xl opacity-85">{detalle?.secciones.sobre.descripcion}</p>
             </div>
           )}
 
           {tab === "planEstudios" && (
             <div className="grid gap-4">
               <div className="text-lg font-semibold">PLAN DE ESTUDIOS</div>
-              {/* Contenedor con scroll vertical; leyenda sticky como ancla */}
-              <div className="max-h-[560px] overflow-y-auto pr-2 rounded-xl">
-                <div className="sticky top-0 z-[1] bg-[var(--surface)]/95 backdrop-blur p-2">
-                  {/* Descripciones de las etapas */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {Object.entries(detalle?.secciones.planEstudios.legendEtapas ?? {}).map(([key, l], i) => (
-                      <button 
-                        key={i} 
-                        onClick={() => {
-                          const element = document.getElementById(`etapa-${key}`);
-                          element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }}
-                        className="text-left p-3 rounded-lg bg-[var(--surface-2)]/50 border border-[var(--border)] hover:bg-[var(--surface-2)] transition-colors cursor-pointer"
-                      >
-                        <div className="flex items-center justify-start gap-2 mb-2">
-                          <span className="inline-block w-3 h-3 rounded-sm" style={{ background: l.color }} />
-                          <span className="font-medium text-sm">{l.label}</span>
-                        </div>
-                        <p className="text-xs opacity-80 leading-relaxed">{l.descripcion}</p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                {/* Ciclos agrupados por etapas */}
-                <div className="grid grid-cols-1 gap-6 p-2 pt-3">
-                  {/* Etapa de Adaptación */}
-                  <div id="etapa-adaptacion" className="scroll-mt-4">
-                    <div className="flex items-center gap-3 mb-4">
+              {/* Ciclos agrupados por etapas */}
+              <div className="grid grid-cols-1 gap-6 p-2 pt-3">
+                {/* Navegación sticky de etapas */}
+                <div className="sticky top-0 z-[1] bg-[var(--surface)]/95 backdrop-blur p-2 rounded-xl border border-[var(--border)] mb-4">
+                  <div className="flex gap-3 overflow-x-auto">
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById("etapa-adaptacion");
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--surface)] border border-[var(--border)] hover:bg-[var(--uc-purple)] hover:text-white hover:border-[var(--uc-purple)] transition-all duration-200 text-sm font-medium flex-shrink-0"
+                      title="Etapa de adaptación - Desarrolla las bases sólidas"
+                    >
                       <span 
-                        className="inline-block w-4 h-4 rounded-sm" 
+                        className="inline-block w-3 h-3 rounded-full" 
                         style={{ background: detalle?.secciones.planEstudios.legendEtapas?.adaptacion?.color ?? "#B9E1FF" }}
                       />
-                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Adaptación</h3>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4">
-                      {detalle?.secciones.planEstudios.ciclos
-                        .filter(c => c.etapa === "adaptacion")
-                        .map((c) => {
-                          const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
-                          return (
-                            <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
-                              <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
-                              <div className="grid grid-cols-1 gap-2">
-                                {c.cursos.map((cu, i) => (
-                                  <div
-                                    key={i}
-                                    className="rounded-xl px-3 py-2 text-sm border text-black"
-                                    style={{ background: etapaColor, borderColor: "var(--border)" }}
-                                  >
-                                    {cu}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-
-                  {/* Etapa de Profundización */}
-                  <div id="etapa-profundizacion" className="scroll-mt-4">
-                    <div className="flex items-center gap-3 mb-4">
+                      <span>Etapa de Adaptación</span>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById("etapa-profundizacion");
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--surface)] border border-[var(--border)] hover:bg-[var(--uc-purple)] hover:text-white hover:border-[var(--uc-purple)] transition-all duration-200 text-sm font-medium flex-shrink-0"
+                      title="Etapa de profundización - Adquiere conocimientos especializados"
+                    >
                       <span 
-                        className="inline-block w-4 h-4 rounded-sm" 
+                        className="inline-block w-3 h-3 rounded-full" 
                         style={{ background: detalle?.secciones.planEstudios.legendEtapas?.profundizacion?.color ?? "#9169FF" }}
                       />
-                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Profundización</h3>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4">
-                      {detalle?.secciones.planEstudios.ciclos
-                        .filter(c => c.etapa === "profundizacion")
-                        .map((c) => {
-                          const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
-                          return (
-                            <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
-                              <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
-                              <div className="grid grid-cols-1 gap-2">
-                                {c.cursos.map((cu, i) => (
-                                  <div
-                                    key={i}
-                                    className="rounded-xl px-3 py-2 text-sm border text-black"
-                                    style={{ background: etapaColor, borderColor: "var(--border)" }}
-                                  >
-                                    {cu}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-
-                  {/* Etapa de Consolidación */}
-                  <div id="etapa-consolidacion" className="scroll-mt-4">
-                    <div className="flex items-center gap-3 mb-4">
+                      <span>Etapa de Profundización</span>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById("etapa-consolidacion");
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--surface)] border border-[var(--border)] hover:bg-[var(--uc-purple)] hover:text-white hover:border-[var(--uc-purple)] transition-all duration-200 text-sm font-medium flex-shrink-0"
+                      title="Etapa de consolidación - Integra todo tu aprendizaje"
+                    >
                       <span 
-                        className="inline-block w-4 h-4 rounded-sm" 
+                        className="inline-block w-3 h-3 rounded-full" 
                         style={{ background: detalle?.secciones.planEstudios.legendEtapas?.consolidacion?.color ?? "#FAAAFA" }}
                       />
-                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Consolidación</h3>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4">
-                      {detalle?.secciones.planEstudios.ciclos
-                        .filter(c => c.etapa === "consolidacion")
-                        .map((c) => {
-                          const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
-                          return (
-                            <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
-                              <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
-                              <div className="grid grid-cols-1 gap-2">
-                                {c.cursos.map((cu, i) => (
-                                  <div
-                                    key={i}
-                                    className="rounded-xl px-3 py-2 text-sm border text-black"
-                                    style={{ background: etapaColor, borderColor: "var(--border)" }}
-                                  >
-                                    {cu}
-                                  </div>
-                                ))}
+                      <span>Etapa de Consolidación</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Contenedor con scroll vertical para las etapas */}
+                <div className="max-h-[600px] overflow-y-auto pr-2 rounded-xl">
+                  <div className="grid grid-cols-1 gap-6">
+                    {/* Etapa de Adaptación */}
+                    <div id="etapa-adaptacion" className="scroll-mt-20">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span 
+                          className="inline-block w-4 h-4 rounded-sm" 
+                          style={{ background: detalle?.secciones.planEstudios.legendEtapas?.adaptacion?.color ?? "#B9E1FF" }}
+                        />
+                        <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Adaptación</h3>
+                      </div>
+                      <p className="text-sm opacity-80 leading-relaxed mb-4">
+                        {detalle?.secciones.planEstudios.legendEtapas?.adaptacion?.descripcion || "Desarrolla las bases sólidas que necesitas para construir tu carrera profesional con confianza."}
+                      </p>
+                      <div className="grid grid-cols-1 gap-4">
+                        {detalle?.secciones.planEstudios.ciclos
+                          .filter(c => c.etapa === "adaptacion")
+                          .map((c) => {
+                            const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                            return (
+                              <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                                <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                                <div className="grid grid-cols-1 gap-2">
+                                  {c.cursos.map((cu, i) => (
+                                    <div
+                                      key={i}
+                                      className="rounded-xl px-3 py-2 text-sm border text-black"
+                                      style={{ background: etapaColor, borderColor: "var(--border)" }}
+                                    >
+                                      {cu}
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                      </div>
+                    </div>
+
+                    {/* Etapa de Profundización */}
+                    <div id="etapa-profundizacion" className="scroll-mt-20">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span 
+                          className="inline-block w-4 h-4 rounded-sm" 
+                          style={{ background: detalle?.secciones.planEstudios.legendEtapas?.profundizacion?.color ?? "#9169FF" }}
+                        />
+                        <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Profundización</h3>
+                      </div>
+                      <p className="text-sm opacity-80 leading-relaxed mb-4">
+                        {detalle?.secciones.planEstudios.legendEtapas?.profundizacion?.descripcion || "Adquiere conocimientos especializados que te permitirán destacar en el mercado laboral."}
+                      </p>
+                      <div className="grid grid-cols-1 gap-4">
+                        {detalle?.secciones.planEstudios.ciclos
+                          .filter(c => c.etapa === "profundizacion")
+                          .map((c) => {
+                            const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                            return (
+                              <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                                <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                                <div className="grid grid-cols-1 gap-2">
+                                  {c.cursos.map((cu, i) => (
+                                    <div
+                                      key={i}
+                                      className="rounded-xl px-3 py-2 text-sm border text-black"
+                                      style={{ background: etapaColor, borderColor: "var(--border)" }}
+                                    >
+                                      {cu}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+
+                    {/* Etapa de Consolidación */}
+                    <div id="etapa-consolidacion" className="scroll-mt-20">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span 
+                          className="inline-block w-4 h-4 rounded-sm" 
+                          style={{ background: detalle?.secciones.planEstudios.legendEtapas?.consolidacion?.color ?? "#FAAAFA" }}
+                        />
+                        <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Consolidación</h3>
+                      </div>
+                      <p className="text-sm opacity-80 leading-relaxed mb-4">
+                        {detalle?.secciones.planEstudios.legendEtapas?.consolidacion?.descripcion || "Integra todo tu aprendizaje en proyectos reales que definirán tu futuro profesional."}
+                      </p>
+                      <div className="grid grid-cols-1 gap-4">
+                        {detalle?.secciones.planEstudios.ciclos
+                          .filter(c => c.etapa === "consolidacion")
+                          .map((c) => {
+                            const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                            return (
+                              <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                                <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
+                                <div className="grid grid-cols-1 gap-2">
+                                  {c.cursos.map((cu, i) => (
+                                    <div
+                                      key={i}
+                                      className="rounded-xl px-3 py-2 text-sm border text-black"
+                                      style={{ background: etapaColor, borderColor: "var(--border)" }}
+                                    >
+                                      {cu}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -278,6 +391,107 @@ export default function CarreraDetallePage() {
               ))}
             </div>
           )}
+
+                    {tab === "costos" && (
+            <div className="grid gap-4">
+              <div className="text-lg font-semibold">Información sobre costos y escalas</div>
+              
+              {didactics && (
+                <>
+                  {/* Anclas de navegación */}
+                  {didactics.anchors && (
+                    <div className="sticky top-0 z-[1] bg-[var(--surface)]/95 backdrop-blur p-2 rounded-xl border border-[var(--border)] mb-4">
+                      <div className="flex flex-wrap gap-3">
+                        {didactics.anchors.map((anchor: { id: string; label: string; icon: string; description: string }) => (
+                          <button
+                            key={anchor.id}
+                            onClick={() => {
+                              const element = document.getElementById(anchor.id);
+                              if (element) {
+                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }
+                            }}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--surface)] border border-[var(--border)] hover:bg-[var(--uc-purple)] hover:text-white hover:border-[var(--uc-purple)] transition-all duration-200 text-sm font-medium"
+                            title={anchor.description}
+                          >
+                            <span className="text-lg">{anchor.icon}</span>
+                            <span>{anchor.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Contenedor con scroll vertical */}
+                  <div className="max-h-[560px] overflow-y-auto pr-2 rounded-xl">
+                    <div className="grid gap-6 p-2">
+                      {/* Sección de didácticas */}
+                      {Object.entries(didactics.didactics).map(([key, section]: [string, { id: string; titulo: string; bullets: string[] }]) => (
+                        <div key={key} id={section.id} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 scroll-mt-4">
+                          <h3 className="text-lg font-semibold mb-4 text-[var(--foreground)]">{section.titulo}</h3>
+                          <ul className="space-y-3">
+                            {section.bullets.map((bullet: string, index: number) => (
+                              <li key={index} className="flex items-start gap-3">
+                                <span className="inline-block w-2 h-2 rounded-full bg-[var(--uc-purple)] mt-2 flex-shrink-0"></span>
+                                <span className="opacity-90 leading-relaxed">{bullet}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+
+                      {/* Sección de explicación de cálculo */}
+                      <div id="calculo" className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 scroll-mt-4">
+                        <h3 className="text-lg font-semibold mb-4 text-[var(--foreground)]">¿Cómo calcular mis pagos?</h3>
+                        <div className="grid gap-4">
+                          <div className="grid gap-3">
+                            {didactics.explicacionCalculo.pasos.map((paso: string, index: number) => (
+                              <div key={index} className="flex items-start gap-3">
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[var(--uc-purple)] text-white text-sm font-medium flex-shrink-0">
+                                  {index + 1}
+                                </span>
+                                <span className="opacity-90 leading-relaxed">{paso}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="mt-4 p-4 rounded-xl bg-[var(--uc-lilac)]/10 border border-[var(--uc-lilac)]/20">
+                            <p className="text-sm font-medium text-[var(--uc-purple)]">{didactics.explicacionCalculo.nota}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Sección de fuentes */}
+                      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+                        <h3 className="text-lg font-semibold mb-4 text-[var(--foreground)]">Fuentes oficiales</h3>
+                        <div className="grid gap-3">
+                          {didactics.fuentes.map((fuente: { label: string; url: string }, index: number) => (
+                            <a
+                              key={index}
+                              href={fuente.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-[var(--uc-purple)] hover:underline transition-colors"
+                            >
+                              <span>{fuente.label}</span>
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {!didactics && (
+                <div className="text-center py-12">
+                  <div className="text-lg opacity-70">Cargando información de costos...</div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -307,7 +521,13 @@ export default function CarreraDetallePage() {
 
       {videoUrl && <VideoModal url={videoUrl} onClose={() => setVideoUrl(null)} />}
       {sendOpen && (
-        <SendResultsModal open={sendOpen} onClose={() => setSendOpen(false)} careerNames={[carrera.nombre]} />
+        <SendResultsModal 
+          open={sendOpen} 
+          onClose={() => setSendOpen(false)} 
+          careerNames={[carrera.nombre]}
+          source="career"
+          selectedCarreras={[carrera]}
+        />
       )}
       {selectOpen && (
         <Modal

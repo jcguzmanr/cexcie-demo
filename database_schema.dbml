@@ -1,0 +1,205 @@
+// CExCIE - Database Schema
+// Sistema de gestión académica para campus, facultades, carreras y precios
+// Use this file with dbdiagram.io
+
+Project CExCIE {
+  database_type: 'PostgreSQL'
+  Note: '''
+    Sistema de gestión académica que maneja:
+    - Campus universitarios y su información
+    - Facultades y carreras académicas
+    - Modalidades de estudio (presencial, semipresencial, distancia)
+    - Ofertas académicas (combinaciones carrera×campus×modalidad)
+    - Sistema de precios por periodo y concepto
+  '''
+}
+
+// ============================================================================
+// CATÁLOGOS BASE
+// ============================================================================
+
+Table campus {
+  id text [pk, note: 'Identificador único del campus']
+  nombre text [not null, note: 'Nombre del campus']
+  
+  Note: 'Sedes universitarias disponibles'
+}
+
+Table campus_meta {
+  id text [pk, ref: > campus.id, note: 'FK a campus']
+  imagen text [note: 'Ruta de imagen del campus']
+  direccion text [note: 'Dirección física']
+  ciudad text [note: 'Ciudad donde se ubica']
+  map_url text [note: 'URL de Google Maps o similar']
+  
+  Note: 'Información adicional de campus (imágenes, ubicación)'
+}
+
+Table facultad {
+  id text [pk, note: 'Identificador único de facultad']
+  nombre text [not null, unique, note: 'Nombre de la facultad']
+  
+  Note: 'Facultades académicas'
+}
+
+Table modalidad {
+  id text [pk, note: 'presencial | semipresencial | distancia']
+  
+  Note: 'Modalidades de estudio disponibles'
+}
+
+// ============================================================================
+// CARRERAS Y DISPONIBILIDAD
+// ============================================================================
+
+Table carrera {
+  id text [pk, note: 'Identificador único de carrera']
+  nombre text [not null, note: 'Nombre de la carrera']
+  facultad_id text [not null, ref: > facultad.id, note: 'FK a facultad']
+  duracion text [note: 'Duración en años/semestres']
+  malla_resumen_json jsonb [note: 'Resumen de malla curricular']
+  grado text [note: 'Grado académico que otorga']
+  titulo text [note: 'Título profesional']
+  imagen text [note: 'Imagen representativa']
+  
+  indexes {
+    (facultad_id, nombre) [unique, name: 'uq_carrera_facultad_nombre']
+  }
+  
+  Note: 'Programas académicos ofrecidos'
+}
+
+Table carrera_campus {
+  carrera_id text [pk, ref: > carrera.id]
+  campus_id text [pk, ref: > campus.id]
+  
+  indexes {
+    (campus_id, carrera_id) [name: 'ix_carrera_campus_by_campus']
+  }
+  
+  Note: 'Disponibilidad de carreras por campus'
+}
+
+Table carrera_modalidad {
+  carrera_id text [pk, ref: > carrera.id]
+  modalidad_id text [pk, ref: > modalidad.id]
+  
+  indexes {
+    (modalidad_id, carrera_id) [name: 'ix_carrera_modalidad_by_modalidad']
+  }
+  
+  Note: 'Modalidades disponibles por carrera'
+}
+
+// ============================================================================
+// OFERTAS ACADÉMICAS
+// ============================================================================
+
+Table oferta {
+  carrera_id text [pk, ref: > carrera.id]
+  campus_id text [pk, ref: > campus.id]
+  modalidad_id text [pk, ref: > modalidad.id]
+  estado text [not null, default: 'activa', note: 'activa | pausada | cerrada']
+  extras jsonb [note: 'Información adicional en JSON']
+  
+  indexes {
+    (campus_id, modalidad_id, carrera_id) [name: 'ix_oferta_campus_modalidad_carrera']
+  }
+  
+  Note: 'Combinaciones reales carrera×campus×modalidad disponibles'
+}
+
+// ============================================================================
+// SISTEMA DE PRECIOS
+// ============================================================================
+
+Table periodo {
+  id text [pk, note: 'Formato: YYYY-N (ej: 2025-1)']
+  anio int [not null, note: 'Año >= 2000']
+  ciclo int [not null, note: '1 o 2']
+  inicio date [note: 'Fecha de inicio del periodo']
+  fin date [note: 'Fecha de fin del periodo']
+  
+  Note: 'Periodos académicos'
+}
+
+Table moneda {
+  codigo text [pk, note: 'PEN | USD']
+  simbolo text [note: 'S/. | $']
+  
+  Note: 'Monedas para sistema de precios'
+}
+
+Table precio {
+  carrera_id text [pk]
+  campus_id text [pk]
+  modalidad_id text [pk]
+  periodo_id text [pk, ref: > periodo.id]
+  item text [pk, note: 'matricula | pension_mensual | credito | cuota']
+  monto decimal(12,2) [not null, note: 'Monto > 0']
+  moneda_codigo text [not null, ref: > moneda.codigo]
+  vigente_desde date [note: 'Fecha desde cuando aplica']
+  vigente_hasta date [note: 'Fecha hasta cuando aplica']
+  
+  indexes {
+    (carrera_id, periodo_id) [name: 'ix_precio_carrera_periodo']
+    (campus_id, modalidad_id, periodo_id) [name: 'ix_precio_campus_modalidad_periodo']
+  }
+  
+  Note: 'Precios por oferta, periodo y concepto'
+}
+
+// Referencia compuesta para precio -> oferta
+Ref: precio.(carrera_id, campus_id, modalidad_id) > oferta.(carrera_id, campus_id, modalidad_id)
+
+// ============================================================================
+// VISTAS
+// ============================================================================
+
+Table vw_precio_vigente {
+  carrera_id text
+  campus_id text
+  modalidad_id text
+  periodo_id text
+  item text
+  monto decimal(12,2)
+  moneda_codigo text
+  vigente_desde date
+  vigente_hasta date
+  
+  Note: '''
+    Vista para precios vigentes.
+    Filtra precios donde:
+    - vigente_desde <= hoy (o es NULL)
+    - vigente_hasta >= hoy (o es NULL)
+  '''
+}
+
+// ============================================================================
+// ENUMS (para documentación)
+// ============================================================================
+
+Enum modalidad_enum {
+  presencial
+  semipresencial
+  distancia
+}
+
+Enum estado_oferta_enum {
+  activa
+  pausada
+  cerrada
+}
+
+Enum item_precio_enum {
+  matricula
+  pension_mensual
+  credito
+  cuota
+}
+
+Enum moneda_enum {
+  PEN
+  USD
+}
+

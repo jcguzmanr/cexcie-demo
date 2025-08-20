@@ -1,0 +1,115 @@
+{
+  "id": "ingenieria-ambiental",
+  "nombre": "Ingeniería Ambiental",
+  "facultad": "Ingeniería",
+  "campus": ["Arequipa", "Cusco", "Huancayo", "Lima", "Ica"],
+  "modalidades": ["presencial", "semipresencial"],
+  
+  "secciones": {
+    "sobre": {
+      "titulo": "Sobre la carrera",
+      "descripcion": "La Ingeniería Ambiental forma profesionales comprometidos con la sostenibilidad y la protección del medio ambiente. Desarrolla soluciones innovadoras para los desafíos ambientales actuales, desde la gestión de residuos hasta la implementación de tecnologías limpias.",
+      "media": {
+        "type": "image",
+        "alt": "Ingeniero ambiental trabajando en campo",
+        "src": "/carreras/ing-amb.png"
+      },
+      "infoCards": [
+        {
+          "id": "modalidades",
+          "icon": "📍",
+          "titulo": "Modalidades disponibles",
+          "contenido": ["Presencial", "Semipresencial"],
+          "descripcion": "Modalidades que combinan teoría y práctica en campo"
+        },
+        {
+          "id": "campus",
+          "icon": "🏢",
+          "titulo": "Campus disponibles",
+          "contenido": ["Arequipa", "Cusco", "Huancayo", "Lima", "Ica"],
+          "descripcion": "Amplia cobertura geográfica para tu formación"
+        },
+        {
+          "id": "grado",
+          "icon": "🎓",
+          "titulo": "Grado obtenido",
+          "contenido": "Bachiller en Ingeniería Ambiental",
+          "descripcion": "Título universitario con enfoque en sostenibilidad"
+        },
+        {
+          "id": "duracion",
+          "icon": "⏰",
+          "titulo": "Duración",
+          "contenido": ["5 años", "10 periodos académicos"],
+          "descripcion": "Programa integral de formación profesional"
+        },
+        {
+          "id": "certificaciones",
+          "icon": "📚",
+          "titulo": "Certificaciones",
+          "contenido": [
+            "Auditor Ambiental",
+            "Gestor de Residuos Sólidos",
+            "Especialista en Calidad del Aire",
+            "Experto en Gestión del Agua"
+          ],
+          "descripcion": "Certificaciones que validan tu expertise ambiental"
+        },
+        {
+          "id": "titulo-profesional",
+          "icon": "🎯",
+          "titulo": "Título profesional",
+          "contenido": "Ingeniero Ambiental",
+          "descripcion": "Título profesional para ejercer en el campo ambiental"
+        }
+      ]
+    },
+    
+    "planEstudios": {
+      "legendEtapas": {
+        "adaptacion": { 
+          "label": "Etapa de adaptación", 
+          "color": "#B9E1FF",
+          "descripcion": "Desarrolla las bases científicas y matemáticas fundamentales."
+        },
+        "profundizacion": { 
+          "label": "Etapa de profundización", 
+          "color": "#9169FF",
+          "descripcion": "Adquiere conocimientos especializados en ciencias ambientales."
+        },
+        "consolidacion": { 
+          "label": "Etapa de consolidación", 
+          "color": "#FAAAFA",
+          "descripcion": "Integra tu aprendizaje en proyectos ambientales reales."
+        }
+      },
+      "ciclos": [
+        { "numero": 1, "creditos": 22, "etapa": "adaptacion", "cursos": ["Matemática Básica", "Química General", "Física", "Introducción a la Ingeniería Ambiental"] },
+        { "numero": 2, "creditos": 22, "etapa": "adaptacion", "cursos": ["Cálculo Diferencial", "Química Orgánica", "Estadística", "Biología General"] }
+      ]
+    },
+    
+    "internacional": {
+      "cards": [
+        {
+          "titulo": "Programas de intercambio",
+          "texto": "Participa en programas de intercambio con universidades internacionales especializadas en ciencias ambientales.",
+          "cta": { "label": "SABER MÁS", "action": "openModal", "payload": "intercambio-ambiental" }
+        }
+      ]
+    },
+    
+    "beneficios": {
+      "bloques": [
+        {
+          "titulo": "Laboratorios especializados",
+          "items": ["Laboratorio de análisis de agua", "Laboratorio de calidad del aire", "Laboratorio de suelos"]
+        },
+        {
+          "titulo": "Prácticas en campo",
+          "items": ["Visitas a plantas de tratamiento", "Monitoreo ambiental", "Auditorías ambientales"]
+        }
+      ]
+    }
+  }
+}

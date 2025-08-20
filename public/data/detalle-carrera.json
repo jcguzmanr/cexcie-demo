@@ -13,7 +13,56 @@
           "type": "image",
           "alt": "Estudiante en laboratorio de computación",
           "src": "/detallecarrera.png"
-        }
+        },
+        "infoCards": [
+          {
+            "id": "modalidades",
+            "icon": "📍",
+            "titulo": "Modalidades disponibles",
+            "contenido": ["A Distancia", "Presencial", "Semipresencial"],
+            "descripcion": "Elige la modalidad que mejor se adapte a tu estilo de vida y horarios"
+          },
+          {
+            "id": "campus",
+            "icon": "🏢",
+            "titulo": "Campus disponibles",
+            "contenido": ["Arequipa", "Cusco", "Huancayo", "Lima"],
+            "descripcion": "Estudia en el campus más cercano a ti o en la ciudad de tu preferencia"
+          },
+          {
+            "id": "grado",
+            "icon": "🎓",
+            "titulo": "Grado obtenido",
+            "contenido": "Bachiller en Ingeniería de Sistemas e Informática",
+            "descripcion": "Título universitario reconocido internacionalmente"
+          },
+          {
+            "id": "duracion",
+            "icon": "⏰",
+            "titulo": "Duración",
+            "contenido": ["5 años", "10 periodos académicos"],
+            "descripcion": "Programa estructurado para completar tu formación profesional"
+          },
+          {
+            "id": "certificaciones",
+            "icon": "📚",
+            "titulo": "Certificaciones",
+            "contenido": [
+              "Desarrollador de Aplicaciones Web",
+              "Analista de Sistemas", 
+              "Desarrollador Móvil y de Realidad Virtual",
+              "Experto en Ciencia de Datos y Machine Learning"
+            ],
+            "descripcion": "Certificaciones progresivas que validan tus competencias"
+          },
+          {
+            "id": "titulo-profesional",
+            "icon": "🎯",
+            "titulo": "Título profesional",
+            "contenido": "Ingeniero de Sistemas e Informática",
+            "descripcion": "Título profesional que te permite ejercer en el campo de la tecnología"
+          }
+        ]
       },
   
       "planEstudios": {
