@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useTelemetryEvents } from './useTelemetry';
-import { PDF_STATES, THANKYOU_EVENTS, createThankYouEvent } from './thankyou-events';
+import { PDF_STATES, THANKYOU_EVENTS } from './thankyou-events';
 
 export type PDFState = typeof PDF_STATES[keyof typeof PDF_STATES];
 
@@ -10,7 +10,7 @@ export interface PDFGenerationOptions {
   leadId: string;
   source: "career" | "comparator";
   careerNames: string[];
-  selectedCarreras?: any[];
+  selectedCarreras?: Array<{ id: string; nombre: string; [key: string]: unknown }>;
 }
 
 export function usePDFGeneration() {
@@ -20,7 +20,7 @@ export function usePDFGeneration() {
   const { trackCustomEvent } = useTelemetryEvents();
 
   const generatePDF = useCallback(async (options: PDFGenerationOptions) => {
-    const { leadId, source, careerNames, selectedCarreras } = options;
+    const { leadId, source, careerNames } = options;
     
     try {
       setPdfState(PDF_STATES.LOADING);

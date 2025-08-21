@@ -17,7 +17,7 @@ export function TelemetryLogger({ className = '' }: TelemetryLoggerProps) {
   const [eventCount, setEventCount] = useState(0);
   const [leadCount, setLeadCount] = useState(0);
   const eventsEndRef = useRef<HTMLDivElement>(null);
-  const [maxEvents, setMaxEvents] = useState(100); // Limit events in memory
+  const [maxEvents] = useState(100); // Limit events in memory
 
   useEffect(() => {
     // Load initial data

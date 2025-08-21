@@ -215,29 +215,6 @@ export default function ComparadorPage() {
   );
 }
 
-function validateEmail(value: string) {
-  return /.+@.+\..+/.test(value);
-}
-function validatePhone(value: string) {
-  return /^\+?\d[\d\s-]{6,}$/.test(value);
-}
-
-function Field({ label, value, onChange, type = "text", placeholder, error }: { label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string; error?: string }) {
-  return (
-    <label className="grid gap-1">
-      <span className="text-sm font-medium opacity-80">{label}</span>
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        type={type}
-        placeholder={placeholder}
-        className={cx("px-4 py-3 rounded-xl border bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)]", error ? "border-red-500 focus-visible:ring-red-500/40" : undefined)}
-      />
-      {error && <span className="text-xs text-red-600">{error}</span>}
-    </label>
-  );
-}
-
 // function SuccessBanner({ onClose }: { onClose: () => void }) {
 //   return (
 //     <div className="rounded-xl border bg-green-50 text-green-900 p-4">

@@ -31,7 +31,6 @@ export function ThankYouModal({
   const { trackCustomEvent } = useTelemetryEvents();
   const { 
     pdfState, 
-    pdfUrl, 
     error, 
     generatePDF, 
     downloadPDF, 
@@ -41,9 +40,9 @@ export function ThankYouModal({
   // Generar highlights dinámicos según el origen
   useEffect(() => {
     if (source === "career" && careerNames.length === 1) {
-      setHighlights(HIGHLIGHTS_CONFIG.career);
+      setHighlights([...HIGHLIGHTS_CONFIG.career]);
     } else if (source === "comparator" && careerNames.length > 1) {
-      setHighlights(HIGHLIGHTS_CONFIG.comparator);
+      setHighlights([...HIGHLIGHTS_CONFIG.comparator]);
     }
   }, [source, careerNames]);
 

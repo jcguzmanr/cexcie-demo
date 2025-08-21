@@ -182,12 +182,10 @@ export function trackContainer(
  * Add semantic tracking to study plan elements
  * @param element - The study plan element
  * @param stage - The stage name (e.g., "Etapa de adaptación")
- * @param description - Brief description of the stage
  */
 export function trackStudyPlanElement(
   element: HTMLElement,
-  stage: string,
-  description?: string
+  stage: string
 ) {
   addSemanticTracking(element, {
     label: stage,
@@ -309,5 +307,5 @@ export function useSemanticTracking(
     if (ref.current) {
       addSemanticTracking(ref.current, options);
     }
-  }, [ref, options.label, options.entityType, options.entityId, options.context]);
+  }, [ref, options]);
 }

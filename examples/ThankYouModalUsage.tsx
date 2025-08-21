@@ -105,7 +105,7 @@ export function CompleteExample() {
             id: "comp",
             nombre: "Ciencias de la Computación",
             facultadId: "ing",
-            modalidades: ["presencial", "semipresencial"],
+            modalidades: ["presencial", "semipresencial"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
             imagen: "/carreras/comp.png"
           }
@@ -120,7 +120,7 @@ export function CompleteExample() {
             id: "comp",
             nombre: "Ciencias de la Computación",
             facultadId: "ing",
-            modalidades: ["presencial", "semipresencial"],
+            modalidades: ["presencial", "semipresencial"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
             imagen: "/carreras/comp.png"
           },
@@ -128,7 +128,7 @@ export function CompleteExample() {
             id: "sis",
             nombre: "Ingeniería de Sistemas e Informática",
             facultadId: "ing",
-            modalidades: ["presencial", "semipresencial"],
+            modalidades: ["presencial", "semipresencial"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
             imagen: "/carreras/sistemas.png"
           },
@@ -136,7 +136,7 @@ export function CompleteExample() {
             id: "admfin",
             nombre: "Administración y Finanzas",
             facultadId: "emp",
-            modalidades: ["presencial", "semipresencial", "distancia"],
+            modalidades: ["presencial", "semipresencial", "distancia"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
             imagen: "/carreras/admfin.png"
           }

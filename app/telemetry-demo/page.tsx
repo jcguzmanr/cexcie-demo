@@ -251,7 +251,7 @@ export default function TelemetryDemoPage() {
                 <ul className="list-disc list-inside ml-4 space-y-1 text-sm text-gray-700">
                   <li><strong>Clean Data:</strong> No CSS classes or HTML technical details</li>
                   <li><strong>Business Focus:</strong> Only captures what matters for analytics</li>
-                  <li><strong>Human Readable:</strong> Clear labels like "Ciencias de la Comunicación Career Card"</li>
+                  <li><strong>Human Readable:</strong> Clear labels like &ldquo;Ciencias de la Comunicación Career Card&rdquo;</li>
                   <li><strong>Structured:</strong> Consistent entityType, entityId, context for easy analysis</li>
                   <li><strong>Actionable:</strong> Perfect for generating usage reports and insights</li>
                 </ul>

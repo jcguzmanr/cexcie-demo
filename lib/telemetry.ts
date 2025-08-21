@@ -662,5 +662,5 @@ export const Telemetry = new TelemetryClass();
 
 // Add to global window for helper functions
 if (typeof window !== 'undefined') {
-  (window as any).Telemetry = Telemetry;
+  (window as unknown as Record<string, unknown>).Telemetry = Telemetry;
 }

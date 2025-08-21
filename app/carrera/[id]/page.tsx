@@ -44,7 +44,7 @@ type DetalleCarrera = {
 
 
 // Función para verificar si una carrera tiene suficientes cursos para comparar
-function carreraTieneSuficientesCursos(carreraId: string): boolean {
+function carreraTieneSuficientesCursos(): boolean {
   // TODO: Implementar lógica para verificar número de cursos por carrera
   // Por ahora retorna true para todas las carreras
   // En el futuro, verificar si la carrera tiene más de 1 curso
@@ -71,7 +71,7 @@ export default function CarreraDetallePage() {
   const router = useRouter();
   
   // Verificar si la carrera actual puede ser comparada
-  const puedeComparar = carreraTieneSuficientesCursos(carrera?.id || "");
+  const puedeComparar = carreraTieneSuficientesCursos();
 
   React.useEffect(() => {
     fetch("/data/detalle-carrera.json")
