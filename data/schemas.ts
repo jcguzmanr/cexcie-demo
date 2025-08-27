@@ -28,10 +28,24 @@ export const CarreraSchema = z.object({
   modalidades: z.array(ModalidadSchema).default([]),
   campus: z.array(z.string()).default([]),
   duracion: z.string().optional(),
-  mallaResumen: z.array(z.string()).optional(),
+  mallaResumen: z.array(z.string()).default([]),
   grado: z.string().optional(),
   titulo: z.string().optional(),
   imagen: z.string().optional(),
+});
+
+// Esquemas para comparación de modalidades
+export const ModalidadComparisonCategorySchema = z.object({
+  category: z.string().min(1),
+  presencial: z.string().min(1),
+  semipresencial: z.string().min(1),
+  distancia: z.string().min(1),
+});
+
+export const ModalidadComparisonSchema = z.object({
+  career_id: z.string().min(1),
+  career_name: z.string().min(1),
+  comparison_categories: z.array(ModalidadComparisonCategorySchema),
 });
 
 export type Campus = z.infer<typeof CampusSchema>;
@@ -39,4 +53,6 @@ export type Modalidad = z.infer<typeof ModalidadSchema>;
 export type Facultad = z.infer<typeof FacultadSchema>;
 export type Carrera = z.infer<typeof CarreraSchema>;
 export type CampusMeta = z.infer<typeof CampusMetaSchema>;
+export type ModalidadComparison = z.infer<typeof ModalidadComparisonSchema>;
+export type ModalidadComparisonCategory = z.infer<typeof ModalidadComparisonCategorySchema>;
 

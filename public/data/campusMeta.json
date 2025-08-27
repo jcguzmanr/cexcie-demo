@@ -28,11 +28,11 @@
     "mapUrl": "https://maps.example/losolivos"
   },
   {
-    "id": "miraflores",
-    "imagen": "/campus/campus-miraflores.png",
+    "id": "ayacucho",
+    "imagen": "/campus/campus-ayacucho.png",
     "direccion": "(por confirmar)",
-    "ciudad": "Lima (Miraflores)",
-    "mapUrl": "https://maps.example/miraflores"
+    "ciudad": "Ayacucho",
+    "mapUrl": "https://maps.example/ayacucho"
   },
   {
     "id": "ica",

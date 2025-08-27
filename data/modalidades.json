@@ -1,0 +1,119 @@
+[
+  {
+    "id": "presencial",
+    "nombre": "Modalidad Presencial",
+    "descripcion": "Sumérgete en un entorno moderno, cuidadosamente elaborado para que vivas una experiencia educativa excepcional.",
+    "tags": [
+      {
+        "texto": "AulasInnovadoras",
+        "emoji": "🏫",
+        "descripcion": "Infraestructura moderna y tecnología de vanguardia"
+      },
+      {
+        "texto": "ModeloInternacional",
+        "emoji": "🌍",
+        "descripcion": "Estándares académicos internacionales"
+      },
+      {
+        "texto": "AltaCalidadAcadémica",
+        "emoji": "⭐",
+        "descripcion": "Excelencia en la formación profesional"
+      },
+      {
+        "texto": "ComunidadContinental",
+        "emoji": "🤝",
+        "descripcion": "Red de contactos y networking presencial"
+      },
+      {
+        "texto": "EcosistemaHíbrido",
+        "emoji": "🔀",
+        "descripcion": "Combinación de métodos tradicionales y digitales"
+      }
+    ],
+    "caracteristicas": {
+      "horarios": "Fijos y estructurados",
+      "interaccion": "Directa con profesores y compañeros",
+      "ubicacion": "Campus físico",
+      "tecnologia": "Presencial con apoyo digital",
+      "flexibilidad": "Media"
+    }
+  },
+  {
+    "id": "semipresencial",
+    "nombre": "Modalidad Semipresencial",
+    "descripcion": "Te ofrecemos una educación que se adapta a tu ritmo de vida, donde la flexibilidad es la clave.",
+    "tags": [
+      {
+        "texto": "FlexibleParaTi",
+        "emoji": "⏰",
+        "descripcion": "Adaptable a tu horario personal"
+      },
+      {
+        "texto": "EdInnovadora",
+        "emoji": "💡",
+        "descripcion": "Metodologías educativas innovadoras"
+      },
+      {
+        "texto": "AprovechaTuTiempo",
+        "emoji": "⏳",
+        "descripcion": "Optimización del tiempo de estudio"
+      },
+      {
+        "texto": "RedProfesional",
+        "emoji": "🌐",
+        "descripcion": "Construcción de redes profesionales"
+      },
+      {
+        "texto": "SmartTime",
+        "emoji": "⌛",
+        "descripcion": "Gestión inteligente del tiempo"
+      }
+    ],
+    "caracteristicas": {
+      "horarios": "Flexibles con sesiones presenciales",
+      "interaccion": "Mixta (presencial y virtual)",
+      "ubicacion": "Campus + plataforma digital",
+      "tecnologia": "Híbrida avanzada",
+      "flexibilidad": "Alta"
+    }
+  },
+  {
+    "id": "distancia",
+    "nombre": "Modalidad a Distancia",
+    "descripcion": "Nuestra modalidad a distancia se adapta a tus necesidades y derriba los límites de tiempo y espacio.",
+    "tags": [
+      {
+        "texto": "100Virtual",
+        "emoji": "💻",
+        "descripcion": "Educación completamente en línea"
+      },
+      {
+        "texto": "EcosistemaDigital",
+        "emoji": "📲",
+        "descripcion": "Plataforma digital integral"
+      },
+      {
+        "texto": "AccedeDesdeDondeSea",
+        "emoji": "🌏",
+        "descripcion": "Estudia desde cualquier lugar del mundo"
+      },
+      {
+        "texto": "AutonomíaTotal",
+        "emoji": "🆓",
+        "descripcion": "Control completo sobre tu aprendizaje"
+      },
+      {
+        "texto": "AhorraTiempoYCostos",
+        "emoji": "💰",
+        "descripcion": "Eficiencia en tiempo y recursos"
+      }
+    ],
+    "caracteristicas": {
+      "horarios": "Completamente flexibles",
+      "interaccion": "Virtual y asíncrona",
+      "ubicacion": "100% remota",
+      "tecnologia": "Plataforma digital completa",
+      "flexibilidad": "Máxima"
+    }
+  }
+]

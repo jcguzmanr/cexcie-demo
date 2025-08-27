@@ -133,6 +133,139 @@
             "items": ["Tutorías personalizadas", "Asesoría en empleabilidad", "Red de egresados para networking profesional"]
           }
         ]
+      },
+
+      "testimonios": {
+        "estudiantes": [
+          {
+            "id": "est-1",
+            "nombre": "María Fernanda López",
+            "carrera": "Ciencia de la Computación",
+            "ciclo": "6to ciclo",
+            "campus": "Lima",
+            "foto": "👩‍💻",
+            "testimonio": "La carrera me ha permitido desarrollar habilidades prácticas desde el primer ciclo. Los laboratorios son increíbles y los profesores siempre están dispuestos a ayudar.",
+            "destacado": "Mejor estudiante del 5to ciclo"
+          },
+          {
+            "id": "est-2",
+            "nombre": "Carlos Mendoza",
+            "carrera": "Ciencia de la Computación",
+            "ciclo": "4to ciclo",
+            "campus": "Arequipa",
+            "foto": "👨‍💻",
+            "testimonio": "Los proyectos integradores con empresas reales me han dado una visión clara de lo que es trabajar en tecnología. Excelente preparación práctica.",
+            "destacado": "Líder del club de programación"
+          },
+          {
+            "id": "est-3",
+            "nombre": "Ana Sofía Torres",
+            "carrera": "Ciencia de la Computación",
+            "ciclo": "7mo ciclo",
+            "campus": "Huancayo",
+            "foto": "👩‍🔬",
+            "testimonio": "La modalidad semipresencial me permite balancear mis estudios con trabajo. El contenido es muy actualizado y relevante para el mercado.",
+            "destacado": "Participante en hackathons internacionales"
+          },
+          {
+            "id": "est-4",
+            "nombre": "Diego Ramírez",
+            "carrera": "Ciencia de la Computación",
+            "ciclo": "5to ciclo",
+            "campus": "Cusco",
+            "foto": "👨‍🎓",
+            "testimonio": "Las certificaciones progresivas me han ayudado a construir un portafolio sólido. Ya tengo ofertas de trabajo antes de terminar.",
+            "destacado": "Certificado en Machine Learning"
+          },
+          {
+            "id": "est-5",
+            "nombre": "Valeria Castro",
+            "carrera": "Ciencia de la Computación",
+            "ciclo": "3er ciclo",
+            "campus": "Lima",
+            "foto": "👩‍🎨",
+            "testimonio": "Me encanta cómo la carrera combina teoría y práctica. Los laboratorios de innovación son espacios increíbles para crear y experimentar.",
+            "destacado": "Creadora de apps móviles"
+          },
+          {
+            "id": "est-6",
+            "nombre": "Roberto Silva",
+            "carrera": "Ciencia de la Computación",
+            "ciclo": "8vo ciclo",
+            "campus": "Arequipa",
+            "foto": "👨‍🚀",
+            "testimonio": "La experiencia internacional con clases espejo y streaming me ha abierto las puertas a oportunidades globales. Excelente programa.",
+            "destacado": "Participante en programa de intercambio"
+          }
+        ],
+        "egresados": [
+          {
+            "id": "egr-1",
+            "nombre": "Dr. Patricia Morales",
+            "carrera": "Ciencia de la Computación",
+            "egreso": "2020",
+            "cargo": "Senior Data Scientist",
+            "empresa": "Google",
+            "foto": "👩‍💼",
+            "testimonio": "La base sólida en matemáticas y programación que recibí me permitió especializarme en IA. Ahora lidero equipos de investigación en Silicon Valley.",
+            "destacado": "PhD en Computer Science - Stanford"
+          },
+          {
+            "id": "egr-2",
+            "nombre": "Ing. Miguel Ángel Rojas",
+            "carrera": "Ciencia de la Computación",
+            "egreso": "2019",
+            "cargo": "Cloud Solutions Architect",
+            "empresa": "Microsoft",
+            "foto": "👨‍💼",
+            "testimonio": "Las certificaciones en cloud computing que obtuve durante la carrera fueron clave para mi desarrollo profesional. Excelente preparación técnica.",
+            "destacado": "Microsoft MVP Award 2023"
+          },
+          {
+            "id": "egr-3",
+            "nombre": "Ing. Carmen Elena Vargas",
+            "carrera": "Ciencia de la Computación",
+            "egreso": "2021",
+            "cargo": "Cybersecurity Engineer",
+            "empresa": "Cisco",
+            "foto": "👩‍🔒",
+            "testimonio": "La especialización en ciberseguridad me abrió puertas en una industria en constante crecimiento. Los proyectos prácticos fueron fundamentales.",
+            "destacado": "Certificada CISSP, CEH"
+          },
+          {
+            "id": "egr-4",
+            "nombre": "Ing. Fernando Delgado",
+            "carrera": "Ciencia de la Computación",
+            "egreso": "2018",
+            "cargo": "Software Engineering Manager",
+            "empresa": "Amazon",
+            "foto": "👨‍🔧",
+            "testimonio": "La formación en ingeniería de software me permitió escalar rápidamente en mi carrera. Ahora gestiono equipos de más de 50 desarrolladores.",
+            "destacado": "Líder de proyectos de alto impacto"
+          },
+          {
+            "id": "egr-5",
+            "nombre": "Ing. Lucía Fernández",
+            "carrera": "Ciencia de la Computación",
+            "egreso": "2022",
+            "cargo": "Game Developer",
+            "empresa": "Electronic Arts",
+            "foto": "👩‍🎮",
+            "testimonio": "Mi pasión por los videojuegos se convirtió en profesión gracias a la especialización en desarrollo de aplicaciones móviles y realidad virtual.",
+            "destacado": "Desarrolladora de títulos AAA"
+          },
+          {
+            "id": "egr-6",
+            "nombre": "Ing. Alejandro Torres",
+            "carrera": "Ciencia de la Computación",
+            "egreso": "2017",
+            "cargo": "CTO & Co-founder",
+            "empresa": "TechStartup",
+            "foto": "👨‍🚀",
+            "testimonio": "El espíritu emprendedor que se fomenta en la carrera me llevó a crear mi propia empresa. La red de egresados ha sido invaluable para el networking.",
+            "destacado": "Startup valuada en $50M"
+          }
+        ]
       }
     }
   }

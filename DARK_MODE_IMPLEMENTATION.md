@@ -2,95 +2,85 @@
 
 ## Descripción General
 
-Se ha implementado soporte completo para **Dark Mode** en todos los componentes de la vista de agradecimiento (`ThankYouModal`). Ahora la interfaz se adapta automáticamente al tema seleccionado por el usuario, proporcionando una experiencia visual consistente y atractiva en ambos modos.
+Se ha implementado **Dark Mode exclusivo** en todos los componentes de la vista de agradecimiento (`ThankYouModal`). La interfaz ahora usa consistentemente los colores institucionales de CExCIE en tema oscuro, proporcionando una experiencia visual uniforme y profesional.
 
 ## 🎨 Componentes Actualizados
 
 ### 1. **HighlightsSection** ✅
-- **Gradientes adaptativos**: Colores que cambian según el tema
-- **Texto adaptativo**: Colores de texto que se ajustan automáticamente
-- **Fondos adaptativos**: Fondos de highlights que se adaptan al tema
-- **Indicadores visuales**: Puntos de progreso con colores apropiados
+- **Gradientes institucionales**: Colores azules e índigo para carreras, púrpura y rosa para comparador
+- **Texto optimizado**: Colores de texto que mantienen legibilidad en dark mode
+- **Fondos adaptativos**: Fondos de highlights con transparencia apropiada
+- **Indicadores visuales**: Puntos de progreso con colores institucionales
 
 ### 2. **LegalNoteSection** ✅
-- **Bordes adaptativos**: Colores de borde que cambian con el tema
-- **Fondos informativos**: Colores de fondo que se adaptan
-- **Texto y enlaces**: Colores que mantienen contraste en ambos temas
-- **Indicadores de estado**: Colores que funcionan en ambos modos
+- **Bordes institucionales**: Colores de borde consistentes con el tema
+- **Fondos informativos**: Colores de fondo que mantienen contraste
+- **Texto y enlaces**: Colores que mantienen legibilidad y accesibilidad
+- **Indicadores de estado**: Colores que funcionan perfectamente en dark mode
 
 ### 3. **ThankYouModal** ✅
-- **Header de agradecimiento**: Colores adaptativos para el mensaje principal
-- **Icono de confirmación**: Fondo y color que se adaptan al tema
-- **Mensajes de error**: Colores de error apropiados para cada tema
+- **Header de agradecimiento**: Colores institucionales para el mensaje principal
+- **Icono de confirmación**: Fondo y color adaptados al tema oscuro
+- **Mensajes de error**: Colores de error apropiados para dark mode
 - **Texto general**: Colores que mantienen legibilidad
 
 ### 4. **Modal Base** ✅
 - **Ya compatible**: Usa variables CSS que se adaptan automáticamente
-- **Superficies**: Fondos que cambian según el tema
-- **Bordes**: Colores de borde adaptativos
-- **Texto**: Colores de texto que se ajustan
+- **Superficies**: Fondos oscuros institucionales
+- **Bordes**: Colores de borde consistentes
+- **Texto**: Colores de texto optimizados
 
-## 🌈 Paleta de Colores por Tema
+## 🌈 Paleta de Colores Institucionales
 
-### **Light Mode (Tema Claro)**
+### **Dark Mode (Tema Oscuro Exclusivo)**
 ```css
 /* Highlights - Carrera */
---gradient: from-blue-50 to-indigo-50
---border: border-blue-200
---text: text-gray-800
---highlight-bg: bg-white/60
+--gradient: from-blue-950/30 to-indigo-950/30
+--border: border-blue-800/50
+--text: text-gray-200
+--highlight-bg: bg-white/10
 
 /* Highlights - Comparador */
---gradient: from-purple-50 to-pink-50
---border: border-purple-200
+--gradient: from-purple-950/30 to-pink-950/30
+--border: border-purple-800/50
 
 /* Legal Section */
---bg: bg-blue-50
---border: border-blue-200
---text: text-blue-800
-```
+--bg: bg-blue-950/30
+--border: border-blue-800/50
+--text: text-blue-200
 
-### **Dark Mode (Tema Oscuro)**
-```css
-/* Highlights - Carrera */
---gradient: dark:from-blue-950/30 dark:to-indigo-950/30
---border: dark:border-blue-800/50
---text: dark:text-gray-200
---highlight-bg: dark:bg-white/10
-
-/* Highlights - Comparador */
---gradient: dark:from-purple-950/30 dark:to-pink-950/30
---border: dark:border-purple-800/50
-
-/* Legal Section */
---bg: dark:bg-blue-950/30
---border: dark:border-blue-800/50
---text: dark:text-blue-200
+/* Colores base del sistema */
+--background: #0a0a0a
+--foreground: #ededed
+--surface: #111113
+--surface-2: #17181b
+--border: rgba(255, 255, 255, 0.14)
+--muted: rgba(255, 255, 255, 0.35)
 ```
 
 ## 🔧 Implementación Técnica
 
-### **Clases CSS Condicionales**
+### **Clases CSS Simplificadas**
 ```tsx
 const getGradientClass = (source: "career" | "comparator") => {
   if (source === "career") {
-    return "from-blue-50 to-indigo-50 border-blue-200 dark:from-blue-950/30 dark:to-indigo-950/30 dark:border-blue-800/50";
+    return "from-blue-950/30 to-indigo-950/30 border-blue-800/50";
   } else {
-    return "from-purple-50 to-pink-50 border-purple-200 dark:from-purple-950/30 dark:to-pink-950/30 dark:border-purple-800/50";
+    return "from-purple-950/30 to-pink-950/30 border-purple-800/50";
   }
 };
 ```
 
-### **Colores de Texto Adaptativos**
+### **Colores de Texto Optimizados**
 ```tsx
-<h3 className="text-gray-800 dark:text-gray-200">
+<h3 className="text-gray-200">
   Lo que recibirás:
 </h3>
 ```
 
-### **Fondos Adaptativos**
+### **Fondos Institucionales**
 ```tsx
-<div className="bg-white/60 dark:bg-white/10">
+<div className="bg-white/10">
   {/* Contenido */}
 </div>
 ```
@@ -98,16 +88,16 @@ const getGradientClass = (source: "career" | "comparator") => {
 ## 🎯 Beneficios de la Implementación
 
 ### **Para el Usuario**
-- **Experiencia consistente**: Misma funcionalidad en ambos temas
-- **Legibilidad mejorada**: Contraste apropiado en cada modo
-- **Preferencia personal**: Respeta la elección del usuario
+- **Experiencia consistente**: Tema oscuro uniforme en toda la aplicación
+- **Legibilidad mejorada**: Contraste optimizado para dark mode
+- **Identidad institucional**: Colores que representan a CExCIE
 - **Accesibilidad**: Mejor experiencia para usuarios con sensibilidad visual
 
 ### **Para el Desarrollo**
-- **Mantenibilidad**: Código centralizado y reutilizable
+- **Mantenibilidad**: Código simplificado sin lógica condicional
 - **Escalabilidad**: Fácil agregar nuevos componentes
 - **Consistencia**: Patrón uniforme en toda la aplicación
-- **Testing**: Fácil verificar en ambos temas
+- **Performance**: Sin overhead de detección de tema
 
 ## 🧪 Cómo Probar
 
@@ -116,42 +106,42 @@ const getGradientClass = (source: "career" | "comparator") => {
 http://localhost:3000/demo-thankyou
 ```
 
-### **2. Cambiar Tema**
-- Usar el botón de cambio de tema en la barra superior
-- Alternar entre Light y Dark Mode
-- Verificar que todos los componentes se adapten
+### **2. Verificar Tema**
+- La aplicación siempre usa dark mode
+- No hay toggle de tema en la barra superior
+- Todos los componentes usan colores institucionales
 
 ### **3. Verificar Componentes**
-- **HighlightsSection**: Gradientes y colores adaptativos
-- **LegalNoteSection**: Fondos y bordes adaptativos
-- **ThankYouModal**: Texto y elementos visuales adaptativos
+- **HighlightsSection**: Gradientes y colores institucionales
+- **LegalNoteSection**: Fondos y bordes institucionales
+- **ThankYouModal**: Texto y elementos visuales optimizados
 - **ChannelActionButtons**: Ya compatible (usa Button base)
 
 ## 📱 Responsive Design
 
 ### **Breakpoints**
-- **Mobile**: Colores adaptativos en pantallas pequeñas
+- **Mobile**: Colores institucionales en pantallas pequeñas
 - **Tablet**: Adaptación automática en dispositivos medianos
 - **Desktop**: Experiencia completa en pantallas grandes
 
 ### **Adaptación Automática**
-- Los colores se ajustan automáticamente al tema del sistema
-- Transiciones suaves entre temas
+- Los colores se aplican automáticamente en dark mode
+- Transiciones suaves entre estados
 - Consistencia visual en todos los dispositivos
 
 ## 🚀 Próximos Pasos
 
 ### **Inmediatos** ✅
-- [x] Soporte completo para Dark Mode
-- [x] Colores adaptativos en todos los componentes
-- [x] Transiciones suaves entre temas
-- [x] Documentación técnica completa
+- [x] Dark mode exclusivo implementado
+- [x] Colores institucionales en todos los componentes
+- [x] Eliminación del toggle de tema
+- [x] Documentación técnica actualizada
 
 ### **Futuros** 🔄
-- [ ] A/B testing de colores en Dark Mode
-- [ ] Personalización de temas por usuario
+- [ ] A/B testing de colores institucionales
+- [ ] Personalización de colores por facultad
 - [ ] Más variantes de color para diferentes estados
-- [ ] Animaciones específicas por tema
+- [ ] Animaciones específicas para dark mode
 
 ## 📊 Métricas de Implementación
 
@@ -162,17 +152,17 @@ http://localhost:3000/demo-thankyou
 - **Documentados**: 4 (100%)
 
 ### **Cobertura de Colores**
-- **Textos**: 100% adaptativos
-- **Fondos**: 100% adaptativos
-- **Bordes**: 100% adaptativos
-- **Gradientes**: 100% adaptativos
+- **Textos**: 100% optimizados para dark mode
+- **Fondos**: 100% institucionales
+- **Bordes**: 100% consistentes
+- **Gradientes**: 100% institucionales
 
 ## ✨ Características Destacadas
 
-### **Adaptación Automática**
-- Los componentes detectan automáticamente el tema actual
-- No requiere configuración manual adicional
-- Transiciones suaves entre temas
+### **Tema Exclusivo**
+- Solo dark mode para mantener identidad institucional
+- No hay opción de cambio de tema
+- Colores consistentes en toda la aplicación
 
 ### **Consistencia Visual**
 - Misma paleta de colores en toda la aplicación
@@ -180,18 +170,18 @@ http://localhost:3000/demo-thankyou
 - Experiencia coherente en todos los modos
 
 ### **Performance**
-- Sin impacto en el rendimiento
-- Cambios de tema instantáneos
+- Sin lógica de detección de tema
+- Cambios de estado instantáneos
 - Optimización de CSS con Tailwind
 
 ## 🔍 Solución de Problemas
 
-### **Problema Común: Sección en Blanco**
-**Síntoma**: La sección de highlights aparece en blanco en Dark Mode
+### **Problema Común: Componentes en Blanco**
+**Síntoma**: Los componentes aparecen en blanco o con colores incorrectos
 
-**Causa**: Colores fijos que no se adaptan al tema oscuro
+**Causa**: Clases CSS que no están optimizadas para dark mode
 
-**Solución**: Implementar clases CSS condicionales con prefijos `dark:`
+**Solución**: Usar exclusivamente las clases de dark mode institucionales
 
 ### **Verificación de Implementación**
 ```bash
@@ -215,14 +205,12 @@ npm run dev
 ### **Componentes Base**
 - [Modal.tsx](./components/Modal.tsx)
 - [Button.tsx](./components/Button.tsx)
-- [ThemeToggle.tsx](./components/ThemeToggle.tsx)
 
 ### **Configuración de Tema**
 - [globals.css](./styles/globals.css)
-- [tailwind.config.js](./tailwind.config.js)
 
 ---
 
 **Estado**: ✅ **COMPLETADO**  
 **Última actualización**: Diciembre 2024  
-**Versión**: 1.0.0
+**Versión**: 2.0.0 - Dark Mode Exclusivo

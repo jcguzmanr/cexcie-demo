@@ -69,13 +69,8 @@ export default function RootLayout({
         dangerouslySetInnerHTML={{
           __html: `(() => {
   try {
-    var key = 'cexcie-theme';
-    var theme = localStorage.getItem(key);
-    if (!theme) {
-      var m = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
-      theme = m && m.matches ? 'dark' : 'light';
-    }
-    document.documentElement.setAttribute('data-theme', theme);
+    // Always use dark mode for CExCIE
+    document.documentElement.setAttribute('data-theme', 'dark');
   } catch (_) {}
 })();`,
         }}

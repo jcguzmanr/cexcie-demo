@@ -40,7 +40,7 @@ export default function FacultadesPage() {
           cta={<div className="text-sm opacity-80">Usa window.cexcieIngest(&apos;/facultades&apos;, json)</div>}
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
           {filtered.map((f) => (
             <Card key={f.id} onClick={() => setOpen(f.id)}>
               <div className="text-lg font-medium">{f.nombre}</div>

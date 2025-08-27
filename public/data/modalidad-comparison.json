@@ -1,0 +1,38 @@
+[
+  {
+    "career_id": "default",
+    "career_name": "Carrera Universitaria",
+    "comparison_categories": [
+      {
+        "category": "Metodología de aprendizaje",
+        "presencial": "Clases 100% presenciales, enfoque en proyectos prácticos y laboratorios en campus.",
+        "semipresencial": "Combina sesiones en campus con clases virtuales sincrónicas. Balance entre teoría y práctica.",
+        "distancia": "Clases 100% online, con materiales grabados, recursos interactivos y tutorías virtuales. Autonomía total para avanzar."
+      },
+      {
+        "category": "Recursos y experiencias",
+        "presencial": "Acceso completo a bibliotecas, laboratorios especializados, talleres de innovación y vida universitaria activa.",
+        "semipresencial": "Uso de laboratorios y campus en momentos clave, reforzado con acceso digital a plataformas, bibliotecas online y grabaciones.",
+        "distancia": "Acceso a simuladores digitales, bibliotecas virtuales y contenidos on-demand. No incluye uso físico de laboratorios, salvo convenios puntuales."
+      },
+      {
+        "category": "Flexibilidad y tiempo",
+        "presencial": "Horarios fijos, asistencia obligatoria en campus, avance a ritmo programado.",
+        "semipresencial": "Horarios mixtos: algunas sesiones obligatorias en campus y actividades online que permiten ajustar tiempos.",
+        "distancia": "Máxima flexibilidad, actividades asincrónicas disponibles 24/7, el estudiante gestiona su ritmo de avance."
+      },
+      {
+        "category": "Interacción y comunidad",
+        "presencial": "Alta interacción con compañeros, docentes y actividades extracurriculares. Comunidad física sólida.",
+        "semipresencial": "Networking híbrido: presencial en campus y virtual en foros o clases en línea. Mantiene comunidad diversa.",
+        "distancia": "Interacción principalmente online mediante foros, grupos virtuales y sesiones de tutoría. Comunidad digital, menos presencial."
+      },
+      {
+        "category": "Evaluación y seguimiento",
+        "presencial": "Evaluaciones continuas en clase, proyectos supervisados y exámenes presenciales.",
+        "semipresencial": "Evaluaciones híbridas: prácticas en campus y teóricas online, con entregables digitales y supervisión docente.",
+        "distancia": "Evaluaciones virtuales, autoevaluaciones y entregables en línea. Seguimiento mediante reportes automáticos y tutorías periódicas."
+      }
+    ]
+  }
+]

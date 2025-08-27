@@ -136,13 +136,13 @@ export function ThankYouModal({
       <div className="grid gap-6">
         {/* Header / Mensaje de agradecimiento */}
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-2xl mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-900/30 text-green-400 text-2xl mb-4">
             ✓
           </div>
-          <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+          <h2 className="text-2xl font-bold mb-2 text-gray-100">
             ¡Gracias! Hemos registrado tu interés
           </h2>
-          <p className="text-lg opacity-80 text-gray-700 dark:text-gray-300">
+          <p className="text-lg opacity-80 text-gray-300">
             en {source === "career" ? careerNames[0] : `la comparación de ${careerNames.length} carreras`}
           </p>
         </div>
@@ -174,7 +174,7 @@ export function ThankYouModal({
 
           {/* Mostrar error si existe */}
           {pdfState === "error" && error && (
-            <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 p-3 rounded-lg border border-red-200 dark:border-red-800/50">
+            <div className="text-sm text-red-400 bg-red-950/30 p-3 rounded-lg border border-red-800/50">
               <strong>Error:</strong> {error}
             </div>
           )}

@@ -47,9 +47,9 @@ export function HighlightsSection({ highlights, source, className }: HighlightsS
 
   const getGradientClass = (source: "career" | "comparator") => {
     if (source === "career") {
-      return "from-blue-50 to-indigo-50 border-blue-200 dark:from-blue-950/30 dark:to-indigo-950/30 dark:border-blue-800/50";
+      return "from-blue-950/30 to-indigo-950/30 border-blue-800/50";
     } else {
-      return "from-purple-50 to-pink-50 border-purple-200 dark:from-purple-950/30 dark:to-pink-950/30 dark:border-purple-800/50";
+      return "from-purple-950/30 to-pink-950/30 border-purple-800/50";
     }
   };
 
@@ -59,7 +59,7 @@ export function HighlightsSection({ highlights, source, className }: HighlightsS
       getGradientClass(source),
       className
     )}>
-      <h3 className="font-semibold mb-4 text-center text-gray-800 dark:text-gray-200">
+      <h3 className="font-semibold mb-4 text-center text-gray-200">
         {source === "career" ? "Lo que recibirás:" : "Resumen de tu comparación:"}
       </h3>
       
@@ -70,7 +70,7 @@ export function HighlightsSection({ highlights, source, className }: HighlightsS
             className={cx(
               "flex items-center gap-4 p-3 rounded-lg transition-all duration-500 transform",
               visibleHighlights.includes(highlight)
-                ? "opacity-100 translate-x-0 bg-white/60 dark:bg-white/10 shadow-sm dark:shadow-none"
+                ? "opacity-100 translate-x-0 bg-white/10 shadow-none"
                 : "opacity-0 translate-x-4"
             )}
             style={{
@@ -82,7 +82,7 @@ export function HighlightsSection({ highlights, source, className }: HighlightsS
             </div>
             
             <div className="flex-1">
-              <span className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              <span className="text-sm text-gray-300 leading-relaxed">
                 {highlight}
               </span>
             </div>
@@ -91,8 +91,8 @@ export function HighlightsSection({ highlights, source, className }: HighlightsS
               <div className={cx(
                 "w-2 h-2 rounded-full transition-all duration-300",
                 visibleHighlights.includes(highlight)
-                  ? "bg-blue-500 dark:bg-blue-400 scale-100"
-                  : "bg-gray-300 dark:bg-gray-600 scale-75"
+                  ? "bg-blue-400 scale-100"
+                  : "bg-gray-600 scale-75"
               )} />
             </div>
           </div>
@@ -108,8 +108,8 @@ export function HighlightsSection({ highlights, source, className }: HighlightsS
               className={cx(
                 "w-2 h-2 rounded-full transition-all duration-300",
                 index < visibleHighlights.length
-                  ? "bg-blue-500 dark:bg-blue-400 scale-110"
-                  : "bg-gray-300 dark:bg-gray-600 scale-100"
+                  ? "bg-blue-400 scale-110"
+                  : "bg-gray-600 scale-100"
               )}
             />
           ))}

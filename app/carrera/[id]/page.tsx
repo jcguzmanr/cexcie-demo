@@ -8,6 +8,8 @@ import Image from "next/image";
 import { Modal } from "@/components/Modal";
 import { SendResultsModal } from "@/components/SendResultsModal";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { ModalidadComparison } from "@/components/ModalidadComparison";
+import { ModalidadComparison as ModalidadComparisonType } from "@/data/schemas";
 
 type DetalleCarrera = {
   id: string;
@@ -38,6 +40,27 @@ type DetalleCarrera = {
     beneficios: {
       bloques: { titulo: string; items: string[] }[];
     };
+    testimonios?: {
+      estudiantes?: Array<{
+        id: string;
+        nombre: string;
+        foto: string;
+        campus: string;
+        ciclo: string;
+        testimonio: string;
+        destacado?: string;
+      }>;
+      egresados?: Array<{
+        id: string;
+        nombre: string;
+        foto: string;
+        cargo: string;
+        empresa: string;
+        egreso: string;
+        testimonio: string;
+        destacado?: string;
+      }>;
+    };
   };
 };
 
@@ -58,7 +81,7 @@ export default function CarreraDetallePage() {
   const carrerasMap = useAppStore((s) => s.carreraById);
   const { toggleCarrera, clearComparador } = useAppStore((s) => s.actions);
   const [detalle, setDetalle] = React.useState<DetalleCarrera | null>(null);
-  const [tab, setTab] = React.useState<"sobre" | "planEstudios" | "internacional" | "beneficios" | "costos">("sobre");
+  const [tab, setTab] = React.useState<"sobre" | "planEstudios" | "internacional" | "beneficios" | "costos" | "testimonios" | "modalidades">("sobre");
   const [videoUrl, setVideoUrl] = React.useState<string | null>(null);
   const [sendOpen, setSendOpen] = React.useState(false);
   const [selectOpen, setSelectOpen] = React.useState(false);
@@ -68,6 +91,8 @@ export default function CarreraDetallePage() {
     explicacionCalculo: { id: string; pasos: string[]; nota: string };
     fuentes: Array<{ label: string; url: string }>;
   } | null>(null);
+  const [modalidadComparison, setModalidadComparison] = React.useState<ModalidadComparisonType | null>(null);
+  const [tipoTestimonio, setTipoTestimonio] = React.useState<"estudiantes" | "egresados">("estudiantes");
   const router = useRouter();
   
   // Verificar si la carrera actual puede ser comparada
@@ -83,7 +108,30 @@ export default function CarreraDetallePage() {
       .then((r) => r.json())
       .then((j) => setDidactics(j))
       .catch(() => setDidactics(null));
-  }, []);
+    
+    // Cargar comparación de modalidades
+    fetch("/data/modalidad-comparison.json")
+      .then((r) => r.json())
+      .then((comparisons: ModalidadComparisonType[]) => {
+        console.log("📊 Comparaciones cargadas:", comparisons);
+        const comparison = comparisons.find(c => c.career_id === "default");
+        console.log("🎯 Comparación encontrada:", comparison);
+        if (comparison) {
+          const personalizedComparison = {
+            ...comparison,
+            career_name: carrera.nombre
+          };
+          console.log("✨ Comparación personalizada:", personalizedComparison);
+          setModalidadComparison(personalizedComparison);
+        } else {
+          setModalidadComparison(null);
+        }
+      })
+      .catch((error) => {
+        console.error("💥 Error:", error);
+        setModalidadComparison(null);
+      });
+  }, [params.id]);
 
   if (!carrera) {
     return (
@@ -105,7 +153,7 @@ export default function CarreraDetallePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
         <div className="grid gap-3">
-          {["sobre", "planEstudios", "internacional", "beneficios", "costos"].map((k) => (
+          {["sobre", "planEstudios", "internacional", "beneficios", "costos", "testimonios", "modalidades"].map((k) => (
             <Button key={k} variant={tab === k ? "primary" : "secondary"} shape="pill" className="justify-center" onClick={() => setTab(k as typeof tab)}>
               <span className={tab === k ? "text-white" : "text-[var(--uc-purple)]"}>
                 {k === "sobre" && "Sobre la carrera"}
@@ -113,6 +161,8 @@ export default function CarreraDetallePage() {
                 {k === "internacional" && "Internacional"}
                 {k === "beneficios" && "Beneficios"}
                 {k === "costos" && "Costos"}
+                {k === "testimonios" && "Testimonios"}
+                {k === "modalidades" && "Modalidades"}
               </span>
             </Button>
           ))}
@@ -488,6 +538,141 @@ export default function CarreraDetallePage() {
               {!didactics && (
                 <div className="text-center py-12">
                   <div className="text-lg opacity-70">Cargando información de costos...</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab === "testimonios" && (
+            <div className="grid gap-6">
+              <div className="text-lg font-semibold">Testimonios</div>
+              
+              {/* Selector de tipo de testimonio */}
+              <div className="flex gap-3 p-3 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-sm">
+                <button
+                  onClick={() => setTipoTestimonio("estudiantes")}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    tipoTestimonio === "estudiantes"
+                      ? "bg-[var(--uc-purple)] text-white shadow-lg shadow-[var(--uc-purple)]/25"
+                      : "text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10 border border-transparent hover:border-[var(--uc-lilac)]/20"
+                  }`}
+                >
+                  👨‍🎓 Estudiantes ({detalle?.secciones.testimonios?.estudiantes?.length || 0})
+                </button>
+                <button
+                  onClick={() => setTipoTestimonio("egresados")}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    tipoTestimonio === "egresados"
+                      ? "bg-[var(--uc-purple)] text-white shadow-lg shadow-[var(--uc-purple)]/25"
+                      : "text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10 border border-transparent hover:border-[var(--uc-lilac)]/20"
+                  }`}
+                >
+                  🎓 Egresados ({detalle?.secciones.testimonios?.egresados?.length || 0})
+                </button>
+              </div>
+
+              {/* Grid de testimonios */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {tipoTestimonio === "estudiantes" && detalle?.secciones.testimonios?.estudiantes?.map((testimonio) => (
+                  <div
+                    key={testimonio.id}
+                    className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 hover:shadow-xl hover:shadow-[var(--uc-purple)]/10 transition-all duration-300 group hover:border-[var(--uc-purple)]/30"
+                  >
+                    {/* Header del testimonio */}
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--uc-purple)] via-[var(--uc-lilac)] to-[var(--uc-purple)] flex items-center justify-center text-2xl text-white flex-shrink-0 shadow-lg shadow-[var(--uc-purple)]/25 border-2 border-white/20">
+                        {testimonio.foto}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-[var(--foreground)] text-lg mb-1 group-hover:text-[var(--uc-purple)] transition-colors">
+                          {testimonio.nombre}
+                        </h3>
+                        <div className="flex items-center gap-2 text-sm opacity-70 mb-2">
+                          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--uc-purple)]/20 text-[var(--uc-purple)] text-xs font-medium border border-[var(--uc-purple)]/30">
+                            📍 {testimonio.campus}
+                          </span>
+                          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--uc-sky)]/20 text-[var(--uc-sky)] text-xs font-medium border border-[var(--uc-sky)]/30">
+                            🎯 {testimonio.ciclo}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Testimonio */}
+                    <blockquote className="text-[var(--foreground)] opacity-85 leading-relaxed mb-4 italic">
+                      &ldquo;{testimonio.testimonio}&rdquo;
+                    </blockquote>
+
+                    {/* Destacado */}
+                    {testimonio.destacado && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-[var(--uc-purple)]">⭐</span>
+                        <span className="opacity-80 font-medium">{testimonio.destacado}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {tipoTestimonio === "egresados" && detalle?.secciones.testimonios?.egresados?.map((testimonio) => (
+                  <div
+                    key={testimonio.id}
+                    className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 hover:shadow-xl hover:shadow-[var(--uc-purple)]/10 transition-all duration-300 group hover:border-[var(--uc-purple)]/30"
+                  >
+                    {/* Header del testimonio */}
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--uc-purple)] via-[var(--uc-lilac)] to-[var(--uc-purple)] flex items-center justify-center text-2xl text-white flex-shrink-0 shadow-lg shadow-[var(--uc-purple)]/25 border-2 border-white/20">
+                        {testimonio.foto}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-[var(--foreground)] text-lg mb-1 group-hover:text-[var(--uc-purple)] transition-colors">
+                          {testimonio.nombre}
+                        </h3>
+                        <div className="text-sm opacity-70 mb-2">
+                          <div className="font-medium text-[var(--uc-purple)]">{testimonio.cargo}</div>
+                          <div className="opacity-80">{testimonio.empresa}</div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--uc-lilac)]/20 text-[var(--uc-lilac)] text-xs font-medium border border-[var(--uc-lilac)]/30">
+                            🎓 Egresado {testimonio.egreso}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Testimonio */}
+                    <blockquote className="text-[var(--foreground)] opacity-85 leading-relaxed mb-4 italic">
+                      &ldquo;{testimonio.testimonio}&rdquo;
+                    </blockquote>
+
+                    {/* Destacado */}
+                    {testimonio.destacado && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-[var(--uc-purple)]">🏆</span>
+                        <span className="opacity-80 font-medium">{testimonio.destacado}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Mensaje cuando no hay testimonios */}
+              {(!detalle?.secciones.testimonios?.[tipoTestimonio] || detalle.secciones.testimonios[tipoTestimonio].length === 0) && (
+                <div className="text-center py-12">
+                  <div className="text-lg opacity-70">No hay testimonios disponibles para {tipoTestimonio === "estudiantes" ? "estudiantes" : "egresados"} en este momento.</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab === "modalidades" && (
+            <div className="grid gap-4">
+              {modalidadComparison ? (
+                <div className="overflow-x-auto">
+                  <ModalidadComparison comparison={modalidadComparison} />
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="text-lg opacity-70">Comparación de modalidades no disponible para esta carrera.</div>
                 </div>
               )}
             </div>

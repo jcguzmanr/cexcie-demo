@@ -14,6 +14,7 @@ export function CareerExample() {
     facultadId: "ing",
     modalidades: ["presencial", "semipresencial"],
     campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+    mallaResumen: [],
     imagen: "/carreras/ing-amb.png"
   };
 
@@ -49,6 +50,7 @@ export function ComparatorExample() {
       facultadId: "ing",
       modalidades: ["presencial", "semipresencial"],
       campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+      mallaResumen: [],
       imagen: "/carreras/ing-amb.png"
     },
     {
@@ -57,6 +59,7 @@ export function ComparatorExample() {
       facultadId: "ing",
       modalidades: ["presencial", "semipresencial"],
       campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+      mallaResumen: [],
       imagen: "/carreras/ing-civ.png"
     },
     {
@@ -65,6 +68,7 @@ export function ComparatorExample() {
       facultadId: "ing",
       modalidades: ["presencial", "semipresencial"],
       campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+      mallaResumen: [],
       imagen: "/carreras/ing-elec.png"
     }
   ];
@@ -107,6 +111,7 @@ export function CompleteExample() {
             facultadId: "ing",
             modalidades: ["presencial", "semipresencial"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+            mallaResumen: [],
             imagen: "/carreras/comp.png"
           }
         ]
@@ -122,6 +127,7 @@ export function CompleteExample() {
             facultadId: "ing",
             modalidades: ["presencial", "semipresencial"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+            mallaResumen: [],
             imagen: "/carreras/comp.png"
           },
           {
@@ -130,6 +136,7 @@ export function CompleteExample() {
             facultadId: "ing",
             modalidades: ["presencial", "semipresencial"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+            mallaResumen: [],
             imagen: "/carreras/sistemas.png"
           },
           {
@@ -138,6 +145,7 @@ export function CompleteExample() {
             facultadId: "emp",
             modalidades: ["presencial", "semipresencial", "distancia"] as ("presencial" | "semipresencial" | "distancia")[],
             campus: ["arequipa", "cusco", "huancayo", "los-olivos", "miraflores", "ica"],
+            mallaResumen: [],
             imagen: "/carreras/admfin.png"
           }
         ]
@@ -147,14 +155,14 @@ export function CompleteExample() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
-        Demo: Vista de Agradecimiento
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-100">
+        Demo: Vista de Agradecimiento - Dark Mode
       </h1>
       
       <div className="grid md:grid-cols-2 gap-6 mb-8">
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
-          <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Modo Carrera Individual</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+        <div className="p-4 border border-gray-700 rounded-lg bg-gray-800">
+          <h3 className="text-lg font-semibold mb-2 text-gray-100">Modo Carrera Individual</h3>
+          <p className="text-sm text-gray-400 mb-3">
             Muestra información específica de una carrera con highlights personalizados.
           </p>
           <button 
@@ -168,9 +176,9 @@ export function CompleteExample() {
           </button>
         </div>
 
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
-          <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Modo Comparador</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+        <div className="p-4 border border-gray-700 rounded-lg bg-gray-800">
+          <h3 className="text-lg font-semibold mb-2 text-gray-100">Modo Comparador</h3>
+          <p className="text-sm text-gray-400 mb-3">
             Muestra comparación de múltiples carreras con highlights de comparación.
           </p>
           <button 
@@ -185,10 +193,9 @@ export function CompleteExample() {
         </div>
       </div>
 
-      <div className="text-center text-sm text-gray-500 dark:text-gray-400 space-y-2">
+      <div className="text-center text-sm text-gray-400 space-y-2">
         <p>Selecciona un modo y abre el modal para ver la nueva implementación en acción.</p>
-        <p>✨ <strong>Nuevo:</strong> Soporte completo para Dark Mode en todos los componentes.</p>
-        <p>Cambia el tema usando el botón en la barra superior para ver la diferencia.</p>
+        <p>✨ <strong>Tema:</strong> Aplicación configurada exclusivamente en Dark Mode con los colores institucionales de CExCIE.</p>
         <p>Todos los eventos se registran en la consola del navegador.</p>
       </div>
 

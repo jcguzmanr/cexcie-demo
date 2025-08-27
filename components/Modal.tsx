@@ -23,12 +23,12 @@ export function Modal({ open, onClose, title, subtitle, children, footer }: Prop
   return (
     <div role="dialog" aria-modal="true" className="fixed inset-0 z-50">
       <div
-        className="absolute inset-0 bg-black/40"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
       <div className="absolute inset-0 flex items-stretch md:items-center justify-center p-4" onClick={(e)=>e.stopPropagation()}>
-        <div className="w-full max-w-5xl h-[90vh] md:h-auto rounded-2xl bg-[var(--surface)] text-[var(--foreground)] shadow-xl border border-[var(--border)] flex flex-col">
+        <div className="w-full max-w-[80vw] h-[80vh] md:h-[80vh] rounded-2xl bg-[var(--surface)] text-[var(--foreground)] shadow-xl border border-[var(--border)] flex flex-col">
           <div className="p-4 border-b border-[var(--border)] flex items-center justify-between gap-3 sticky top-0 bg-[var(--surface)] z-10">
             <div className="min-w-0">
               <h2 className="text-lg font-semibold truncate">{title}</h2>
