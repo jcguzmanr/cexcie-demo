@@ -2,22 +2,11 @@
 import { useAppStore, getFacultadList } from "@/store";
 import { Chip } from "@/components/Chip";
 import { Modal } from "@/components/Modal";
-import { ModalidadTags } from "@/components/ModalidadTags";
 import Link from "next/link";
 import React from "react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
-// Importar datos de modalidades
-import modalidadesData from "@/data/modalidades.json";
 
-const DESCS: Record<string, string> = {
-  presencial:
-    "Sumérgete en un entorno moderno, cuidadosamente elaborado para que vivas una experiencia educativa excepcional.",
-  semipresencial:
-    "Te ofrecemos una educación que se adapta a tu ritmo de vida, donde la flexibilidad es la clave.",
-  distancia:
-    "Nuestra modalidad a distancia se adapta a tus necesidades y derriba los límites de tiempo y espacio.",
-};
 
 export default function CarrerasPage() {
   const campusSel = useAppStore((s) => s.selectedCampus);
