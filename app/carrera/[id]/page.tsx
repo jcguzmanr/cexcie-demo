@@ -410,14 +410,25 @@ export default function CarreraDetallePage() {
           )}
 
           {tab === "internacional" && (
-            <div className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid gap-6">
+              <div className="text-lg font-semibold">INTERNACIONAL</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {detalle?.secciones.internacional.cards.map((card, i) => (
-                  <div key={i} className="rounded-2xl bg-[var(--surface)] text-[var(--foreground)] p-4 border border-[var(--border)]">
-                    <div className="text-lg font-semibold mb-2">{card.titulo}</div>
-                    <p className="opacity-80 mb-4">{card.texto}</p>
+                  <div key={i} className="rounded-2xl bg-[var(--surface)] text-[var(--foreground)] p-6 border border-[var(--border)] hover:shadow-lg hover:border-[var(--uc-purple)]/30 transition-all duration-300 group">
+                    <div className="text-xl font-semibold mb-3 text-[var(--foreground)] group-hover:text-[var(--uc-purple)] transition-colors">
+                      {card.titulo}
+                    </div>
+                    <p className="opacity-80 mb-6 leading-relaxed text-[var(--foreground)]">
+                      {card.texto}
+                    </p>
                     {card.videoUrl && (
-                      <button onClick={() => setVideoUrl(card.videoUrl!)} className="inline-flex px-4 py-2 rounded-full border bg-[var(--uc-purple)] text-white">
+                      <button 
+                        onClick={() => setVideoUrl(card.videoUrl!)} 
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--uc-purple)] text-white font-medium hover:bg-[var(--uc-purple)]/90 hover:shadow-lg hover:shadow-[var(--uc-purple)]/25 transition-all duration-200 transform hover:scale-105"
+                      >
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                        </svg>
                         {card.cta?.label ?? "Ver video"}
                       </button>
                     )}
@@ -754,19 +765,79 @@ export default function CarreraDetallePage() {
   );
 }
 
+// Función para convertir URLs de YouTube a formato embed
+function convertYouTubeUrl(url: string): string {
+  // Extraer el ID del video de la URL de YouTube
+  const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/)?.[1];
+  
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  
+  // Si no es una URL de YouTube válida, devolver la URL original
+  return url;
+}
+
 // Video modal inline
 function VideoModal({ url, onClose }: { url: string; onClose: () => void }) {
+  const embedUrl = convertYouTubeUrl(url);
+  
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  
   return (
-    <Modal open={true} onClose={onClose} title="Video">
-      <div className="relative w-full aspect-video">
-        <iframe
-          src={url}
-          className="w-full h-full rounded-xl"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-50">
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
+        <div className="w-full max-w-4xl bg-[var(--surface)] text-[var(--foreground)] shadow-2xl border border-[var(--border)] rounded-2xl flex flex-col">
+          <div className="p-4 border-b border-[var(--border)] flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h2 className="text-xl font-semibold">Video</h2>
+            </div>
+            <button 
+              aria-label="Cerrar" 
+              className="p-2 -m-2 hover:bg-[var(--uc-purple)]/10 hover:text-[var(--uc-purple)] rounded-lg transition-colors" 
+              onClick={onClose}
+            >
+              ✕
+            </button>
+          </div>
+          <div className="p-4">
+            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden">
+              <iframe
+                src={embedUrl}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Video de YouTube"
+              />
+            </div>
+            <div className="mt-4 text-center">
+              <p className="text-sm opacity-70">
+                Si el video no se reproduce, puedes verlo directamente en 
+                <a 
+                  href={url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[var(--uc-purple)] hover:underline ml-1"
+                >
+                  YouTube
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    </Modal>
+    </div>
   );
 }
 

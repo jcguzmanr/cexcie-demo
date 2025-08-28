@@ -67,11 +67,12 @@ export function SendResultsModal({
   selectedCarreras = []
 }: Props) {
   const [name, setName] = useState("");
+  const [dni, setDni] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [contactMethod, setContactMethod] = useState<"whatsapp" | "correo">("correo");
+  const [contactMethod, setContactMethod] = useState<"whatsapp" | "correo">("whatsapp");
   const [sent, setSent] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; dni?: string; phone?: string; email?: string }>({});
   const [leadId, setLeadId] = useState<string>("");
   const [showThankYou, setShowThankYou] = useState(false);
 
@@ -86,8 +87,9 @@ export function SendResultsModal({
   }, []);
 
   function handleSend() {
-    const next: { name?: string; phone?: string; email?: string } = {};
+    const next: { name?: string; dni?: string; phone?: string; email?: string } = {};
     if (name.trim().length < 2) next.name = "Ingresa tu nombre completo.";
+    if (dni.trim().length < 8) next.dni = "Ingresa tu DNI (mínimo 8 dígitos).";
     if (!validatePhone(phone)) next.phone = "Ingresa un teléfono válido (e.g., +51 999 999 999).";
     if (!validateEmail(email)) next.email = "Ingresa un email válido.";
     setErrors(next);
@@ -102,7 +104,8 @@ export function SendResultsModal({
         source,
         leadId: newLeadId,
         contactMethod,
-        careerCount: careerNames.length
+        careerCount: careerNames.length,
+        dni: dni.trim()
       });
       
       setSent(true);
@@ -148,6 +151,9 @@ export function SendResultsModal({
               <>Te contactaremos por WhatsApp al <strong>{phone}</strong>.</>
             )}
           </div>
+          <div className="text-sm opacity-70">
+            DNI registrado: <strong>{dni}</strong>
+          </div>
           <div className="flex justify-end">
             <Button onClick={onClose}>Cerrar</Button>
           </div>
@@ -167,6 +173,14 @@ export function SendResultsModal({
             onChange={setName}
             placeholder="Tu nombre completo"
             error={errors.name}
+          />
+
+          <Field
+            label="DNI"
+            value={dni}
+            onChange={setDni}
+            placeholder="12345678"
+            error={errors.dni}
           />
 
           <Field
@@ -192,8 +206,8 @@ export function SendResultsModal({
             value={contactMethod}
             onChange={(v) => setContactMethod(v as "whatsapp" | "correo")}
             options={[
-              { value: "correo", label: "Correo electrónico" },
-              { value: "whatsapp", label: "WhatsApp" }
+              { value: "whatsapp", label: "WhatsApp" },
+              { value: "correo", label: "Correo electrónico" }
             ]}
           />
 

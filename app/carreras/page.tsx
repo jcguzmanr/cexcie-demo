@@ -18,7 +18,14 @@ export default function CarrerasPage() {
   const selectedCarreras = useAppStore((s) => s.selectedCarreras);
   const { toggleCarrera, clearComparador } = useAppStore((s) => s.actions);
   const [open, setOpen] = React.useState<string | null>(null);
-  const [showInfoModal, setShowInfoModal] = React.useState(false);
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % 3); // 3 posiciones para mostrar 3 elementos por vez
+    }, 5000); // Cambia cada 5 segundos
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="p-6 grid gap-6">
@@ -40,24 +47,107 @@ export default function CarrerasPage() {
 
       <div className="space-y-8">
 
-        {/* Banner de información adicional */}
-        <div className="rounded-3xl border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface),transparent_20%)] p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <div className="text-[var(--uc-purple)] font-semibold mb-2">¿QUIERES CONOCER MÁS?</div>
-              <div className="text-[var(--foreground)] opacity-80 leading-relaxed">
-                <p className="text-lg font-medium mb-1">Descubre todo sobre esta carrera</p>
-                <p className="text-sm opacity-70">Conoce los detalles, modalidades y oportunidades que te esperan</p>
+      <div className="w-full h-32 relative overflow-hidden rounded-xl bg-gradient-to-r from-[var(--uc-purple)]/10 to-[var(--uc-lilac)]/20 border border-[var(--uc-purple)]/30">
+            <div className="absolute inset-0 flex transition-transform duration-1000 ease-in-out" 
+                 style={{ transform: `translateX(-${(currentSlide * 100)}%)` }}>
+              
+              {/* Posición 1: ¿Qué es? + Beneficios + Duración */}
+              <div className="w-full flex-shrink-0 flex gap-2 p-3">
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">¿Qué es?</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
+                    {modalidad === "presencial" && "Modalidad tradicional donde asistes físicamente a clases en el campus, con interacción directa con profesores y compañeros."}
+                    {modalidad === "semipresencial" && "Combinación de clases presenciales y virtuales, ofreciendo flexibilidad manteniendo la conexión personal."}
+                    {modalidad === "distancia" && "Educación completamente en línea con plataformas digitales avanzadas, permitiendo estudiar desde cualquier lugar."}
+                  </div>
+                </div>
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Beneficios</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
+                    {modalidad === "presencial" && "• Experiencia inmersiva completa\n• Networking directo\n• Acceso inmediato a recursos físicos"}
+                    {modalidad === "semipresencial" && "• Flexibilidad de horarios\n• Ahorro en transporte\n• Combinación de lo mejor de ambos mundos"}
+                    {modalidad === "distancia" && "• Máxima flexibilidad\n• Ahorro en tiempo y transporte\n• Acceso global a la educación"}
+                  </div>
+                </div>
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Duración</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
+                    {modalidad === "presencial" && "Carreras de 5 años con horarios fijos de lunes a viernes, incluyendo prácticas presenciales obligatorias."}
+                    {modalidad === "semipresencial" && "Carreras de 5 años con clases presenciales 2-3 veces por semana y actividades virtuales complementarias."}
+                    {modalidad === "distancia" && "Carreras de 5 años con ritmo personalizado, permitiendo completar en menos tiempo según tu dedicación."}
+                  </div>
+                </div>
+              </div>
+
+              {/* Posición 2: Ventajas + Máximo tiempo virtual + ¿Qué es? */}
+              <div className="w-full flex-shrink-0 flex gap-2 p-3">
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Ventajas</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
+                    {modalidad === "presencial" && "• Ambiente universitario tradicional\n• Acceso directo a laboratorios\n• Participación en actividades extracurriculares"}
+                    {modalidad === "semipresencial" && "• Balance entre flexibilidad y estructura\n• Ahorro en costos de transporte\n• Mantiene conexión social"}
+                    {modalidad === "distancia" && "• Sin limitaciones geográficas\n• Ahorro significativo en costos\n• Compatible con trabajo y familia"}
+                  </div>
+                </div>
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Máximo tiempo virtual</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
+                    {modalidad === "presencial" && "20% del tiempo total, principalmente para tareas, consultas y material complementario."}
+                    {modalidad === "semipresencial" && "60% del tiempo total, combinando clases virtuales con sesiones presenciales estratégicas."}
+                    {modalidad === "distancia" && "100% del tiempo total, con plataformas digitales y herramientas virtuales como base principal."}
+                  </div>
+                </div>
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">¿Qué es?</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
+                    {modalidad === "presencial" && "Modalidad tradicional donde asistes físicamente a clases en el campus, con interacción directa con profesores y compañeros."}
+                    {modalidad === "semipresencial" && "Combinación de clases presenciales y virtuales, ofreciendo flexibilidad manteniendo la conexión personal."}
+                    {modalidad === "distancia" && "Educación completamente en línea con plataformas digitales avanzadas, permitiendo estudiar desde cualquier lugar."}
+                  </div>
+                </div>
+              </div>
+
+              {/* Posición 3: Beneficios + Duración + Ventajas */}
+              <div className="w-full flex-shrink-0 flex gap-2 p-3">
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Beneficios</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
+                    {modalidad === "presencial" && "• Experiencia inmersiva completa\n• Networking directo\n• Acceso inmediato a recursos físicos"}
+                    {modalidad === "semipresencial" && "• Flexibilidad de horarios\n• Ahorro en transporte\n• Combinación de lo mejor de ambos mundos"}
+                    {modalidad === "distancia" && "• Máxima flexibilidad\n• Ahorro en tiempo y transporte\n• Acceso global a la educación"}
+                  </div>
+                </div>
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Duración</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
+                    {modalidad === "presencial" && "Carreras de 5 años con horarios fijos de lunes a viernes, incluyendo prácticas presenciales obligatorias."}
+                    {modalidad === "semipresencial" && "Carreras de 5 años con clases presenciales 2-3 veces por semana y actividades virtuales complementarias."}
+                    {modalidad === "distancia" && "Carreras de 5 años con ritmo personalizado, permitiendo completar en menos tiempo según tu dedicación."}
+                  </div>
+                </div>
+                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
+                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Ventajas</div>
+                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
+                    {modalidad === "presencial" && "• Ambiente universitario tradicional\n• Acceso directo a laboratorios\n• Participación en actividades extracurriculares"}
+                    {modalidad === "semipresencial" && "• Balance entre flexibilidad y estructura\n• Ahorro en costos de transporte\n• Mantiene conexión social"}
+                    {modalidad === "distancia" && "• Sin limitaciones geográficas\n• Ahorro significativo en costos\n• Compatible con trabajo y familia"}
+                  </div>
+                </div>
               </div>
             </div>
-            <button 
-              onClick={() => setShowInfoModal(true)}
-              className="bg-[var(--uc-purple)] hover:bg-[var(--uc-purple)]/90 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg"
-            >
-              Ver más
-            </button>
+            
+            {/* Indicadores de posición */}
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+              {[0, 1, 2].map((index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentSlide === index ? 'bg-[var(--uc-purple)] scale-125' : 'bg-[var(--uc-purple)]/30'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
 
         {/* Listado de facultades */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -138,85 +228,7 @@ export default function CarrerasPage() {
         </Modal>
       ))}
 
-      {/* Modal de información adicional */}
-      <Modal
-        open={showInfoModal}
-        onClose={() => setShowInfoModal(false)}
-        title="Información de la Modalidad"
-        subtitle={`Modalidad ${modalidad.charAt(0).toUpperCase() + modalidad.slice(1)}`}
-      >
-        <div className="space-y-6">
-          <div className="text-center mb-6">
-            <div className="text-4xl mb-3">🎓</div>
-            <p className="text-lg font-medium">Conoce todos los detalles de esta modalidad</p>
-          </div>
-          
-          {/* Scroll horizontal con las 5 opciones */}
-          <div className="overflow-x-auto pb-4">
-            <div className="flex gap-4 min-w-max">
-              {/* Qué es */}
-              <div className="w-64 flex-shrink-0">
-                <div className="bg-orange-200 text-black p-4 rounded-xl mb-3 text-center font-semibold">
-                  ¿Qué es?
-                </div>
-                <div className="bg-orange-200 text-black p-4 rounded-xl text-sm leading-relaxed">
-                  {modalidad === "presencial" && "Modalidad tradicional donde asistes físicamente a clases en el campus, con interacción directa con profesores y compañeros."}
-                  {modalidad === "semipresencial" && "Combinación de clases presenciales y virtuales, ofreciendo flexibilidad manteniendo la conexión personal."}
-                  {modalidad === "distancia" && "Educación completamente en línea con plataformas digitales avanzadas, permitiendo estudiar desde cualquier lugar."}
-                </div>
-              </div>
 
-              {/* Beneficios */}
-              <div className="w-64 flex-shrink-0">
-                <div className="bg-orange-200 text-black p-4 rounded-xl mb-3 text-center font-semibold">
-                  Beneficios
-                </div>
-                <div className="bg-orange-200 text-black p-4 rounded-xl text-sm leading-relaxed">
-                  {modalidad === "presencial" && "• Experiencia inmersiva completa\n• Networking directo\n• Acceso inmediato a recursos físicos\n• Horarios estructurados"}
-                  {modalidad === "semipresencial" && "• Flexibilidad de horarios\n• Ahorro en transporte\n• Combinación de lo mejor de ambos mundos\n• Autonomía controlada"}
-                  {modalidad === "distancia" && "• Máxima flexibilidad\n• Ahorro en tiempo y transporte\n• Acceso global a la educación\n• Aprendizaje autodirigido"}
-                </div>
-              </div>
-
-              {/* Duración */}
-              <div className="w-64 flex-shrink-0">
-                <div className="bg-orange-200 text-black p-4 rounded-xl mb-3 text-center font-semibold">
-                  Duración
-                </div>
-                <div className="bg-orange-200 text-black p-4 rounded-xl text-sm leading-relaxed">
-                  {modalidad === "presencial" && "Carreras de 5 años con horarios fijos de lunes a viernes, incluyendo prácticas presenciales obligatorias."}
-                  {modalidad === "semipresencial" && "Carreras de 5 años con clases presenciales 2-3 veces por semana y actividades virtuales complementarias."}
-                  {modalidad === "distancia" && "Carreras de 5 años con ritmo personalizado, permitiendo completar en menos tiempo según tu dedicación."}
-                </div>
-              </div>
-
-              {/* Ventajas */}
-              <div className="w-64 flex-shrink-0">
-                <div className="bg-orange-200 text-black p-4 rounded-xl mb-3 text-center font-semibold">
-                  Ventajas
-                </div>
-                <div className="bg-orange-200 text-black p-4 rounded-xl text-sm leading-relaxed">
-                  {modalidad === "presencial" && "• Ambiente universitario tradicional\n• Acceso directo a laboratorios\n• Participación en actividades extracurriculares\n• Seguimiento personalizado"}
-                  {modalidad === "semipresencial" && "• Balance entre flexibilidad y estructura\n• Ahorro en costos de transporte\n• Mantiene conexión social\n• Adaptable a diferentes estilos de vida"}
-                  {modalidad === "distancia" && "• Sin limitaciones geográficas\n• Ahorro significativo en costos\n• Compatible con trabajo y familia\n• Tecnología de vanguardia"}
-                </div>
-              </div>
-
-              {/* Máximo tiempo virtual */}
-              <div className="w-64 flex-shrink-0">
-                <div className="bg-orange-200 text-black p-4 rounded-xl mb-3 text-center font-semibold">
-                  Máximo tiempo virtual
-                </div>
-                <div className="bg-orange-200 text-black p-4 rounded-xl text-sm leading-relaxed">
-                  {modalidad === "presencial" && "20% del tiempo total, principalmente para tareas, consultas y material complementario."}
-                  {modalidad === "semipresencial" && "60% del tiempo total, combinando clases virtuales con sesiones presenciales estratégicas."}
-                  {modalidad === "distancia" && "100% del tiempo total, con plataformas digitales y herramientas virtuales como base principal."}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }
