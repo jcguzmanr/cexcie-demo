@@ -3,6 +3,11 @@
   { "id": "emp", "nombre": "Facultad de Ciencias de la Empresa", "modalidades": ["presencial", "semipresencial", "distancia"] },
   { "id": "salud", "nombre": "Facultad de Ciencias de la Salud", "modalidades": ["presencial"] },
   { "id": "hum", "nombre": "Facultad de Humanidades", "modalidades": ["presencial", "distancia"] },
-  { "id": "der", "nombre": "Facultad de Derecho", "modalidades": ["presencial", "semipresencial", "distancia"] }
+  { "id": "der", "nombre": "Facultad de Derecho", "modalidades": ["presencial", "semipresencial", "distancia"] },
+  { "id": "med", "nombre": "Facultad de Medicina", "modalidades": ["presencial", "semipresencial", "distancia"] },
+  { "id": "cien", "nombre": "Facultad de Ciencias", "modalidades": ["presencial", "semipresencial", "distancia"] },
+  { "id": "eco", "nombre": "Facultad de Economía", "modalidades": ["presencial", "semipresencial", "distancia"] },
+  { "id": "filo", "nombre": "Facultad de Filosofía", "modalidades": ["presencial", "semipresencial", "distancia"] },
+  { "id": "filo", "nombre": "Facultad de Filosofía", "modalidades": ["presencial", "semipresencial", "distancia"] },
 ]
 

@@ -6,11 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:setup": "node scripts/migration/setup-local-db.js",
+    "db:migrate": "node scripts/migration/migrate-json-to-postgres.js",
+    "db:test": "node scripts/migration/test-consistency.js",
+    "db:rollback": "node scripts/migration/rollback.js",
+    "test:database": "npm run db:test",
+    "db:health": "node scripts/migration/health-check.js"
   },
   "dependencies": {
+    "@types/pg": "^8.15.5",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.1",
     "next": "15.4.6",
+    "pg": "^8.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "zod": "^3.23.8",
