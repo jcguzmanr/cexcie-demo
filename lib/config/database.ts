@@ -26,7 +26,7 @@ export function getDatabaseConfig(): DatabaseConfig {
   
   if (env === 'development') {
     return {
-      provider: (process.env.DATABASE_PROVIDER as any) || 'json',
+      provider: (process.env.DATABASE_PROVIDER as 'json' | 'postgresql' | 'hybrid') || 'json',
       postgresql: process.env.DATABASE_URL ? {
         url: process.env.DATABASE_URL,
         ssl: false,
@@ -118,9 +118,9 @@ export function getLogLevel(): 'debug' | 'info' | 'warn' | 'error' {
     return 'debug';
   }
   
-  const logLevel = process.env.LOG_LEVEL as any;
-  if (['debug', 'info', 'warn', 'error'].includes(logLevel)) {
-    return logLevel;
+  const logLevel = process.env.LOG_LEVEL as string | undefined;
+  if (['debug', 'info', 'warn', 'error'].includes(logLevel as string)) {
+    return logLevel as 'debug' | 'info' | 'warn' | 'error';
   }
   
   return 'info';

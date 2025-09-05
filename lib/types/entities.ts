@@ -57,9 +57,9 @@ export interface CarreraDetalle extends Carrera {
         notas: string[];
       }>;
     };
-    internacional?: any;
-    empleabilidad?: any;
-    costos?: any;
+    internacional?: Record<string, unknown>;
+    empleabilidad?: Record<string, unknown>;
+    costos?: Record<string, unknown>;
   };
 }
 

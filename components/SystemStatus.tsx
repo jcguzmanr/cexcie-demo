@@ -1,9 +1,20 @@
+"use client";
+
 // Componente para mostrar el estado del sistema
 import { useDataProviderHealth, useDataProviderStats } from '../lib/hooks/useDataProvider';
 
 export function SystemStatus() {
   const health = useDataProviderHealth();
   const stats = useDataProviderStats();
+  
+  if (!health || !stats) return null;
+  
+  // Type assertion para stats
+  const typedStats = stats as {
+    type: string;
+    features: string[];
+    capabilities: string[];
+  };
 
   if (!health || !stats) return null;
 
@@ -36,10 +47,10 @@ export function SystemStatus() {
         {/* Tipo de Provider */}
         <div className="pt-2 border-t border-gray-200">
           <div className="text-xs text-gray-600">
-            <strong>Provider:</strong> {stats.type}
+            <strong>Provider:</strong> {typedStats.type}
           </div>
           <div className="text-xs text-gray-500 mt-1">
-            {stats.features.slice(0, 2).join(', ')}
+            {typedStats.features.slice(0, 2).join(', ')}
           </div>
         </div>
       </div>

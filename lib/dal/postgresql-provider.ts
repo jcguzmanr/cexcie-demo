@@ -98,7 +98,7 @@ export class PostgreSQLDataProvider extends BaseDataProvider {
         nombre: row.nombre,
         facultadId: row.facultad_id,
         modalidades: row.modalidades.filter(Boolean),
-        campus: row.campus.map((c: any) => c.id),
+        campus: row.campus.map((c: { id: string }) => c.id),
         imagen: row.imagen,
         duracionAnios: row.duracion ? parseInt(row.duracion) : undefined,
         gradoAcademico: row.grado,

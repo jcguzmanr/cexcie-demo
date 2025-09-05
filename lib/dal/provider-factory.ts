@@ -1,8 +1,9 @@
 // Factory para crear providers según configuración
 import { DataProvider, DataProviderConfig } from '../types/dal';
 import { JSONDataProvider } from './json-provider';
-import { PostgreSQLDataProvider } from './postgresql-provider';
-import { HybridDataProvider } from './hybrid-provider';
+// PostgreSQL providers se importan dinámicamente para evitar problemas de build
+// import { PostgreSQLDataProvider } from './postgresql-provider';
+// import { HybridDataProvider } from './hybrid-provider';
 
 export class DataProviderFactory {
   static createProvider(config: DataProviderConfig): DataProvider {
@@ -16,7 +17,10 @@ export class DataProviderFactory {
           throw new Error('Database URL required for PostgreSQL provider');
         }
         console.log('🔧 Creating PostgreSQL Data Provider');
-        return new PostgreSQLDataProvider(config.databaseUrl);
+        // Importación dinámica para evitar problemas de build
+        return import('./postgresql-provider').then(module => 
+          new module.PostgreSQLDataProvider(config.databaseUrl)
+        );
       
       case 'hybrid':
         if (!config.databaseUrl) {
@@ -24,9 +28,15 @@ export class DataProviderFactory {
           return new JSONDataProvider();
         }
         console.log('🔧 Creating Hybrid Data Provider');
-        return new HybridDataProvider(
-          new JSONDataProvider(),
-          new PostgreSQLDataProvider(config.databaseUrl)
+        // Importación dinámica para evitar problemas de build
+        return Promise.all([
+          import('./hybrid-provider'),
+          import('./postgresql-provider')
+        ]).then(([hybridModule, postgresModule]) => 
+          new hybridModule.HybridDataProvider(
+            new JSONDataProvider(),
+            new postgresModule.PostgreSQLDataProvider(config.databaseUrl)
+          )
         );
       
       default:

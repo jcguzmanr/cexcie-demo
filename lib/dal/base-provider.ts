@@ -1,23 +1,27 @@
 // Clase base para todos los providers
 import { DataProvider, CacheEntry } from '../types/dal';
+import { 
+  Facultad, Campus, Carrera, CarreraDetalle, PlanEstudios, 
+  Curso, Certificacion, ModalidadComparison, Precio, Periodo, Moneda 
+} from '../types/entities';
 
 export abstract class BaseDataProvider implements DataProvider {
-  protected cache = new Map<string, CacheEntry<any>>();
+  protected cache = new Map<string, CacheEntry<unknown>>();
   protected defaultTTL = 5 * 60 * 1000; // 5 minutos
 
-  abstract getFacultades(): Promise<any[]>;
-  abstract getCampus(): Promise<any[]>;
-  abstract getCarreras(): Promise<any[]>;
-  abstract getCarreraById(id: string): Promise<any | null>;
-  abstract getCarrerasByCampus(campusId: string): Promise<any[]>;
-  abstract getCarrerasByFacultad(facultadId: string): Promise<any[]>;
-  abstract getPlanEstudios(carreraId: string): Promise<any[]>;
-  abstract getCursos(carreraId: string): Promise<any[]>;
-  abstract getCertificaciones(carreraId: string): Promise<any[]>;
-  abstract getModalidadComparison(): Promise<any[]>;
-  abstract getPrecios(carreraId: string, campusId: string, modalidadId: string): Promise<any[]>;
-  abstract getPeriodos(): Promise<any[]>;
-  abstract getMonedas(): Promise<any[]>;
+  abstract getFacultades(): Promise<Facultad[]>;
+  abstract getCampus(): Promise<Campus[]>;
+  abstract getCarreras(): Promise<Carrera[]>;
+  abstract getCarreraById(id: string): Promise<CarreraDetalle | null>;
+  abstract getCarrerasByCampus(campusId: string): Promise<Carrera[]>;
+  abstract getCarrerasByFacultad(facultadId: string): Promise<Carrera[]>;
+  abstract getPlanEstudios(carreraId: string): Promise<PlanEstudios[]>;
+  abstract getCursos(carreraId: string): Promise<Curso[]>;
+  abstract getCertificaciones(carreraId: string): Promise<Certificacion[]>;
+  abstract getModalidadComparison(): Promise<ModalidadComparison[]>;
+  abstract getPrecios(carreraId: string, campusId: string, modalidadId: string): Promise<Precio[]>;
+  abstract getPeriodos(): Promise<Periodo[]>;
+  abstract getMonedas(): Promise<Moneda[]>;
 
   protected getCachedData<T>(key: string, loader: () => Promise<T>, ttl?: number): Promise<T> {
     const cacheKey = `base_${key}`;
@@ -25,7 +29,7 @@ export abstract class BaseDataProvider implements DataProvider {
     const cacheTTL = ttl || this.defaultTTL;
 
     if (cached && Date.now() - cached.timestamp < cacheTTL) {
-      return cached.data;
+      return Promise.resolve(cached.data as T);
     }
 
     return loader().then(data => {

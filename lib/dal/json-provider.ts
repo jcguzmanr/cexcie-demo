@@ -41,7 +41,16 @@ export class JSONDataProvider extends BaseDataProvider {
         
         // Buscar por ID en el detalle
         if (carrera.id === id) {
-          return carrera;
+          // Mapear la estructura del JSON a la interfaz CarreraDetalle
+          return {
+            id: carrera.id,
+            nombre: carrera.nombre,
+            facultadId: carrera.facultad || 'unknown',
+            modalidades: carrera.modalidades || [],
+            campus: carrera.campus || [],
+            imagen: carrera.secciones?.sobre?.media?.src || '',
+            secciones: carrera.secciones
+          } as CarreraDetalle;
         }
         
         return null;
@@ -82,8 +91,8 @@ export class JSONDataProvider extends BaseDataProvider {
         cicloNumero: ciclo.numero,
         creditos: ciclo.creditos,
         etapa: ciclo.etapa,
-        etapaDescripcion: carrera.secciones.planEstudios.legendEtapas[ciclo.etapa]?.label || '',
-        etapaColor: carrera.secciones.planEstudios.legendEtapas[ciclo.etapa]?.color || '',
+        etapaDescripcion: carrera.secciones.planEstudios?.legendEtapas?.[ciclo.etapa]?.label || '',
+        etapaColor: carrera.secciones.planEstudios?.legendEtapas?.[ciclo.etapa]?.color || '',
         cursos: ciclo.cursos,
         notas: ciclo.notas
       }));
@@ -143,7 +152,19 @@ export class JSONDataProvider extends BaseDataProvider {
     return this.measureOperation('getModalidadComparison (JSON)', async () => {
       return this.getCachedData('modalidad-comparison', async () => {
         const data = await import('../../public/data/modalidad-comparison.json');
-        return data.default || data;
+        const rawData = data.default || data;
+        
+        // Mapear la estructura del JSON a la interfaz ModalidadComparison
+        return rawData.map((item: Record<string, unknown>) => ({
+          careerId: item.career_id as string,
+          careerName: item.career_name as string,
+          comparisonCategories: item.comparison_categories as Array<{
+            category: string;
+            presencial: string;
+            semipresencial: string;
+            distancia: string;
+          }>
+        }));
       });
     });
   }
@@ -164,11 +185,11 @@ export class JSONDataProvider extends BaseDataProvider {
   }
 
   // Métodos específicos del JSON Provider
-  async getCacheStats() {
+  async getCacheStats(): Promise<{ size: number; keys: string[] }> {
     return this.getCacheStats();
   }
 
-  async clearCache() {
+  async clearCache(): Promise<void> {
     this.clearCache();
   }
 }

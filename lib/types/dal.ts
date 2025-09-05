@@ -45,11 +45,11 @@ export interface ConsistencyReport {
 export interface Difference {
   type: 'missing_in_postgresql' | 'missing_in_json' | 'data_mismatch';
   key: string | number;
-  jsonData?: any;
-  postgresData?: any;
+  jsonData?: Record<string, unknown>;
+  postgresData?: Record<string, unknown>;
   field?: string;
-  jsonValue?: any;
-  postgresValue?: any;
+  jsonValue?: unknown;
+  postgresValue?: unknown;
 }
 
 export interface HealthStatus {
