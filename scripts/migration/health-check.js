@@ -11,7 +11,7 @@ const { Pool } = require('pg');
 const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/cexcie';
 
 async function healthCheck() {
-  const pool = new Pool({ connectionString: DATABASE_URL });
+  const pool = new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
   
   try {
     console.log('🏥 Iniciando health check de PostgreSQL...');

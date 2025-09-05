@@ -12,7 +12,7 @@ const fs = require('fs').promises;
 const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/cexcie';
 
 async function testConsistency() {
-  const pool = new Pool({ connectionString: DATABASE_URL });
+  const pool = new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
   
   try {
     console.log('🔍 Iniciando test de consistencia entre JSON y PostgreSQL...');

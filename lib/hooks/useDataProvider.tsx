@@ -45,13 +45,22 @@ export function DataProviderProvider({ children }: { children: ReactNode }) {
         const config = getDatabaseConfig();
         console.log('🔧 Initializing data provider:', config.provider);
 
-        // Por ahora, solo soportamos JSON provider para evitar problemas de build
-        if (config.provider !== 'json') {
-          console.warn('⚠️ Solo se soporta JSON provider en este momento. Cambiando a JSON.');
+        // Seleccionar provider según config (.env.local)
+        let dataProvider: DataProvider;
+        if (config.provider === 'postgresql' && config.postgresql?.url) {
+          const mod = await import('../dal/postgresql-provider');
+          dataProvider = new mod.PostgreSQLDataProvider(config.postgresql.url);
+        } else if (config.provider === 'hybrid' && config.postgresql?.url) {
+          const [hyb, pg] = await Promise.all([
+            import('../dal/hybrid-provider'),
+            import('../dal/postgresql-provider')
+          ]);
+          const { JSONDataProvider } = await import('../dal/json-provider');
+          dataProvider = new hyb.HybridDataProvider(new JSONDataProvider(), new pg.PostgreSQLDataProvider(config.postgresql.url));
+        } else {
+          const { JSONDataProvider } = await import('../dal/json-provider');
+          dataProvider = new JSONDataProvider();
         }
-        
-        const { JSONDataProvider } = await import('../dal/json-provider');
-        const dataProvider = new JSONDataProvider();
 
         // Validar el provider
         const isValid = true; // JSON provider siempre es válido
@@ -61,15 +70,10 @@ export function DataProviderProvider({ children }: { children: ReactNode }) {
 
         setProvider(dataProvider);
 
-        // Health check inicial
-        setHealth({ postgres: false, json: true });
-
-        // Obtener información del provider
-        setStats({
-          type: 'JSONDataProvider',
-          features: ['Caching', 'File-based', 'Fast startup'],
-          capabilities: ['Read-only', 'Static data', 'No persistence']
-        } as Record<string, unknown>);
+        // Health y stats iniciales
+        const isPg = dataProvider.constructor.name === 'PostgreSQLDataProvider' || dataProvider.constructor.name === 'HybridDataProvider';
+        setHealth({ postgres: isPg, json: dataProvider.constructor.name !== 'PostgreSQLDataProvider' });
+        setStats({ type: dataProvider.constructor.name } as Record<string, unknown>);
 
         console.log('✅ Data provider initialized successfully');
         console.log('📊 Provider info:', providerInfo);

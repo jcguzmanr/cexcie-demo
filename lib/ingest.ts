@@ -111,17 +111,33 @@ export function createIngestGlobal() {
 
   if (!hasCampus) {
     try { ingestScreenData("/campus", campusJson as unknown); } catch {}
-    fetch("/data/campus.json").then(r=>r.json()).then(j=>ingestScreenData("/campus", j)).catch(()=>{});
+    // Preferir API (BD) con fallback a /data
+    fetch("/api/campus")
+      .then(r=>r.json())
+      .then(j=>ingestScreenData("/campus", j))
+      .catch(()=>{
+        fetch("/data/campus.json").then(r=>r.json()).then(j=>ingestScreenData("/campus", j)).catch(()=>{});
+      });
   }
   if (!hasCampusMeta) {
     try { ingestScreenData("/campus-meta", campusMetaJson as unknown); } catch {}
     fetch("/data/campusMeta.json").then(r=>r.json()).then(j=>ingestScreenData("/campus-meta", j)).catch(()=>{});
   }
   if (!hasFacultades) {
-    fetch("/data/facultades.json").then(r=>r.json()).then(j=>ingestScreenData("/facultades", j)).catch(()=>{});
+    fetch("/api/facultades")
+      .then(r=>r.json())
+      .then(j=>ingestScreenData("/facultades", j))
+      .catch(()=>{
+        fetch("/data/facultades.json").then(r=>r.json()).then(j=>ingestScreenData("/facultades", j)).catch(()=>{});
+      });
   }
   if (!hasCarreras) {
-    fetch("/data/carreras.json").then(r=>r.json()).then(j=>ingestScreenData("/carreras", j)).catch(()=>{});
+    fetch("/api/carreras")
+      .then(r=>r.json())
+      .then(j=>ingestScreenData("/carreras", j))
+      .catch(()=>{
+        fetch("/data/carreras.json").then(r=>r.json()).then(j=>ingestScreenData("/carreras", j)).catch(()=>{});
+      });
   }
 }
 

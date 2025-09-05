@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:setup": "node scripts/migration/setup-local-db.js",
+    "db:schema": "node scripts/migration/apply-schema.js",
     "db:migrate": "node scripts/migration/migrate-json-to-postgres.js",
     "db:test": "node scripts/migration/test-consistency.js",
     "db:rollback": "node scripts/migration/rollback.js",

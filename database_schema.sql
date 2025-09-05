@@ -133,10 +133,8 @@ CREATE INDEX ix_oferta_campus_modalidad_carrera ON oferta(campus_id, modalidad_i
 CREATE INDEX ix_precio_carrera_periodo ON precio(carrera_id, periodo_id);
 CREATE INDEX ix_precio_campus_modalidad_periodo ON precio(campus_id, modalidad_id, periodo_id);
 
--- Índice parcial para precios vigentes
-CREATE INDEX ix_precio_vigente_partial ON precio(carrera_id, periodo_id)
-WHERE (vigente_desde IS NULL OR vigente_desde <= now()::date)
-  AND (vigente_hasta IS NULL OR vigente_hasta >= now()::date);
+-- Índices para acelerar consultas por vigencia (evita funciones no inmutables en predicados)
+CREATE INDEX ix_precio_vigencia_rng ON precio(carrera_id, periodo_id, vigente_desde, vigente_hasta);
 
 -- Índices para búsqueda de texto (requiere extensión pg_trgm)
 -- CREATE INDEX ix_trgm_carrera_nombre ON carrera USING gin (nombre gin_trgm_ops);
