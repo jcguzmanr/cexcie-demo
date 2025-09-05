@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import { getDatabaseConnectionString } from '@/lib/config/database';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 export async function GET() {
   const databaseUrl = getDatabaseConnectionString();
   if (!databaseUrl) {
-    const data = await import('@/data/carreras.json');
-    return NextResponse.json(data.default || data);
+    try {
+      const filePath = path.resolve(process.cwd(), 'public/data/carreras.json');
+      const content = await fs.readFile(filePath, 'utf8');
+      return NextResponse.json(JSON.parse(content));
+    } catch (e) {
+      return NextResponse.json({ error: 'Fallback JSON not found' }, { status: 500 });
+    }
   }
 
   const pool = new Pool({ connectionString: databaseUrl, ssl: { rejectUnauthorized: false } });

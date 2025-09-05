@@ -13,7 +13,8 @@
     "db:test": "node scripts/migration/test-consistency.js",
     "db:rollback": "node scripts/migration/rollback.js",
     "test:database": "npm run db:test",
-    "db:health": "node scripts/migration/health-check.js"
+    "db:health": "node scripts/migration/health-check.js",
+    "db:sql": "node scripts/migration/sql-exec.js"
   },
   "dependencies": {
     "@types/pg": "^8.15.5",

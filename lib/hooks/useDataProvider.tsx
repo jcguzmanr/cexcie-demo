@@ -45,22 +45,9 @@ export function DataProviderProvider({ children }: { children: ReactNode }) {
         const config = getDatabaseConfig();
         console.log('🔧 Initializing data provider:', config.provider);
 
-        // Seleccionar provider según config (.env.local)
-        let dataProvider: DataProvider;
-        if (config.provider === 'postgresql' && config.postgresql?.url) {
-          const mod = await import('../dal/postgresql-provider');
-          dataProvider = new mod.PostgreSQLDataProvider(config.postgresql.url);
-        } else if (config.provider === 'hybrid' && config.postgresql?.url) {
-          const [hyb, pg] = await Promise.all([
-            import('../dal/hybrid-provider'),
-            import('../dal/postgresql-provider')
-          ]);
-          const { JSONDataProvider } = await import('../dal/json-provider');
-          dataProvider = new hyb.HybridDataProvider(new JSONDataProvider(), new pg.PostgreSQLDataProvider(config.postgresql.url));
-        } else {
-          const { JSONDataProvider } = await import('../dal/json-provider');
-          dataProvider = new JSONDataProvider();
-        }
+        // En cliente usamos JSON provider; la app ingiere datos desde /api/* que ya leen BD
+        const { JSONDataProvider } = await import('../dal/json-provider');
+        const dataProvider: DataProvider = new JSONDataProvider();
 
         // Validar el provider
         const isValid = true; // JSON provider siempre es válido
@@ -71,12 +58,10 @@ export function DataProviderProvider({ children }: { children: ReactNode }) {
         setProvider(dataProvider);
 
         // Health y stats iniciales
-        const isPg = dataProvider.constructor.name === 'PostgreSQLDataProvider' || dataProvider.constructor.name === 'HybridDataProvider';
-        setHealth({ postgres: isPg, json: dataProvider.constructor.name !== 'PostgreSQLDataProvider' });
+        setHealth({ postgres: false, json: true });
         setStats({ type: dataProvider.constructor.name } as Record<string, unknown>);
 
         console.log('✅ Data provider initialized successfully');
-        console.log('📊 Provider info:', providerInfo);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
         console.error('❌ Failed to initialize data provider:', errorMessage);
