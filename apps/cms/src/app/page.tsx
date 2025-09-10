@@ -1,8 +1,10 @@
 import Link from "next/link";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function Home() {
   return (
-    <div className="p-6">
+    <ProtectedRoute>
+      <div className="p-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-4">Dashboard CExCIE</h1>
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
@@ -57,6 +59,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }
