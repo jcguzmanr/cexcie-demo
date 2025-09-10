@@ -1,0 +1,39 @@
+[
+  {
+    "id": "queEs",
+    "title": "¿Qué es?",
+    "presencial": "Modalidad de estudios regular, dirigida principalmente a egresados de colegio. El estudiante asiste todos los días y convive con sus compañeros y docentes en el campus.",
+    "semipresencial": "Modalidad híbrida para personas que trabajan o tienen otras responsabilidades. Clases en el campus algunos días (principalmente fines de semana) y el resto virtual.",
+    "distancia": "Modalidad 100% virtual, orientada a quienes buscan máxima flexibilidad. El estudiante se conecta desde donde esté, sin necesidad de asistir al campus."
+  },
+  {
+    "id": "beneficios",
+    "title": "Beneficios",
+    "presencial": "Acceso a laboratorios y talleres del campus • Interacción directa con docentes y compañeros • Participación en eventos y actividades dentro del campus • Acompañamiento de mentores y buddy • Facilidad para acceder a áreas de atención",
+    "semipresencial": "Flexibilidad horaria • Combinación de aprendizaje digital con experiencias en campus • Interacción con docentes por canales presenciales y virtuales • Acompañamiento de mentores y buddy",
+    "distancia": "Máxima flexibilidad horaria • Uso de herramientas digitales: simuladores, Contiverson, campus virtual y Hub de Información • Interacción por canales virtuales • Acompañamiento de mentores y buddy"
+  },
+  {
+    "id": "duracion",
+    "title": "Duración",
+    "presencial": "80% de créditos presenciales y hasta 20% de créditos virtuales.",
+    "semipresencial": "40% de créditos presenciales y hasta 60% de créditos virtuales.",
+    "distancia": "100% de clases virtuales (con excepciones específicas según programa)."
+  },
+  {
+    "id": "ventajas",
+    "title": "Ventajas",
+    "presencial": "Experiencia universitaria completa en campus • Fortalece habilidades sociales • Acceso a espacios físicos y virtuales • Red de contactos",
+    "semipresencial": "Gestiona mejor tu tiempo • Estudia sin dejar de lado otras responsabilidades • Acceso a espacios físicos y virtuales • Red de contactos",
+    "distancia": "Estudia desde cualquier lugar con conexión a internet • Red de contactos • Máxima autonomía"
+  },
+  {
+    "id": "maximoTiempoVirtual",
+    "title": "Máximo tiempo virtual",
+    "presencial": "20% de créditos",
+    "semipresencial": "Hasta 60% de créditos",
+    "distancia": "100% de créditos con excepción"
+  }
+]
+
+

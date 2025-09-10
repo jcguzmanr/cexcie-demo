@@ -5,6 +5,8 @@ import { Modal } from "@/components/Modal";
 import Link from "next/link";
 import React from "react";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { motion } from "framer-motion";
+import { ModalidadOverview } from "@/components/ModalidadOverview";
 
 
 
@@ -45,8 +47,20 @@ export default function CarrerasPage() {
     return () => clearInterval(interval);
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.06, delayChildren: 0.04 }
+    }
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.25 } }
+  };
+
   return (
-    <div className="p-6 grid gap-6">
+    <motion.div className="p-6 grid gap-6" variants={containerVariants} initial="hidden" animate="show">
       <Breadcrumb items={[{ label: "Inicio", href: "/" }, { label: "Campus", href: "/campus" }, { label: "Carreras" }]} />
       {/* Debug panel para validar filtros (visible siempre mientras depuramos) */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/70 p-3 text-xs">
@@ -59,130 +73,34 @@ export default function CarrerasPage() {
         <div className="mt-2"><span className="opacity-70">Facultades visibles:</span> <span className="font-mono">{filtered.map(f=>f.id).join(', ') || '—'}</span></div>
         <div className="mt-1"><span className="opacity-70">Ejemplo carreras filtradas:</span> <span className="font-mono">{carrerasFiltradas.slice(0,8).map(c=>c.id).join(', ') || '—'}</span></div>
       </div>
-      <div>
+      <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-semibold">Conoce nuestras carreras</h1>
         {campusSel && (
           <div className="text-sm opacity-70 mt-1">Campus seleccionado: <span className="font-medium">{campusSel.nombre}</span></div>
         )}
-      </div>
+      </motion.div>
 
-      <div className="flex gap-3 flex-wrap">
+      <motion.div className="flex gap-3 flex-wrap" variants={itemVariants}>
         {(["presencial", "semipresencial", "distancia"] as const).map((m) => (
-          <Chip key={m} selected={modalidad === m} onClick={() => setModalidad(m)}>
-            MODALIDAD {m.toUpperCase()}
-          </Chip>
+          <motion.div key={m} variants={itemVariants}>
+            <Chip selected={modalidad === m} onClick={() => setModalidad(m)}>
+              MODALIDAD {m.toUpperCase()}
+            </Chip>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="space-y-8">
-
-      <div className="w-full h-32 relative overflow-hidden rounded-xl bg-gradient-to-r from-[var(--uc-purple)]/10 to-[var(--uc-lilac)]/20 border border-[var(--uc-purple)]/30">
-            <div className="absolute inset-0 flex transition-transform duration-1000 ease-in-out" 
-                 style={{ transform: `translateX(-${(currentSlide * 100)}%)` }}>
-              
-              {/* Posición 1: ¿Qué es? + Beneficios + Duración */}
-              <div className="w-full flex-shrink-0 flex gap-2 p-3">
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">¿Qué es?</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
-                    {modalidad === "presencial" && "Modalidad tradicional donde asistes físicamente a clases en el campus, con interacción directa con profesores y compañeros."}
-                    {modalidad === "semipresencial" && "Combinación de clases presenciales y virtuales, ofreciendo flexibilidad manteniendo la conexión personal."}
-                    {modalidad === "distancia" && "Educación completamente en línea con plataformas digitales avanzadas, permitiendo estudiar desde cualquier lugar."}
-                  </div>
-                </div>
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Beneficios</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
-                    {modalidad === "presencial" && "• Experiencia inmersiva completa\n• Networking directo\n• Acceso inmediato a recursos físicos"}
-                    {modalidad === "semipresencial" && "• Flexibilidad de horarios\n• Ahorro en transporte\n• Combinación de lo mejor de ambos mundos"}
-                    {modalidad === "distancia" && "• Máxima flexibilidad\n• Ahorro en tiempo y transporte\n• Acceso global a la educación"}
-                  </div>
-                </div>
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Duración</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
-                    {modalidad === "presencial" && "Carreras de 5 años con horarios fijos de lunes a viernes, incluyendo prácticas presenciales obligatorias."}
-                    {modalidad === "semipresencial" && "Carreras de 5 años con clases presenciales 2-3 veces por semana y actividades virtuales complementarias."}
-                    {modalidad === "distancia" && "Carreras de 5 años con ritmo personalizado, permitiendo completar en menos tiempo según tu dedicación."}
-                  </div>
-                </div>
-              </div>
-
-              {/* Posición 2: Ventajas + Máximo tiempo virtual + ¿Qué es? */}
-              <div className="w-full flex-shrink-0 flex gap-2 p-3">
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Ventajas</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
-                    {modalidad === "presencial" && "• Ambiente universitario tradicional\n• Acceso directo a laboratorios\n• Participación en actividades extracurriculares"}
-                    {modalidad === "semipresencial" && "• Balance entre flexibilidad y estructura\n• Ahorro en costos de transporte\n• Mantiene conexión social"}
-                    {modalidad === "distancia" && "• Sin limitaciones geográficas\n• Ahorro significativo en costos\n• Compatible con trabajo y familia"}
-                  </div>
-                </div>
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Máximo tiempo virtual</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
-                    {modalidad === "presencial" && "20% del tiempo total, principalmente para tareas, consultas y material complementario."}
-                    {modalidad === "semipresencial" && "60% del tiempo total, combinando clases virtuales con sesiones presenciales estratégicas."}
-                    {modalidad === "distancia" && "100% del tiempo total, con plataformas digitales y herramientas virtuales como base principal."}
-                  </div>
-                </div>
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">¿Qué es?</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
-                    {modalidad === "presencial" && "Modalidad tradicional donde asistes físicamente a clases en el campus, con interacción directa con profesores y compañeros."}
-                    {modalidad === "semipresencial" && "Combinación de clases presenciales y virtuales, ofreciendo flexibilidad manteniendo la conexión personal."}
-                    {modalidad === "distancia" && "Educación completamente en línea con plataformas digitales avanzadas, permitiendo estudiar desde cualquier lugar."}
-                  </div>
-                </div>
-              </div>
-
-              {/* Posición 3: Beneficios + Duración + Ventajas */}
-              <div className="w-full flex-shrink-0 flex gap-2 p-3">
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Beneficios</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
-                    {modalidad === "presencial" && "• Experiencia inmersiva completa\n• Networking directo\n• Acceso inmediato a recursos físicos"}
-                    {modalidad === "semipresencial" && "• Flexibilidad de horarios\n• Ahorro en transporte\n• Combinación de lo mejor de ambos mundos"}
-                    {modalidad === "distancia" && "• Máxima flexibilidad\n• Ahorro en tiempo y transporte\n• Acceso global a la educación"}
-                  </div>
-                </div>
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Duración</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed text-center">
-                    {modalidad === "presencial" && "Carreras de 5 años con horarios fijos de lunes a viernes, incluyendo prácticas presenciales obligatorias."}
-                    {modalidad === "semipresencial" && "Carreras de 5 años con clases presenciales 2-3 veces por semana y actividades virtuales complementarias."}
-                    {modalidad === "distancia" && "Carreras de 5 años con ritmo personalizado, permitiendo completar en menos tiempo según tu dedicación."}
-                  </div>
-                </div>
-                <div className="flex-1 bg-[var(--uc-purple)]/5 rounded-lg p-2 border border-[var(--uc-purple)]/20">
-                  <div className="text-[var(--uc-purple)] font-semibold text-xs mb-1 text-center">Ventajas</div>
-                  <div className="text-[var(--foreground)] text-xs leading-relaxed">
-                    {modalidad === "presencial" && "• Ambiente universitario tradicional\n• Acceso directo a laboratorios\n• Participación en actividades extracurriculares"}
-                    {modalidad === "semipresencial" && "• Balance entre flexibilidad y estructura\n• Ahorro en costos de transporte\n• Mantiene conexión social"}
-                    {modalidad === "distancia" && "• Sin limitaciones geográficas\n• Ahorro significativo en costos\n• Compatible con trabajo y familia"}
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Indicadores de posición */}
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
-              {[0, 1, 2].map((index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    currentSlide === index ? 'bg-[var(--uc-purple)] scale-125' : 'bg-[var(--uc-purple)]/30'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
+      <motion.div className="space-y-8" variants={itemVariants}>
+        <div className="w-full rounded-xl border border-[var(--uc-purple)]/30 bg-gradient-to-r from-[var(--uc-purple)]/10 to-[var(--uc-lilac)]/20 p-3">
+          <ModalidadOverview modalidad={modalidad as typeof modalidad} />
+        </div>
 
         {/* Listado de facultades */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4" variants={containerVariants}>
           {filtered.map((f) => (
-            <button
+            <motion.button
               key={f.id}
+              variants={itemVariants}
               onClick={() => {
                 clearComparador();
                 setOpen(f.id);
@@ -193,10 +111,10 @@ export default function CarrerasPage() {
               <div className="text-sm opacity-70 group-hover:opacity-100 transition-opacity">
                 Haz clic para ver carreras
               </div>
-            </button>
+            </motion.button>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {filtered.map((f) => (
         <Modal
@@ -231,14 +149,15 @@ export default function CarrerasPage() {
             <div className="text-left text-base opacity-80 mb-6 font-medium">Toca para seleccionar (hasta 3). Con 1 activo, puedes ver la carrera.</div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6" variants={containerVariants} initial="hidden" animate="show">
             {Object.values(carrerasMap)
               .filter((c) => c.facultadId === f.id && c.modalidades.includes(modalidad as typeof modalidad) && (!campusSel || c.campus.includes(campusSel.id)))
               .map((c) => {
                 const isChecked = selectedCarreras.some((s) => s.id === c.id);
                 return (
-                  <button
+                  <motion.button
                     key={c.id}
+                    variants={itemVariants}
                     onClick={() => toggleCarrera(c)}
                     className={`w-full text-center px-4 py-6 sm:px-6 sm:py-8 rounded-2xl border transition-all duration-200 hover:scale-105 hover:shadow-lg active:scale-95 ${
                       isChecked 
@@ -247,18 +166,16 @@ export default function CarrerasPage() {
                     }`}
                   >
                     <div className="font-semibold text-base sm:text-lg leading-tight">{c.nombre}</div>
-                  </button>
+                  </motion.button>
                 );
               })}
             {Object.values(carrerasMap).filter((c) => c.facultadId === f.id).length === 0 && (
               <div className="col-span-2 p-8 text-center text-sm opacity-70">Sin carreras para esta facultad.</div>
             )}
-          </div>
+          </motion.div>
         </Modal>
       ))}
-
-
-    </div>
+    </motion.div>
   );
 }
 

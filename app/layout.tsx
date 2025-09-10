@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
 import { AppShell } from "@/components/AppShell";
+import { RouteTransition } from "@/components/RouteTransition";
 import { DataProviderProvider } from '../lib/hooks/useDataProvider';
 
 const geistSans = Geist({
@@ -78,7 +79,9 @@ export default function RootLayout({
       />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen`}>
         <DataProviderProvider>
-          <AppShell>{children}</AppShell>
+          <RouteTransition>
+            <AppShell>{children}</AppShell>
+          </RouteTransition>
         </DataProviderProvider>
       </body>
     </html>

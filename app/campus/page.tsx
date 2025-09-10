@@ -5,6 +5,7 @@ import { useAppStore, getCampusList } from "@/store";
 import Link from "next/link";
 import Image from "next/image";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { AnimatePresence, motion } from "framer-motion";
 // Fallback local JSON (bundled) in case public fetch fails
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -78,20 +79,63 @@ export default function CampusPage() {
             })}
           </div>
           <div className="rounded-2xl bg-white/60 border p-4 min-h-[360px] flex items-center justify-center">
-            {selected ? (
-              <div className="w-full grid gap-3">
-                {campusMeta[selected.id]?.imagen ? (
-                  <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl">
-                    <Image src={campusMeta[selected.id].imagen!} alt={selected.nombre} fill className="object-cover" />
-                  </div>
-                ) : (
-                  <div className="h-[240px] rounded-2xl bg-[var(--uc-lilac)]/20 flex items-center justify-center text-sm">Imagen del campus</div>
-                )}
-                <div className="text-sm opacity-80">Dirección: {campusMeta[selected.id]?.direccion ?? "—"}</div>
-              </div>
-            ) : (
-              <div className="opacity-70">Selecciona un campus para ver detalles</div>
-            )}
+            <AnimatePresence mode="wait">
+              {selected ? (
+                <motion.div
+                  key={selected.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="w-full grid gap-3"
+                >
+                  {campusMeta[selected.id]?.imagen ? (
+                    <motion.div
+                      key={`${selected.id}-img`}
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.25 }}
+                      className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl"
+                    >
+                      <Image src={campusMeta[selected.id].imagen!} alt={selected.nombre} fill className="object-cover" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key={`${selected?.id ?? 'none'}-ph`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="h-[240px] rounded-2xl bg-[var(--uc-lilac)]/20 flex items-center justify-center text-sm"
+                    >
+                      Imagen del campus
+                    </motion.div>
+                  )}
+                  <motion.div
+                    key={`${selected.id}-meta`}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-sm opacity-80"
+                  >
+                    Dirección: {campusMeta[selected.id]?.direccion ?? "—"}
+                  </motion.div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="no-selection"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="opacity-70"
+                >
+                  Selecciona un campus para ver detalles
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       )}
