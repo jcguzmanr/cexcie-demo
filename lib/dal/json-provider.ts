@@ -184,12 +184,12 @@ export class JSONDataProvider extends BaseDataProvider {
     return [];
   }
 
-  // Métodos específicos del JSON Provider
-  async getCacheStats(): Promise<{ size: number; keys: string[] }> {
-    return this.getCacheStats();
+  // Métodos públicos auxiliares (no sobrecargan los protegidos de la base)
+  getCacheStatsPublic(): { size: number; keys: string[] } {
+    return super.getCacheStats();
   }
 
-  async clearCache(): Promise<void> {
-    this.clearCache();
+  clearCachePublic(): void {
+    super.clearCache();
   }
 }
