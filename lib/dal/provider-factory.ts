@@ -17,9 +17,10 @@ export class DataProviderFactory {
           throw new Error('Database URL required for PostgreSQL provider');
         }
         console.log('🔧 Creating PostgreSQL Data Provider');
+        const dbUrl: string = config.databaseUrl as string; // checked above
         // Importación dinámica para evitar problemas de build
         return import('./postgresql-provider').then(module => 
-          new module.PostgreSQLDataProvider(config.databaseUrl)
+          new module.PostgreSQLDataProvider(dbUrl)
         );
       
       case 'hybrid':
@@ -29,13 +30,14 @@ export class DataProviderFactory {
         }
         console.log('🔧 Creating Hybrid Data Provider');
         // Importación dinámica para evitar problemas de build
+        const dbUrl: string = config.databaseUrl as string; // checked above
         return Promise.all([
           import('./hybrid-provider'),
           import('./postgresql-provider')
         ]).then(([hybridModule, postgresModule]) => 
           new hybridModule.HybridDataProvider(
             new JSONDataProvider(),
-            new postgresModule.PostgreSQLDataProvider(config.databaseUrl)
+            new postgresModule.PostgreSQLDataProvider(dbUrl)
           )
         );
       
