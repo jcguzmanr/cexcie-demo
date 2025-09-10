@@ -99,39 +99,42 @@ export default function CarreraDetallePage() {
   const puedeComparar = carreraTieneSuficientesCursos();
 
   React.useEffect(() => {
-    fetch("/data/detalle-carrera.json")
-      .then((r) => r.json())
+    // Detalle de carrera desde BD con fallback a JSON
+    fetch(`/api/carrera/${params.id}`)
+      .then((r) => r.ok ? r.json() : Promise.reject())
       .then((j: DetalleCarrera) => setDetalle(j))
-      .catch(() => setDetalle(null));
-    
-    fetch("/data/didactics.json")
-      .then((r) => r.json())
-      .then((j) => setDidactics(j))
-      .catch(() => setDidactics(null));
-    
-    // Cargar comparación de modalidades
-    fetch("/data/modalidad-comparison.json")
-      .then((r) => r.json())
+      .catch(() => {
+        fetch("/data/detalle-carrera.json").then(r=>r.json()).then((j: DetalleCarrera)=>setDetalle(j)).catch(()=>setDetalle(null));
+      });
+
+    // Didácticas desde BD con fallback
+    fetch("/api/didactics")
+      .then((r)=>r.ok?r.json():Promise.reject())
+      .then((j)=>setDidactics(j))
+      .catch(()=>{
+        fetch("/data/didactics.json").then(r=>r.json()).then((j)=>setDidactics(j)).catch(()=>setDidactics(null));
+      });
+
+    // Comparación de modalidades desde BD con fallback
+    fetch("/api/modalidad-comparison")
+      .then((r)=>r.ok?r.json():Promise.reject())
       .then((comparisons: ModalidadComparisonType[]) => {
-        console.log("📊 Comparaciones cargadas:", comparisons);
         const comparison = comparisons.find(c => c.career_id === "default");
-        console.log("🎯 Comparación encontrada:", comparison);
         if (comparison) {
-          const personalizedComparison = {
-            ...comparison,
-            career_name: carrera.nombre
-          };
-          console.log("✨ Comparación personalizada:", personalizedComparison);
+          const personalizedComparison = { ...comparison, career_name: carrera.nombre };
           setModalidadComparison(personalizedComparison);
         } else {
           setModalidadComparison(null);
         }
       })
-      .catch((error) => {
-        console.error("💥 Error:", error);
-        setModalidadComparison(null);
+      .catch(() => {
+        fetch("/data/modalidad-comparison.json").then(r=>r.json()).then((comparisons: ModalidadComparisonType[])=>{
+          const comparison = comparisons.find(c => c.career_id === "default");
+          if (comparison) setModalidadComparison({ ...comparison, career_name: carrera.nombre });
+          else setModalidadComparison(null);
+        }).catch(()=>setModalidadComparison(null));
       });
-  }, [params.id]);
+  }, [params.id, carrera?.nombre]);
 
   if (!carrera) {
     return (

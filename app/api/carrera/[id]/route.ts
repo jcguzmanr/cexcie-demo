@@ -6,9 +6,9 @@ import path from 'node:path';
 
 export async function GET(
   _req: Request,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = context.params;
+  const { id } = await params;
   const databaseUrl = getDatabaseConnectionString();
 
   async function readFallbackDetalle() {

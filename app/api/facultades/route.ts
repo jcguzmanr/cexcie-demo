@@ -20,12 +20,25 @@ export async function GET() {
   const pool = new Pool({ connectionString: databaseUrl, ssl: { rejectUnauthorized: false } });
   try {
     const result = await pool.query(`
-      SELECT id, nombre
-      FROM facultad
-      ORDER BY nombre
+      SELECT 
+        f.id, 
+        f.nombre,
+        COALESCE(
+          (
+            SELECT array_agg(DISTINCT md.modalidad_id)
+            FROM carrera c
+            LEFT JOIN carrera_modalidad md ON c.id = md.carrera_id
+            WHERE c.facultad_id = f.id
+          ), ARRAY[]::text[]
+        ) AS modalidades
+      FROM facultad f
+      ORDER BY f.nombre
     `);
-    // Agregar modalidades si procede (vacío por ahora)
-    return NextResponse.json(result.rows.map(r => ({ ...r, modalidades: [] })));
+    return NextResponse.json(result.rows.map(r => ({
+      id: r.id,
+      nombre: r.nombre,
+      modalidades: (r.modalidades || []).filter(Boolean)
+    })));
   } catch (error) {
     console.error('GET /api/facultades error:', error);
     return NextResponse.json({ error: 'Database error' }, { status: 500 });

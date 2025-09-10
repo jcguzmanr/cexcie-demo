@@ -190,3 +190,28 @@ COMMENT ON COLUMN precio.item IS 'Tipo de concepto: matricula, pension_mensual, 
 COMMENT ON COLUMN precio.vigente_desde IS 'Fecha desde cuando aplica el precio';
 COMMENT ON COLUMN precio.vigente_hasta IS 'Fecha hasta cuando aplica el precio';
 
+-- =========================================================================
+-- CONTENIDO ENRIQUECIDO (DETALLE Y DIDÁCTICAS)
+-- =========================================================================
+
+-- Detalle por carrera (estructura flexible en JSON)
+CREATE TABLE IF NOT EXISTS carrera_detalle (
+    carrera_id  text PRIMARY KEY REFERENCES carrera(id) ON DELETE CASCADE,
+    secciones   jsonb NOT NULL DEFAULT '{}'::jsonb,
+    actualizado timestamptz NOT NULL DEFAULT now()
+);
+
+-- Didácticas y ayudas (globales)
+CREATE TABLE IF NOT EXISTS didactics (
+    id          text PRIMARY KEY,
+    payload     jsonb NOT NULL,
+    actualizado timestamptz NOT NULL DEFAULT now()
+);
+
+-- Comparación de modalidades (por carrera o default)
+CREATE TABLE IF NOT EXISTS modalidad_comparison (
+    career_id   text PRIMARY KEY, -- usar 'default' para genérico
+    payload     jsonb NOT NULL,
+    actualizado timestamptz NOT NULL DEFAULT now()
+);
+
