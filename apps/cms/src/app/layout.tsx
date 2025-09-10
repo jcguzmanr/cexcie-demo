@@ -31,8 +31,8 @@ export default function RootLayout({
             <div className="text-lg font-semibold mb-4">CExCIE CMS</div>
             <nav className="space-y-2">
               <Link href="/" className="block px-3 py-2 rounded text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800">Dashboard</Link>
-              <Link href="/facultades" className="block px-3 py-2 rounded text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800">Facultades</Link>
               <Link href="/campus" className="block px-3 py-2 rounded text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800">Campus</Link>
+              <Link href="/facultades" className="block px-3 py-2 rounded text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800">Facultades</Link>
               <Link href="/carreras" className="block px-3 py-2 rounded text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800">Carreras</Link>
               <a href="/api/health" target="_blank" className="block px-3 py-2 rounded text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800">Health</a>
             </nav>
