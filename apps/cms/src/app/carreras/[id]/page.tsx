@@ -124,17 +124,17 @@ export default function CarreraDetail({ params }: any) {
       </div>
 
       <div>
-        <label className="block text-sm mb-3 font-medium">Campus Disponibles</label>
+        <label className="block text-sm mb-3 font-medium text-gray-900 dark:text-white">Campus Disponibles</label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {campus.map((c: any) => (
-            <label key={c.id} className="flex items-center space-x-2 p-2 border rounded hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+            <label key={c.id} className="flex items-center space-x-2 p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
               <input
                 type="checkbox"
                 checked={form.campus.includes(c.id)}
                 onChange={() => toggleCampus(c.id)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
               />
-              <span className="text-sm">{c.nombre}</span>
+              <span className="text-sm text-gray-900 dark:text-white">{c.nombre}</span>
             </label>
           ))}
         </div>
@@ -144,17 +144,17 @@ export default function CarreraDetail({ params }: any) {
       </div>
 
       <div>
-        <label className="block text-sm mb-3 font-medium">Modalidades Disponibles</label>
+        <label className="block text-sm mb-3 font-medium text-gray-900 dark:text-white">Modalidades Disponibles</label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {modalidades.map((m: any) => (
-            <label key={m.id} className="flex items-center space-x-2 p-2 border rounded hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+            <label key={m.id} className="flex items-center space-x-2 p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
               <input
                 type="checkbox"
                 checked={form.modalidades.includes(m.id)}
                 onChange={() => toggleModalidad(m.id)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
               />
-              <span className="text-sm">{m.nombre}</span>
+              <span className="text-sm text-gray-900 dark:text-white">{m.nombre}</span>
             </label>
           ))}
         </div>
