@@ -154,7 +154,7 @@ export default function CarreraDetail({ params }: any) {
                 onChange={() => toggleModalidad(m.id)}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
               />
-              <span className="text-sm text-gray-900 dark:text-white">{m.nombre}</span>
+              <span className="text-sm text-gray-900 dark:text-white">{m.nombre || m.id}</span>
             </label>
           ))}
         </div>
