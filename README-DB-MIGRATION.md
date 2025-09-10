@@ -192,7 +192,7 @@ Verifica el estado de la base de datos y su rendimiento.
 ```typescript
 import { DataProviderFactory } from '../lib/dal/provider-factory';
 
-const provider = DataProviderFactory.createProvider({ source: 'hybrid' });
+const provider = await DataProviderFactory.createProvider({ source: 'hybrid' });
 const results = await DataProviderFactory.benchmarkProvider(provider);
 ```
 

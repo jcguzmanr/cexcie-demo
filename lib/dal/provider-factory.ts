@@ -6,11 +6,11 @@ import { JSONDataProvider } from './json-provider';
 // import { HybridDataProvider } from './hybrid-provider';
 
 export class DataProviderFactory {
-  static createProvider(config: DataProviderConfig): DataProvider {
+  static async createProvider(config: DataProviderConfig): Promise<DataProvider> {
     switch (config.source) {
       case 'json':
         console.log('🔧 Creating JSON Data Provider');
-        return new JSONDataProvider();
+        return Promise.resolve(new JSONDataProvider());
       
       case 'postgresql':
         if (!config.databaseUrl) {
@@ -25,7 +25,7 @@ export class DataProviderFactory {
       case 'hybrid':
         if (!config.databaseUrl) {
           console.warn('⚠️ No database URL provided, falling back to JSON-only mode');
-          return new JSONDataProvider();
+          return Promise.resolve(new JSONDataProvider());
         }
         console.log('🔧 Creating Hybrid Data Provider');
         // Importación dinámica para evitar problemas de build
