@@ -6,6 +6,8 @@ export default function CarreraDetail({ params }: any) {
   const { id } = params
   const [form, setForm] = useState<any>({ nombre:'', facultad_id:'', duracion:'', grado:'', titulo:'', imagen:'', campus:[], modalidades:[], detalle:{ secciones:{} } })
   const [facultades, setFacultades] = useState<any[]>([])
+  const [campus, setCampus] = useState<any[]>([])
+  const [modalidades, setModalidades] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
@@ -13,6 +15,18 @@ export default function CarreraDetail({ params }: any) {
     const res = await fetch('/api/facultades')
     const json = await res.json()
     setFacultades(json.data || [])
+  }
+
+  async function loadCampus() {
+    const res = await fetch('/api/campus')
+    const json = await res.json()
+    setCampus(json.data || [])
+  }
+
+  async function loadModalidades() {
+    const res = await fetch('/api/modalidades')
+    const json = await res.json()
+    setModalidades(json.data || [])
   }
 
   useEffect(() => {
@@ -32,9 +46,29 @@ export default function CarreraDetail({ params }: any) {
       setLoading(false)
     })
     loadFacultades()
+    loadCampus()
+    loadModalidades()
   }, [id])
 
   function updateField(k:string, v:any){ setForm((f:any)=>({ ...f, [k]: v })) }
+
+  function toggleCampus(campusId: string) {
+    setForm((f: any) => ({
+      ...f,
+      campus: f.campus.includes(campusId)
+        ? f.campus.filter((id: string) => id !== campusId)
+        : [...f.campus, campusId]
+    }))
+  }
+
+  function toggleModalidad(modalidadId: string) {
+    setForm((f: any) => ({
+      ...f,
+      modalidades: f.modalidades.includes(modalidadId)
+        ? f.modalidades.filter((id: string) => id !== modalidadId)
+        : [...f.modalidades, modalidadId]
+    }))
+  }
 
   async function save() {
     setSaving(true)
@@ -90,12 +124,43 @@ export default function CarreraDetail({ params }: any) {
       </div>
 
       <div>
-        <label className="block text-sm mb-1">Campus (IDs separados por coma)</label>
-        <input className="border px-2 py-1 w-full" value={form.campus.join(',')} onChange={e=>updateField('campus', e.target.value.split(',').map(x=>x.trim()).filter(Boolean))} />
+        <label className="block text-sm mb-3 font-medium">Campus Disponibles</label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {campus.map((c: any) => (
+            <label key={c.id} className="flex items-center space-x-2 p-2 border rounded hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.campus.includes(c.id)}
+                onChange={() => toggleCampus(c.id)}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm">{c.nombre}</span>
+            </label>
+          ))}
+        </div>
+        {campus.length === 0 && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">No hay campus disponibles</p>
+        )}
       </div>
+
       <div>
-        <label className="block text-sm mb-1">Modalidades (IDs separados por coma)</label>
-        <input className="border px-2 py-1 w-full" value={form.modalidades.join(',')} onChange={e=>updateField('modalidades', e.target.value.split(',').map(x=>x.trim()).filter(Boolean))} />
+        <label className="block text-sm mb-3 font-medium">Modalidades Disponibles</label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {modalidades.map((m: any) => (
+            <label key={m.id} className="flex items-center space-x-2 p-2 border rounded hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.modalidades.includes(m.id)}
+                onChange={() => toggleModalidad(m.id)}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm">{m.nombre}</span>
+            </label>
+          ))}
+        </div>
+        {modalidades.length === 0 && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">No hay modalidades disponibles</p>
+        )}
       </div>
 
       <div>
