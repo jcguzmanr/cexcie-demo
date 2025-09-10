@@ -48,15 +48,22 @@ export function getDatabaseConfig(): DatabaseConfig {
     };
   }
 
-  // Producción: siempre PostgreSQL
+  // Producción: usar PostgreSQL solo si hay DATABASE_URL; caso contrario, fallback a JSON
+  const hasDb = !!process.env.DATABASE_URL;
+  const provider = (process.env.DATABASE_PROVIDER as 'json' | 'postgresql' | 'hybrid') || (hasDb ? 'postgresql' : 'json');
   return {
-    provider: 'postgresql',
-    postgresql: {
-      url: process.env.DATABASE_URL!,
+    provider,
+    postgresql: hasDb ? {
+      url: process.env.DATABASE_URL as string,
       ssl: true,
       maxConnections: 50,
       connectionTimeout: 10000,
       idleTimeout: 60000
+    } : undefined,
+    json: {
+      cacheEnabled: true,
+      cacheTTL: 5 * 60 * 1000,
+      enableLogging: false
     },
     features: {
       enableMetrics: true,
