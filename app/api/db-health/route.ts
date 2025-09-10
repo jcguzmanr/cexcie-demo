@@ -21,16 +21,16 @@ export async function GET() {
       database: res.rows?.[0]?.current_database ?? null,
     });
   } catch (err) {
-    const e = err as any;
+    const e = err as (Error & { code?: string; detail?: string; severity?: string; hint?: string }) | undefined;
     const durationMs = Date.now() - startedAt;
     return NextResponse.json({
       ok: false,
       durationMs,
-      message: e?.message,
-      code: e?.code,
-      detail: e?.detail,
-      severity: e?.severity,
-      hint: e?.hint,
+      message: e?.message ?? null,
+      code: e?.code ?? null,
+      detail: e?.detail ?? null,
+      severity: e?.severity ?? null,
+      hint: e?.hint ?? null,
     }, { status: 500 });
   } finally {
     await pool.end();
