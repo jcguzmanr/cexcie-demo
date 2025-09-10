@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-export default function FacultadDetail({ params }: { params: { id: string } }) {
+export default function FacultadDetail({ params }: any) {
   const { id } = params
   const [nombre, setNombre] = useState('')
   const [loading, setLoading] = useState(true)

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-export default function CampusDetail({ params }: { params: { id: string } }) {
+export default function CampusDetail({ params }: any) {
   const { id } = params
   const [nombre, setNombre] = useState('')
   const [imagen, setImagen] = useState('')

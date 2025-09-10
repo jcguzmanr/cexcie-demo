@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-export default function CarreraDetail({ params }: { params: { id: string } }) {
+export default function CarreraDetail({ params }: any) {
   const { id } = params
   const [form, setForm] = useState<any>({ nombre:'', facultad_id:'', duracion:'', grado:'', titulo:'', imagen:'', campus:[], modalidades:[], detalle:{ secciones:{} } })
   const [loading, setLoading] = useState(true)
