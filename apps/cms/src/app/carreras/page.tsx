@@ -5,6 +5,7 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 
 export default function CarrerasPage() {
   const [data, setData] = useState<any[]>([])
+  const [facultades, setFacultades] = useState<any[]>([])
   const [id, setId] = useState('')
   const [nombre, setNombre] = useState('')
   const [facultadId, setFacultadId] = useState('')
@@ -16,6 +17,12 @@ export default function CarrerasPage() {
     setData(json.data || [])
   }
 
+  async function loadFacultades() {
+    const res = await fetch('/api/facultades')
+    const json = await res.json()
+    setFacultades(json.data || [])
+  }
+
   async function create() {
     setLoading(true)
     await fetch('/api/carreras', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, nombre, facultad_id: facultadId }) })
@@ -24,7 +31,10 @@ export default function CarrerasPage() {
     setLoading(false)
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => { 
+    load()
+    loadFacultades()
+  }, [])
 
   return (
     <ProtectedRoute>
@@ -56,7 +66,7 @@ export default function CarrerasPage() {
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 mb-8">
           <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Agregar Nueva Carrera</h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Para agregar una nueva carrera, ingresa un ID único (ej: "enf", "ing-sis"), el nombre completo de la carrera y el ID de la facultad a la que pertenece. 
+            Para agregar una nueva carrera, ingresa un ID único (ej: "enf", "ing-sis"), el nombre completo de la carrera y selecciona la facultad a la que pertenece del menú desplegable. 
             Luego haz clic en "Agregar" para guardarla en el sistema.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
@@ -72,12 +82,18 @@ export default function CarrerasPage() {
               value={nombre} 
               onChange={e=>setNombre(e.target.value)} 
             />
-            <input 
+            <select 
               className="border border-gray-300 dark:border-gray-600 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white" 
-              placeholder="ID de la facultad" 
               value={facultadId} 
-              onChange={e=>setFacultadId(e.target.value)} 
-            />
+              onChange={e=>setFacultadId(e.target.value)}
+            >
+              <option value="">Seleccionar facultad</option>
+              {facultades.map((facultad: any) => (
+                <option key={facultad.id} value={facultad.id}>
+                  {facultad.nombre} ({facultad.id})
+                </option>
+              ))}
+            </select>
             <button 
               className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
               onClick={create} 

@@ -5,8 +5,15 @@ import Link from 'next/link'
 export default function CarreraDetail({ params }: any) {
   const { id } = params
   const [form, setForm] = useState<any>({ nombre:'', facultad_id:'', duracion:'', grado:'', titulo:'', imagen:'', campus:[], modalidades:[], detalle:{ secciones:{} } })
+  const [facultades, setFacultades] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+
+  async function loadFacultades() {
+    const res = await fetch('/api/facultades')
+    const json = await res.json()
+    setFacultades(json.data || [])
+  }
 
   useEffect(() => {
     fetch(`/api/carreras/${id}`).then(r=>r.json()).then(j=>{ 
@@ -24,6 +31,7 @@ export default function CarreraDetail({ params }: any) {
       })
       setLoading(false)
     })
+    loadFacultades()
   }, [id])
 
   function updateField(k:string, v:any){ setForm((f:any)=>({ ...f, [k]: v })) }
@@ -49,8 +57,19 @@ export default function CarreraDetail({ params }: any) {
           <input className="border px-2 py-1 w-full" value={form.nombre} onChange={e=>updateField('nombre', e.target.value)} />
         </div>
         <div>
-          <label className="block text-sm">Facultad ID</label>
-          <input className="border px-2 py-1 w-full" value={form.facultad_id} onChange={e=>updateField('facultad_id', e.target.value)} />
+          <label className="block text-sm">Facultad</label>
+          <select 
+            className="border px-2 py-1 w-full" 
+            value={form.facultad_id} 
+            onChange={e=>updateField('facultad_id', e.target.value)}
+          >
+            <option value="">Seleccionar facultad</option>
+            {facultades.map((facultad: any) => (
+              <option key={facultad.id} value={facultad.id}>
+                {facultad.nombre} ({facultad.id})
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-sm">Duración</label>
