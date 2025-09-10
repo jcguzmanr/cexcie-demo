@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export default function CampusDetail({ params }: any) {
   const { id } = params
@@ -62,7 +63,7 @@ export default function CampusDetail({ params }: any) {
       </div>
       <div className="mt-4 flex gap-2">
         <button className="border px-3 py-1" onClick={save} disabled={saving}>Guardar</button>
-        <a className="px-3 py-1" href="/campus">Volver</a>
+        <Link className="px-3 py-1 underline" href="/campus">Volver</Link>
       </div>
     </div>
   )

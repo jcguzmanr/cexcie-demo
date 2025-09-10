@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export default function CarreraDetail({ params }: any) {
   const { id } = params
@@ -85,7 +86,7 @@ export default function CarreraDetail({ params }: any) {
 
       <div className="mt-2 flex gap-2">
         <button className="border px-3 py-1" onClick={save} disabled={saving}>Guardar</button>
-        <a className="px-3 py-1" href="/carreras">Volver</a>
+        <Link className="px-3 py-1 underline" href="/carreras">Volver</Link>
       </div>
     </div>
   )
