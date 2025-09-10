@@ -4,8 +4,10 @@ import { getDatabaseConnectionString } from '@/lib/config/database';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-export async function GET() {
-  const databaseUrl = getDatabaseConnectionString();
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const forceJson = url.searchParams.get('source') === 'json' || process.env.DATABASE_PROVIDER === 'json';
+  const databaseUrl = forceJson ? null : getDatabaseConnectionString();
   if (!databaseUrl) {
     try {
       const filePath = path.resolve(process.cwd(), 'public/data/facultades.json');
@@ -40,8 +42,16 @@ export async function GET() {
       modalidades: (r.modalidades || []).filter(Boolean)
     })));
   } catch (error) {
-    console.error('GET /api/facultades error:', error);
-    return NextResponse.json({ error: 'Database error' }, { status: 500 });
+    const e = error as (Error & { code?: string; detail?: string; severity?: string }) | undefined;
+    const body: Record<string, unknown> = { error: 'Database error' };
+    if (process.env.DEBUG_DB_ERRORS === 'true') {
+      body.message = e?.message;
+      body.code = e?.code;
+      body.detail = e?.detail;
+      body.severity = e?.severity;
+    }
+    console.error('GET /api/facultades error:', e?.message || e);
+    return NextResponse.json(body, { status: 500 });
   } finally {
     await pool.end();
   }
