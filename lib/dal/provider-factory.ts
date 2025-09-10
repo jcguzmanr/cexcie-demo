@@ -12,7 +12,7 @@ export class DataProviderFactory {
         console.log('🔧 Creating JSON Data Provider');
         return Promise.resolve(new JSONDataProvider());
       
-      case 'postgresql':
+      case 'postgresql': {
         if (!config.databaseUrl) {
           throw new Error('Database URL required for PostgreSQL provider');
         }
@@ -22,8 +22,9 @@ export class DataProviderFactory {
         return import('./postgresql-provider').then(module => 
           new module.PostgreSQLDataProvider(dbUrl)
         );
+      }
       
-      case 'hybrid':
+      case 'hybrid': {
         if (!config.databaseUrl) {
           console.warn('⚠️ No database URL provided, falling back to JSON-only mode');
           return Promise.resolve(new JSONDataProvider());
@@ -40,6 +41,7 @@ export class DataProviderFactory {
             new postgresModule.PostgreSQLDataProvider(dbUrl)
           )
         );
+      }
       
       default:
         throw new Error(`Unknown data source: ${config.source}`);
