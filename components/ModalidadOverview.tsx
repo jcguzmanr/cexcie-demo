@@ -58,7 +58,20 @@ export function ModalidadOverview({ modalidad }: ModalidadOverviewProps) {
       >
         {parsed.map((row) => {
           const icon = categoryIcons[row.id] ?? "📌";
-          const content = (row as any)[modalidad] as string;
+          const content =
+            modalidad === "presencial"
+              ? row.presencial
+              : modalidad === "semipresencial"
+                ? row.semipresencial
+                : row.distancia;
+        {parsed.map((row) => {
+          const icon = categoryIcons[row.id] ?? "📌";
+          const content =
+            modalidad === "presencial"
+              ? row.presencial
+              : modalidad === "semipresencial"
+                ? row.semipresencial
+                : row.distancia;
           return (
             <motion.div
               key={row.id}
