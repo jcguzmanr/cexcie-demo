@@ -13,8 +13,26 @@ export default function CarrerasPage() {
   const modalidad = useAppStore((s) => s.selectedModalidad ?? "presencial");
   const setModalidad = useAppStore((s) => s.actions.setModalidad);
   const facultades = useAppStore((s) => getFacultadList(s));
-  const filtered = facultades.filter((f) => f.modalidades.includes(modalidad as typeof modalidad));
   const carrerasMap = useAppStore((s) => s.carreraById);
+  const carrerasFiltradas = Object.values(carrerasMap).filter((c) => {
+    const byModalidad = c.modalidades.includes(modalidad as typeof modalidad);
+    const byCampus = !campusSel || c.campus.includes(campusSel.id);
+    return byModalidad && byCampus;
+  });
+  if (typeof window !== 'undefined') {
+    // Debug en consola para validar conteos
+    // eslint-disable-next-line no-console
+    console.log('[CARRERAS]', {
+      campusSel: campusSel?.id,
+      modalidad,
+      totalCarreras: Object.keys(carrerasMap).length,
+      filtradas: carrerasFiltradas.length,
+      facultades: facultades.length,
+    });
+  }
+  const facultadIdsDisponibles = new Set(carrerasFiltradas.map((c) => c.facultadId));
+  const filtered = facultades.filter((f) => facultadIdsDisponibles.has(f.id));
+  // carrerasMap ya definido arriba
   const selectedCarreras = useAppStore((s) => s.selectedCarreras);
   const { toggleCarrera, clearComparador } = useAppStore((s) => s.actions);
   const [open, setOpen] = React.useState<string | null>(null);
@@ -30,6 +48,17 @@ export default function CarrerasPage() {
   return (
     <div className="p-6 grid gap-6">
       <Breadcrumb items={[{ label: "Inicio", href: "/" }, { label: "Campus", href: "/campus" }, { label: "Carreras" }]} />
+      {/* Debug panel para validar filtros (visible siempre mientras depuramos) */}
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/70 p-3 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+          <div><span className="opacity-70">Campus:</span> <span className="font-mono">{campusSel?.id ?? '—'}</span></div>
+          <div><span className="opacity-70">Modalidad:</span> <span className="font-mono">{modalidad}</span></div>
+          <div><span className="opacity-70">Total carreras:</span> <span className="font-mono">{Object.keys(carrerasMap).length}</span></div>
+          <div><span className="opacity-70">Carreras filtradas:</span> <span className="font-mono">{carrerasFiltradas.length}</span></div>
+        </div>
+        <div className="mt-2"><span className="opacity-70">Facultades visibles:</span> <span className="font-mono">{filtered.map(f=>f.id).join(', ') || '—'}</span></div>
+        <div className="mt-1"><span className="opacity-70">Ejemplo carreras filtradas:</span> <span className="font-mono">{carrerasFiltradas.slice(0,8).map(c=>c.id).join(', ') || '—'}</span></div>
+      </div>
       <div>
         <h1 className="text-2xl font-semibold">Conoce nuestras carreras</h1>
         {campusSel && (
@@ -204,7 +233,7 @@ export default function CarrerasPage() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {Object.values(carrerasMap)
-              .filter((c) => c.facultadId === f.id && c.modalidades.includes(modalidad as typeof modalidad))
+              .filter((c) => c.facultadId === f.id && c.modalidades.includes(modalidad as typeof modalidad) && (!campusSel || c.campus.includes(campusSel.id)))
               .map((c) => {
                 const isChecked = selectedCarreras.some((s) => s.id === c.id);
                 return (

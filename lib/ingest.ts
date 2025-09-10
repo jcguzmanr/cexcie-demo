@@ -97,6 +97,7 @@ export function ingestScreenData(screenId: ScreenId, json: unknown) {
 
 export function createIngestGlobal() {
   if (typeof window === "undefined") return;
+  const dbg = (...args: unknown[]) => console.log('[INGEST]', ...args);
   (window as unknown as { cexcieIngest?: (screenId: ScreenId, json: unknown) => { appliedTo: string[]; warnings?: string[] } }).cexcieIngest = (
     screenId: ScreenId,
     json: unknown,
@@ -108,20 +109,37 @@ export function createIngestGlobal() {
   const hasCampusMeta = Object.keys(state.campusMetaById).length > 0;
   const hasFacultades = state.facultadIds.length > 0;
   const hasCarreras = state.carreraIds.length > 0;
+  dbg('bootstrap', { hasCampus, hasCampusMeta, hasFacultades, hasCarreras });
 
   if (!hasCampus) {
     try { ingestScreenData("/campus", campusJson as unknown); } catch {}
-    fetch("/data/campus.json").then(r=>r.json()).then(j=>ingestScreenData("/campus", j)).catch(()=>{});
+    // Preferir API (BD) con fallback a /data
+    fetch("/api/campus")
+      .then(r=>r.json())
+      .then(j=>{ const res = ingestScreenData("/campus", j); dbg('/api/campus loaded', Array.isArray(j)?j.length:undefined, res); })
+      .catch(()=>{
+        fetch("/data/campus.json").then(r=>r.json()).then(j=>{ const res = ingestScreenData("/campus", j); dbg('/data/campus.json loaded', Array.isArray(j)?j.length:undefined, res); }).catch((e)=>{ dbg('campus fallback error', e); });
+      });
   }
   if (!hasCampusMeta) {
     try { ingestScreenData("/campus-meta", campusMetaJson as unknown); } catch {}
-    fetch("/data/campusMeta.json").then(r=>r.json()).then(j=>ingestScreenData("/campus-meta", j)).catch(()=>{});
+    fetch("/data/campusMeta.json").then(r=>r.json()).then(j=>{ const res = ingestScreenData("/campus-meta", j); dbg('/data/campusMeta.json loaded', Array.isArray(j)?j.length:undefined, res); }).catch((e)=>{ dbg('campusMeta fallback error', e); });
   }
   if (!hasFacultades) {
-    fetch("/data/facultades.json").then(r=>r.json()).then(j=>ingestScreenData("/facultades", j)).catch(()=>{});
+    fetch("/api/facultades")
+      .then(r=>r.json())
+      .then(j=>{ const res = ingestScreenData("/facultades", j); dbg('/api/facultades loaded', Array.isArray(j)?j.length:undefined, res); })
+      .catch(()=>{
+        fetch("/data/facultades.json").then(r=>r.json()).then(j=>{ const res = ingestScreenData("/facultades", j); dbg('/data/facultades.json loaded', Array.isArray(j)?j.length:undefined, res); }).catch((e)=>{ dbg('facultades fallback error', e); });
+      });
   }
   if (!hasCarreras) {
-    fetch("/data/carreras.json").then(r=>r.json()).then(j=>ingestScreenData("/carreras", j)).catch(()=>{});
+    fetch("/api/carreras")
+      .then(r=>r.json())
+      .then(j=>{ const res = ingestScreenData("/carreras", j); dbg('/api/carreras loaded', Array.isArray(j)?j.length:undefined, res); })
+      .catch(()=>{
+        fetch("/data/carreras.json").then(r=>r.json()).then(j=>{ const res = ingestScreenData("/carreras", j); dbg('/data/carreras.json loaded', Array.isArray(j)?j.length:undefined, res); }).catch((e)=>{ dbg('carreras fallback error', e); });
+      });
   }
 }
 

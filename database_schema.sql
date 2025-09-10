@@ -133,10 +133,8 @@ CREATE INDEX ix_oferta_campus_modalidad_carrera ON oferta(campus_id, modalidad_i
 CREATE INDEX ix_precio_carrera_periodo ON precio(carrera_id, periodo_id);
 CREATE INDEX ix_precio_campus_modalidad_periodo ON precio(campus_id, modalidad_id, periodo_id);
 
--- Índice parcial para precios vigentes
-CREATE INDEX ix_precio_vigente_partial ON precio(carrera_id, periodo_id)
-WHERE (vigente_desde IS NULL OR vigente_desde <= now()::date)
-  AND (vigente_hasta IS NULL OR vigente_hasta >= now()::date);
+-- Índices para acelerar consultas por vigencia (evita funciones no inmutables en predicados)
+CREATE INDEX ix_precio_vigencia_rng ON precio(carrera_id, periodo_id, vigente_desde, vigente_hasta);
 
 -- Índices para búsqueda de texto (requiere extensión pg_trgm)
 -- CREATE INDEX ix_trgm_carrera_nombre ON carrera USING gin (nombre gin_trgm_ops);
@@ -191,4 +189,29 @@ COMMENT ON TABLE precio IS 'Precios por oferta, periodo y concepto';
 COMMENT ON COLUMN precio.item IS 'Tipo de concepto: matricula, pension_mensual, credito, cuota';
 COMMENT ON COLUMN precio.vigente_desde IS 'Fecha desde cuando aplica el precio';
 COMMENT ON COLUMN precio.vigente_hasta IS 'Fecha hasta cuando aplica el precio';
+
+-- =========================================================================
+-- CONTENIDO ENRIQUECIDO (DETALLE Y DIDÁCTICAS)
+-- =========================================================================
+
+-- Detalle por carrera (estructura flexible en JSON)
+CREATE TABLE IF NOT EXISTS carrera_detalle (
+    carrera_id  text PRIMARY KEY REFERENCES carrera(id) ON DELETE CASCADE,
+    secciones   jsonb NOT NULL DEFAULT '{}'::jsonb,
+    actualizado timestamptz NOT NULL DEFAULT now()
+);
+
+-- Didácticas y ayudas (globales)
+CREATE TABLE IF NOT EXISTS didactics (
+    id          text PRIMARY KEY,
+    payload     jsonb NOT NULL,
+    actualizado timestamptz NOT NULL DEFAULT now()
+);
+
+-- Comparación de modalidades (por carrera o default)
+CREATE TABLE IF NOT EXISTS modalidad_comparison (
+    career_id   text PRIMARY KEY, -- usar 'default' para genérico
+    payload     jsonb NOT NULL,
+    actualizado timestamptz NOT NULL DEFAULT now()
+);
 

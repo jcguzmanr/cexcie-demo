@@ -27,11 +27,12 @@ export const CarreraSchema = z.object({
   facultadId: z.string().min(1),
   modalidades: z.array(ModalidadSchema).default([]),
   campus: z.array(z.string()).default([]),
-  duracion: z.string().optional(),
+  // Permitir null/undefined provenientes de la BD
+  duracion: z.string().nullish(),
   mallaResumen: z.array(z.string()).default([]),
-  grado: z.string().optional(),
-  titulo: z.string().optional(),
-  imagen: z.string().optional(),
+  grado: z.string().nullish(),
+  titulo: z.string().nullish(),
+  imagen: z.string().nullish(),
 });
 
 // Esquemas para comparación de modalidades
