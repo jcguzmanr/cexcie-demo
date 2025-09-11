@@ -112,13 +112,15 @@ export function createIngestGlobal() {
   dbg('bootstrap', { hasCampus, hasCampusMeta, hasFacultades, hasCarreras });
 
   if (!hasCampus) {
-    try { ingestScreenData("/campus", campusJson as unknown); } catch {}
-    // Preferir API (BD) con fallback a /data
+    // Preferir API (BD) con fallback a /data y, como último recurso, JSON embebido
     fetch("/api/campus")
       .then(r=>r.json())
       .then(j=>{ const res = ingestScreenData("/campus", j); dbg('/api/campus loaded', Array.isArray(j)?j.length:undefined, res); })
       .catch(()=>{
-        fetch("/data/campus.json").then(r=>r.json()).then(j=>{ const res = ingestScreenData("/campus", j); dbg('/data/campus.json loaded', Array.isArray(j)?j.length:undefined, res); }).catch((e)=>{ dbg('campus fallback error', e); });
+        fetch("/data/campus.json").then(r=>r.json()).then(j=>{ const res = ingestScreenData("/campus", j); dbg('/data/campus.json loaded', Array.isArray(j)?j.length:undefined, res); }).catch((e)=>{
+          dbg('campus public fallback error', e);
+          try { const res = ingestScreenData("/campus", campusJson as unknown); dbg('bundled campus.json applied', res); } catch {}
+        });
       });
   }
   if (!hasCampusMeta) {

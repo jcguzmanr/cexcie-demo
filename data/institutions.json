@@ -1,0 +1,70 @@
+{
+  "institutions": [
+    {
+      "id": "cie",
+      "name": "Continental International Education",
+      "description": "Organización educativa internacional que integra diversas instituciones en formación técnica, universitaria, associate degrees, posgrados, idiomas y educación continua, con modalidades presenciales, semipresenciales y virtuales.",
+      "image": "https://continentalinternationaleducation.com/assets/inst-cuf.DvQn1DDc_zIoYs.webp",
+      "link": "/cie"
+    },
+    {
+      "id": "cfu",
+      "name": "Continental Florida University",
+      "description": "Universidad acreditada en Florida, EE.UU., reconocida por QS Stars en Aprendizaje en Línea. Ofrece programas en Negocios, Ingeniería, Marketing, Gestión de Salud, Educación y Psicología, con carreras y maestrías 100% virtuales.",
+      "image": "",
+      "link": "/cfu"
+    },
+    {
+      "id": "cmx",
+      "name": "Continental University of Mexico",
+      "description": "Universidad en línea con más de 38 años de experiencia en educación superior. Reconocida por QS Stars en Aprendizaje en Línea, Empleabilidad e Inclusión. Programas en Negocios, Ingeniería, Marketing, Gestión de Salud y Educación.",
+      "image": "https://continentalinternationaleducation.com/assets/inst-cumx.CSTDsDse_1gVn27.webp",
+      "link": "/cmx"
+    },
+    {
+      "id": "uc",
+      "name": "Universidad Continental",
+      "description": "Una de las principales instituciones de educación superior en Perú. Primera en obtener cinco estrellas QS en Aprendizaje en Línea. Acreditada por ANECA, ACBSP, Bureau Veritas, ICACIT, SGS y SINEACE.",
+      "image": "",
+      "link": "/uc"
+    },
+    {
+      "id": "epg",
+      "name": "Escuela de Posgrado Continental",
+      "description": "Con más de 25 años de experiencia, ofrece programas presenciales en Huancayo, Lima, Arequipa y Cusco, y virtuales en todo el mundo. Áreas: Derecho, Gestión empresarial, Educación, Gestión pública, Ingeniería, Innovación digital, Salud y Psicología.",
+      "image": "",
+      "link": "/epg"
+    },
+    {
+      "id": "esc",
+      "name": "Escuela Superior Continental",
+      "description": "Ofrece 9 carreras profesionales en modalidad virtual y semipresencial. Otorga grado de bachiller equivalente al universitario, habilitando a los egresados para estudios de posgrado en Perú y el extranjero.",
+      "image": "",
+      "link": "/esc"
+    },
+    {
+      "id": "ic",
+      "name": "Instituto Continental",
+      "description": "Con casi cuatro décadas de trayectoria, combina metodologías presenciales y plataformas digitales. Forma profesionales técnicos con pensamiento emprendedor, preparados para generar soluciones reales en el mercado laboral.",
+      "image": "",
+      "link": "/ic"
+    },
+    {
+      "id": "cont",
+      "name": "Continua Continental",
+      "description": "Centro de formación flexible y modular con especializaciones en Educación, Psicología, Salud, Gestión Pública y Transformación Digital. Permite convalidar créditos en la Escuela de Posgrado para avanzar en la formación profesional.",
+      "image": "",
+      "link": "/continua"
+    },
+    {
+      "id": "idiomas",
+      "name": "Centro de Idiomas Continental",
+      "description": "Con más de 19 años de trayectoria, ofrece formación en inglés, francés, quechua, portugués e italiano. Miembro de Global Partners in Education, conecta a estudiantes con más de 50 universidades en 22 países.",
+      "image": "",
+      "link": "/idiomas"
+    }
+  ]
+}
+
+
+

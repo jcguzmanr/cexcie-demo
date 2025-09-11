@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { AnimatePresence, motion } from "framer-motion";
+import React from "react";
 // Fallback local JSON (bundled) in case public fetch fails
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -15,23 +16,30 @@ import campusJson from "@/data/campus.json";
 import campusMetaJson from "@/data/campusMeta.json";
 import { useEffect } from "react";
 import { ingestScreenData } from "@/lib/ingest";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 export default function CampusPage() {
   const campus = useAppStore((s) => getCampusList(s));
   const selected = useAppStore((s) => s.selectedCampus);
   const campusMeta = useAppStore((s) => s.campusMetaById);
   const { setCampus } = useAppStore((s) => s.actions);
-  // Ensure data is available if user lands directly here and global ingest failed
+  // Ensure data is available; priorizar API para campus
   useEffect(() => {
-    if (campus.length === 0) {
-      // Try bundled JSON first
-      try { ingestScreenData("/campus", campusJson as unknown); } catch {}
+    // Siempre intentar API primero para campus
+    fetch("/api/campus")
+      .then((r) => r.json())
+      .then((j) => ingestScreenData("/campus", j))
+      .catch(() => {
+        // Fallback: JSON local y luego público
+        try { ingestScreenData("/campus", campusJson as unknown); } catch {}
+        fetch("/data/campus.json").then(r=>r.json()).then(j=>ingestScreenData("/campus", j)).catch(()=>{});
+      });
+
+    // Campus meta como antes (local + público)
+    fetch("/data/campusMeta.json").then(r=>r.json()).then(j=>ingestScreenData("/campus-meta", j)).catch(() => {
       try { ingestScreenData("/campus-meta", campusMetaJson as unknown); } catch {}
-      // Then fetch from public as a secondary fallback
-      fetch("/data/campus.json").then(r=>r.json()).then(j=>ingestScreenData("/campus", j)).catch(()=>{});
-      fetch("/data/campusMeta.json").then(r=>r.json()).then(j=>ingestScreenData("/campus-meta", j)).catch(()=>{});
-    }
-  }, [campus.length]);
+    });
+  }, []);
 
   // Auto-select Huancayo by default once data is loaded and nothing is selected
   useEffect(() => {
@@ -46,13 +54,13 @@ export default function CampusPage() {
       <Breadcrumb items={[{ label: "Inicio", href: "/" }, { label: "Campus" }]} />
       <div>
         <h1 className="text-xl font-semibold">Selecciona un campus</h1>
-        <p className="text-sm opacity-70 mt-1">Elige tu campus para ver las modalidades y facultades disponibles y, luego, seleccionar tu carrera.</p>
+        <p className="text-sm opacity-70 mt-1">En la Universidad Continental contamos con distintos campus en todo el país. Seleccionar tu campus primero nos permite mostrarte la información académica, modalidades y beneficios disponibles específicamente en esa sede. Así, tu recorrido será más claro, personalizado y cercano a tu realidad.</p>
       </div>
       {campus.length === 0 ? (
         <>
           <DataEmpty
             title="No hay campus."
-            cta={<div className="text-sm opacity-80">Usa window.cexcieIngest(&apos;/campus&apos;, json)</div>}
+            cta={<div className="text-sm opacity-80">Usa window.cexcieIngest('/campus', json)</div>}
           />
           <div className="flex justify-end">
             <Link href="/modalidad">
@@ -66,15 +74,16 @@ export default function CampusPage() {
             {campus.map((c) => {
               const isSel = selected?.id === c.id;
               return (
-                <Button
-                  key={c.id}
-                  variant={isSel ? "primary" : "secondary"}
-                  shape="pill"
-                  className="justify-center"
-                  onClick={() => setCampus(c)}
-                >
-                  <span className={isSel ? "text-white" : "text-[var(--uc-purple)]"}>{c.nombre.toUpperCase()}</span>
-                </Button>
+                <motion.div key={c.id} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.995 }}>
+                  <Button
+                    variant={isSel ? "primary" : "glassPurple"}
+                    shape="pill"
+                    className="justify-center w-full"
+                    onClick={() => setCampus(c)}
+                  >
+                    <span className={isSel ? "text-white" : "text-white"}>{c.nombre.toUpperCase()}</span>
+                  </Button>
+                </motion.div>
               );
             })}
           </div>
@@ -141,7 +150,10 @@ export default function CampusPage() {
       )}
       <div className="flex justify-end">
         <Link href="/carreras">
-          <Button disabled={!selected}>Continuar</Button>
+          <Button disabled={!selected} className="group">
+            <span>Continuar</span>
+            <ArrowRightIcon className="ml-2 inline-block w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Button>
         </Link>
       </div>
     </div>

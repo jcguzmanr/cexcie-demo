@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes } from "react";
 import { cx, HIT_MIN } from "@/lib/ui";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "glassPurple";
   size?: "sm" | "md" | "lg";
   shape?: "rounded" | "pill";
 };
@@ -20,6 +20,7 @@ export function Button({
     primary: "bg-[var(--uc-purple)] text-white hover:brightness-110",
     secondary: "bg-[var(--uc-sky)] text-black hover:brightness-95",
     ghost: "bg-transparent text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10",
+    glassPurple: "bg-[var(--uc-purple)]/15 text-white/95 border border-[var(--uc-purple)]/40 backdrop-blur-sm hover:bg-[var(--uc-purple)]/25 hover:shadow-lg hover:shadow-[var(--uc-purple)]/20",
   } as const;
   const sizes = {
     sm: "px-3 py-2 text-sm",
