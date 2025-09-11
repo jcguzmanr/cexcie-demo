@@ -60,7 +60,7 @@ export default function CampusPage() {
         <>
           <DataEmpty
             title="No hay campus."
-            cta={<div className="text-sm opacity-80">Usa window.cexcieIngest('/campus', json)</div>}
+            cta={<div className="text-sm opacity-80">Usa window.cexcieIngest(&apos;/campus&apos;, json)</div>}
           />
           <div className="flex justify-end">
             <Link href="/modalidad">

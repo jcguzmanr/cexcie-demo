@@ -20,7 +20,7 @@ export default async function UnitPlaceholder({ params }: { params: Promise<Para
     return (
       <div className="p-6">
         <div className="text-xl font-semibold mb-2">Unidad no encontrada</div>
-        <p className="opacity-70 mb-4">La unidad "{unit}" no existe en el catálogo.</p>
+        <p className="opacity-70 mb-4">La unidad &quot;{unit}&quot; no existe en el catálogo.</p>
         <Link href="/" className="underline">Volver al inicio</Link>
       </div>
     );
