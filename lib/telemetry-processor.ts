@@ -29,13 +29,13 @@ export function processTelemetryForLead(sessionId: string): {
   
   // Procesar eventos de telemetría
   const telemetry_events = sessionEvents.map(event => ({
-    page_path: event.page.path,
-    page_title: event.page.title,
-    action_type: event.semantic.action || event.type,
-    entity_type: event.semantic.entityType,
-    entity_id: event.semantic.entityId,
-    entity_name: event.semantic.label,
-    metadata: event.details?.custom || {},
+    page_path: event.page?.path || '',
+    page_title: event.page?.title,
+    action_type: event.semantic?.action || event.type,
+    entity_type: event.semantic?.entityType,
+    entity_id: event.semantic?.entityId,
+    entity_name: event.semantic?.label,
+    metadata: (event.details?.custom as Record<string, unknown>) || {},
     timestamp: event.ts
   }));
 
@@ -52,14 +52,15 @@ export function processTelemetryForLead(sessionId: string): {
 
   // Buscar eventos de selección de carreras/programas
   const selectionEvents = sessionEvents.filter(event => 
-    event.semantic.action === 'selected' && 
-    event.semantic.entityType === 'career'
+    event.semantic?.action === 'selected' && 
+    event.semantic?.entityType === 'career'
   );
 
   // Obtener datos de carreras seleccionadas del localStorage o parámetros
-  let selectedCarreras: Array<{id: string, nombre: string}> = [];
-  let carrerasMap: Record<string, any> = {};
-  let facultadesMap: Record<string, any> = {};
+  type CarreraStore = { id: string; nombre: string; facultadId?: string };
+  type FacultadStore = { id: string; nombre: string };
+  let carrerasMap: Record<string, CarreraStore> = {};
+  let facultadesMap: Record<string, FacultadStore> = {};
   
   // Intentar obtener datos del localStorage si estamos en el cliente
   if (typeof window !== 'undefined') {
@@ -83,8 +84,8 @@ export function processTelemetryForLead(sessionId: string): {
     // Determinar la fuente de selección basada en los eventos
     let selectionSource = 'unknown';
     const relatedEvent = selectionEvents.find(event => 
-      event.semantic.entityId === carrera.id || 
-      event.semantic.label?.includes(carrera.nombre)
+      event.semantic?.entityId === carrera.id || 
+      (event.semantic?.label && carrera.nombre && event.semantic.label.includes(carrera.nombre))
     );
     
     if (relatedEvent) {
