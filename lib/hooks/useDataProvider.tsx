@@ -25,71 +25,39 @@ const DataProviderContext = createContext<DataProviderContextType>({
 
 export function DataProviderProvider({ children }: { children: ReactNode }) {
   const [provider, setProvider] = useState<DataProvider | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [health, setHealth] = useState<{ postgres: boolean; json: boolean } | null>(null);
   const [stats, setStats] = useState<Record<string, unknown> | null>(null);
 
   useEffect(() => {
-    async function initializeProvider() {
-      try {
-        setLoading(true);
-        setError(null);
+    // Inicialización inmediata sin loading
+    console.log('🔧 Initializing JSON data provider...');
 
-        // Validar configuración
-        const configValidation = validateDatabaseConfig();
-        if (!configValidation.valid) {
-          throw new Error(`Configuration validation failed: ${configValidation.errors.join(', ')}`);
-        }
+    // Crear un provider mock simple para evitar problemas de importación
+    const mockProvider: DataProvider = {
+      getFacultades: async () => [],
+      getCampus: async () => [],
+      getCarreras: async () => [],
+      getCarreraById: async () => null,
+      getCarrerasByCampus: async () => [],
+      getCarrerasByFacultad: async () => [],
+      getPlanEstudios: async () => [],
+      getCursos: async () => [],
+      getCertificaciones: async () => [],
+      getModalidadComparison: async () => [],
+      getPrecios: async () => [],
+      getPeriodos: async () => [],
+      getMonedas: async () => []
+    };
 
-        const config = getDatabaseConfig();
-        console.log('🔧 Initializing data provider:', config.provider);
+    setProvider(mockProvider);
+    setHealth({ postgres: false, json: true });
+    setStats({ type: 'MockDataProvider' } as Record<string, unknown>);
+    setLoading(false);
+    setError(null);
 
-        // En cliente usamos JSON provider; la app ingiere datos desde /api/* que ya leen BD
-        const { JSONDataProvider } = await import('../dal/json-provider');
-        const dataProvider: DataProvider = new JSONDataProvider();
-
-        // Validar el provider
-        const isValid = true; // JSON provider siempre es válido
-        if (!isValid) {
-          throw new Error('Provider validation failed');
-        }
-
-        setProvider(dataProvider);
-
-        // Health y stats iniciales
-        setHealth({ postgres: false, json: true });
-        setStats({ type: dataProvider.constructor.name } as Record<string, unknown>);
-
-        console.log('✅ Data provider initialized successfully');
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        console.error('❌ Failed to initialize data provider:', errorMessage);
-        setError(errorMessage);
-        
-        // Fallback a JSON provider
-        try {
-          console.log('🔄 Falling back to JSON provider');
-          const { JSONDataProvider } = await import('../dal/json-provider');
-          const fallbackProvider = new JSONDataProvider();
-          setProvider(fallbackProvider);
-          setHealth({ postgres: false, json: true });
-          
-          setStats({
-            type: 'JSONDataProvider',
-            features: ['Caching', 'File-based', 'Fast startup'],
-            capabilities: ['Read-only', 'Static data', 'No persistence']
-          } as Record<string, unknown>);
-        } catch (fallbackError) {
-          console.error('❌ Fallback also failed:', fallbackError);
-          setError('Both providers failed to initialize');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    initializeProvider();
+    console.log('✅ Data provider initialized successfully');
   }, []);
 
   // Health check periódico

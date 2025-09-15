@@ -18,7 +18,7 @@ export function Button({
   const base = "rounded-xl font-medium select-none active:scale-[0.99] transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--uc-purple)]/40";
   const variants = {
     primary: "bg-[var(--uc-purple)] text-white hover:brightness-110",
-    secondary: "bg-[var(--uc-sky)] text-black hover:brightness-95",
+    secondary: "bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] hover:bg-[var(--uc-lilac)]/10 hover:border-[var(--uc-purple)]/30",
     ghost: "bg-transparent text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10",
     glassPurple: "bg-[var(--uc-purple)]/15 text-white/95 border border-[var(--uc-purple)]/40 backdrop-blur-sm hover:bg-[var(--uc-purple)]/25 hover:shadow-lg hover:shadow-[var(--uc-purple)]/20",
   } as const;

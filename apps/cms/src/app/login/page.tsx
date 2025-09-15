@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import Brand from '@/components/Brand';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -31,10 +32,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-            CExCIE CMS
-          </h2>
+        <div className="flex flex-col items-center">
+          <div className="mt-2">
+            <Brand size="lg" showCms={true} />
+          </div>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Inicia sesión para acceder al panel de administración
           </p>

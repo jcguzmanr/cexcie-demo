@@ -15,7 +15,7 @@ export default function ModalidadPage() {
   const { setModalidad } = useAppStore((s) => s.actions);
   return (
     <div className="p-6 grid gap-6">
-      <h1 className="text-xl font-semibold">Selecciona modalidad</h1>
+      <h1 className="text-xl font-semibold text-center">Selecciona una modalidad de estudios para ver las facultades disponibles</h1>
       {!campus ? (
         <>
           <DataEmpty title="Selecciona un campus primero" cta={<Link className="underline" href="/campus">Ir a campus</Link>} />
@@ -28,12 +28,16 @@ export default function ModalidadPage() {
       ) : (
         <div className="space-y-6">
           {/* Botones de modalidad */}
-          <div className="flex gap-3 flex-wrap">
-            {MODS.map((m) => (
-              <Chip key={m} selected={selected === m} onClick={() => setModalidad(m)}>
-                {m}
-              </Chip>
-            ))}
+          <div className="flex gap-3 flex-wrap justify-center">
+            {MODS.map((m) => {
+              const emoji = m === 'presencial' ? '🏫' : m === 'semipresencial' ? '⏰' : '💻';
+              const displayName = m === 'presencial' ? 'PRESENCIAL' : m === 'semipresencial' ? 'SEMIPRESENCIAL' : 'DISTANCIA';
+              return (
+                <Chip key={m} selected={selected === m} onClick={() => setModalidad(m)}>
+                  {emoji} {displayName}
+                </Chip>
+              );
+            })}
           </div>
           
           {/* Información detallada de la modalidad seleccionada */}

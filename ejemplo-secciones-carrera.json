@@ -1,0 +1,192 @@
+{
+  "secciones": {
+    "sobre": {
+      "titulo": "Sobre Administración y Finanzas",
+      "descripcion": "Forma profesionales capaces de gestionar eficientemente los recursos financieros de las organizaciones, con una sólida base en administración, finanzas corporativas, análisis de riesgos y toma de decisiones estratégicas.",
+      "media": {
+        "type": "image",
+        "alt": "Estudiantes de Administración y Finanzas",
+        "src": "/carreras/admfin.png"
+      },
+      "infoCards": [
+        {
+          "id": "modalidades",
+          "icon": "📍",
+          "titulo": "Modalidades disponibles",
+          "contenido": ["A Distancia", "Presencial", "Semipresencial"],
+          "descripcion": "Elige la modalidad que mejor se adapte a tu estilo de vida"
+        },
+        {
+          "id": "campus",
+          "icon": "🏢",
+          "titulo": "Campus disponibles",
+          "contenido": ["Arequipa", "Ayacucho", "Cusco", "Huancayo", "Ica", "Lima"],
+          "descripcion": "Estudia en el campus más cercano a ti"
+        },
+        {
+          "id": "grado",
+          "icon": "🎓",
+          "titulo": "Grado obtenido",
+          "contenido": "Bachiller en Administración",
+          "descripcion": "Título universitario reconocido internacionalmente"
+        },
+        {
+          "id": "duracion",
+          "icon": "⏰",
+          "titulo": "Duración",
+          "contenido": ["5 años", "10 periodos académicos"],
+          "descripcion": "Programa estructurado para completar tu formación"
+        }
+      ]
+    },
+
+    "planEstudios": {
+      "legendEtapas": {
+        "adaptacion": {
+          "label": "Etapa de adaptación",
+          "color": "#B9E1FF",
+          "descripcion": "Desarrolla las bases sólidas en administración y finanzas"
+        },
+        "profundizacion": {
+          "label": "Etapa de profundización",
+          "color": "#9169FF",
+          "descripcion": "Adquiere conocimientos especializados en gestión financiera"
+        },
+        "consolidacion": {
+          "label": "Etapa de consolidación",
+          "color": "#FAAAFA",
+          "descripcion": "Integra todo tu aprendizaje en proyectos reales"
+        }
+      },
+      "ciclos": [
+        {
+          "numero": 1,
+          "creditos": 22,
+          "etapa": "adaptacion",
+          "cursos": [
+            "Comprensión y Producción de Textos 1",
+            "Matemática Básica",
+            "Introducción a la Administración",
+            "Fundamentos de Economía",
+            "Herramientas Digitales para el Aprendizaje"
+          ],
+          "notas": ["Accede a la Bolsa de Trabajo desde el primer día"]
+        },
+        {
+          "numero": 2,
+          "creditos": 22,
+          "etapa": "adaptacion",
+          "cursos": [
+            "Comprensión y Producción de Textos 2",
+            "Matemática Superior",
+            "Contabilidad General",
+            "Microeconomía",
+            "Estadística Descriptiva"
+          ],
+          "notas": ["Participa en talleres de liderazgo"]
+        }
+      ]
+    },
+
+    "internacional": {
+      "cards": [
+        {
+          "titulo": "Programa de intercambio internacional",
+          "texto": "Participa en programas de intercambio con universidades de Estados Unidos, España y otros países. Obtén experiencia global y amplía tu red de contactos profesionales.",
+          "cta": {
+            "label": "VER VIDEO",
+            "action": "openModal",
+            "payload": "video-intercambio"
+          },
+          "videoUrl": "https://www.youtube.com/watch?v=ejemplo"
+        },
+        {
+          "titulo": "Doble titulación internacional",
+          "texto": "Obtén un título adicional de Continental University of Florida mientras estudias en Perú. Clases multiculturales y experiencias de aprendizaje únicas.",
+          "cta": {
+            "label": "CONOCER MÁS",
+            "action": "openModal",
+            "payload": "video-doble-titulo"
+          }
+        }
+      ]
+    },
+
+    "beneficios": {
+      "bloques": [
+        {
+          "titulo": "Certificaciones Profesionales",
+          "items": [
+            "Certificación en Análisis Financiero",
+            "Certificación en Gestión de Riesgos",
+            "Certificación en Contabilidad Avanzada",
+            "Certificación en Fintech y Banca Digital"
+          ]
+        },
+        {
+          "titulo": "Experiencias Prácticas",
+          "items": [
+            "Prácticas preprofesionales en empresas líderes",
+            "Proyectos integradores con casos reales",
+            "Simuladores de mercado financiero",
+            "Visitas empresariales y conferencias"
+          ]
+        },
+        {
+          "titulo": "Apoyo Académico",
+          "items": [
+            "Tutorías personalizadas",
+            "Asesoría en empleabilidad",
+            "Red de egresados para networking",
+            "Bolsa de trabajo especializada"
+          ]
+        }
+      ]
+    },
+
+    "testimonios": {
+      "estudiantes": [
+        {
+          "id": "est-1",
+          "nombre": "María González",
+          "foto": "👩‍💼",
+          "campus": "Lima",
+          "ciclo": "6to ciclo",
+          "testimonio": "La carrera me ha dado una visión integral de la administración y finanzas. Los profesores son excelentes y el contenido muy actualizado.",
+          "destacado": "Mejor promedio del 5to ciclo"
+        },
+        {
+          "id": "est-2",
+          "nombre": "Carlos Mendoza",
+          "foto": "👨‍💼",
+          "campus": "Arequipa",
+          "ciclo": "4to ciclo",
+          "testimonio": "Las prácticas preprofesionales me han permitido aplicar lo aprendido en empresas reales. Excelente preparación práctica.",
+          "destacado": "Líder del club de finanzas"
+        }
+      ],
+      "egresados": [
+        {
+          "id": "egr-1",
+          "nombre": "Ana Patricia Silva",
+          "foto": "👩‍💼",
+          "cargo": "Gerente Financiero",
+          "empresa": "Banco de Crédito del Perú",
+          "egreso": "2020",
+          "testimonio": "La formación integral que recibí me permitió ascender rápidamente en mi carrera. Ahora lidero el área financiera de una de las principales entidades bancarias del país.",
+          "destacado": "MBA en Finanzas - ESAN"
+        },
+        {
+          "id": "egr-2",
+          "nombre": "Roberto Torres",
+          "foto": "👨‍💼",
+          "cargo": "Director de Administración",
+          "empresa": "Grupo Romero",
+          "egreso": "2019",
+          "testimonio": "Los conocimientos en administración estratégica y finanzas corporativas me abrieron las puertas para dirigir operaciones en una empresa multinacional.",
+          "destacado": "Certificado CFA Level II"
+        }
+      ]
+    }
+  }
+}

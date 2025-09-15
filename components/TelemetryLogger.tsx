@@ -16,10 +16,14 @@ export function TelemetryLogger({ className = '' }: TelemetryLoggerProps) {
   const [isPersisting, setIsPersisting] = useState(true);
   const [eventCount, setEventCount] = useState(0);
   const [leadCount, setLeadCount] = useState(0);
+  const [sessionId, setSessionId] = useState<string>('');
   const eventsEndRef = useRef<HTMLDivElement>(null);
   const [maxEvents] = useState(100); // Limit events in memory
 
   useEffect(() => {
+    // Initialize session ID only on client side
+    setSessionId(Telemetry.events.getSessionId());
+    
     // Load initial data
     setEvents(Telemetry.events.getAll());
     setEventCount(Telemetry.events.count());
@@ -80,7 +84,9 @@ export function TelemetryLogger({ className = '' }: TelemetryLoggerProps) {
   };
 
   const formatTimestamp = (ts: string) => {
-    return new Date(ts).toLocaleTimeString();
+    const date = new Date(ts);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleTimeString();
   };
 
   const getEventIcon = (type: TelemetryEvent['type']) => {
@@ -112,9 +118,9 @@ export function TelemetryLogger({ className = '' }: TelemetryLoggerProps) {
       <div className={`fixed bottom-4 right-4 z-50 ${className}`}>
         <div className="bg-gray-900 text-white rounded-lg shadow-lg p-3">
           <div className="flex items-center gap-3">
-                      <div className="text-sm font-mono">
-            📊 CExCIE Logger | {eventCount} interactions | 👥 {leadCount} prospects
-          </div>
+            <div className="text-sm font-mono">
+              📊 CExCIE Logger | {eventCount} interactions | 👥 {leadCount} prospects
+            </div>
             <Button
               size="sm"
               variant="ghost"
@@ -243,33 +249,33 @@ export function TelemetryLogger({ className = '' }: TelemetryLoggerProps) {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <span>{getEventIcon(event.type)}</span>
-                    <span className="text-gray-400">{formatTimestamp(event.ts)}</span>
+                    <span className="text-gray-400">{formatTimestamp(event.ts) || '—'}</span>
                     <span className="text-blue-400">{event.type}</span>
                   </div>
                 
                 {/* Semantic Information - Clean Business Data */}
                 <div className="text-gray-300">
-                  <span className="text-white font-semibold">📝 {event.semantic.label}</span>
+                  <span className="text-white font-semibold">📝 {event.semantic?.label ?? 'Unknown element'}</span>
                 </div>
                 
-                {event.semantic.entityType && (
+                {event.semantic?.entityType && (
                   <div className="text-gray-300">
-                    Type: <span className="text-blue-400">{event.semantic.entityType}</span>
-                    {event.semantic.entityId && (
-                      <> | ID: <span className="text-blue-400">{event.semantic.entityId}</span></>
+                    Type: <span className="text-blue-400">{event.semantic?.entityType}</span>
+                    {event.semantic?.entityId && (
+                      <> | ID: <span className="text-blue-400">{event.semantic?.entityId}</span></>
                     )}
                   </div>
                 )}
                 
-                {event.semantic.context && (
+                {event.semantic?.context && (
                   <div className="text-gray-300">
-                    Context: <span className="text-indigo-400">{event.semantic.context}</span>
+                    Context: <span className="text-indigo-400">{event.semantic?.context}</span>
                   </div>
                 )}
                 
-                {event.semantic.action && (
+                {event.semantic?.action && (
                   <div className="text-gray-300">
-                    Action: <span className="text-green-400">{event.semantic.action}</span>
+                    Action: <span className="text-green-400">{event.semantic?.action}</span>
                   </div>
                 )}
                 
@@ -301,7 +307,7 @@ export function TelemetryLogger({ className = '' }: TelemetryLoggerProps) {
         {/* Footer */}
         <div className="bg-gray-800 px-4 py-2 text-xs text-gray-400">
           <div className="flex justify-between items-center">
-            <span>Session: {Telemetry.events.getSessionId().slice(0, 8)}...</span>
+            <span>Session: {sessionId ? `${sessionId.slice(0, 8)}...` : 'Loading...'}</span>
             <span>Max: {maxEvents}</span>
           </div>
         </div>

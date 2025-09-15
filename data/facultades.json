@@ -8,6 +8,6 @@
   { "id": "cien", "nombre": "Facultad de Ciencias", "modalidades": ["presencial", "semipresencial", "distancia"] },
   { "id": "eco", "nombre": "Facultad de Economía", "modalidades": ["presencial", "semipresencial", "distancia"] },
   { "id": "filo", "nombre": "Facultad de Filosofía", "modalidades": ["presencial", "semipresencial", "distancia"] },
-  { "id": "filo", "nombre": "Facultad de Filosofía", "modalidades": ["presencial", "semipresencial", "distancia"] },
+  { "id": "filo", "nombre": "Facultad de Filosofía", "modalidades": ["presencial", "semipresencial", "distancia"] }
 ]
 

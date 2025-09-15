@@ -14,7 +14,9 @@
     "db:rollback": "node scripts/migration/rollback.js",
     "test:database": "npm run db:test",
     "db:health": "node scripts/migration/health-check.js",
-    "db:sql": "node scripts/migration/sql-exec.js"
+    "db:sql": "node scripts/migration/sql-exec.js",
+    "db:leads": "node scripts/migration/add-leads-tables.js",
+    "test:leads": "node scripts/test-leads-system.js"
   },
   "dependencies": {
     "@radix-ui/react-icons": "^1.3.2",

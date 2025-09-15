@@ -190,6 +190,87 @@ COMMENT ON COLUMN precio.item IS 'Tipo de concepto: matricula, pension_mensual, 
 COMMENT ON COLUMN precio.vigente_desde IS 'Fecha desde cuando aplica el precio';
 COMMENT ON COLUMN precio.vigente_hasta IS 'Fecha hasta cuando aplica el precio';
 
+-- Comentarios para sistema de leads y telemetría
+COMMENT ON TABLE user_leads IS 'Información de contacto de usuarios que enviaron formulario';
+COMMENT ON TABLE user_navigation_tracking IS 'Tracking de navegación y eventos del usuario';
+COMMENT ON TABLE user_program_selections IS 'Programas específicos seleccionados por el usuario';
+
+COMMENT ON COLUMN user_leads.lead_id IS 'ID único generado por el frontend para identificar el lead';
+COMMENT ON COLUMN user_leads.source IS 'Origen del lead: program, comparator, etc.';
+COMMENT ON COLUMN user_leads.institution_type IS 'Tipo de institución: university, institute, college, etc.';
+COMMENT ON COLUMN user_navigation_tracking.action_type IS 'Tipo de acción: page_visit, program_selected, comparison_viewed, etc.';
+COMMENT ON COLUMN user_navigation_tracking.entity_type IS 'Tipo de entidad: program, campus, department, faculty, etc.';
+COMMENT ON COLUMN user_program_selections.program_type IS 'Tipo de programa: career, course, specialization, degree, etc.';
+COMMENT ON COLUMN user_program_selections.selection_order IS 'Orden de selección (1, 2, 3...) para indicar prioridad';
+
+-- ============================================================================
+-- SISTEMA DE LEADS Y TELEMETRÍA
+-- ============================================================================
+
+-- Tabla principal para leads/contactos
+CREATE TABLE IF NOT EXISTS user_leads (
+    id text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    -- Información de contacto
+    nombre_completo text NOT NULL,
+    dni text NOT NULL,
+    telefono text NOT NULL,
+    email text NOT NULL,
+    metodo_contacto text NOT NULL CHECK (metodo_contacto IN ('whatsapp', 'correo')),
+    -- Metadatos de la sesión
+    session_id text NOT NULL,
+    lead_id text NOT NULL UNIQUE, -- El ID que ya genera el modal
+    source text NOT NULL DEFAULT 'program', -- De dónde vino el lead
+    institution_type text NOT NULL DEFAULT 'university', -- 'university', 'institute', 'college', etc.
+    -- Timestamps
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+-- Tabla para tracking de navegación del usuario
+CREATE TABLE IF NOT EXISTS user_navigation_tracking (
+    id text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    lead_id text NOT NULL REFERENCES user_leads(lead_id) ON DELETE CASCADE,
+    session_id text NOT NULL,
+    -- Datos de navegación
+    page_path text NOT NULL,
+    page_title text,
+    action_type text NOT NULL, -- 'page_visit', 'program_selected', 'comparison_viewed', etc.
+    entity_type text, -- 'program', 'campus', 'department', 'faculty', etc.
+    entity_id text, -- ID de la entidad específica
+    entity_name text, -- Nombre legible de la entidad
+    -- Datos contextuales
+    metadata jsonb DEFAULT '{}',
+    timestamp timestamp with time zone DEFAULT now()
+);
+
+-- Tabla para programas/selecciones del usuario (término genérico)
+CREATE TABLE IF NOT EXISTS user_program_selections (
+    id text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    lead_id text NOT NULL REFERENCES user_leads(lead_id) ON DELETE CASCADE,
+    session_id text NOT NULL,
+    -- Datos del programa (genérico para carreras, cursos, especializaciones, etc.)
+    program_id text NOT NULL,
+    program_name text NOT NULL,
+    program_type text NOT NULL, -- 'career', 'course', 'specialization', 'degree', etc.
+    department_id text, -- Puede ser facultad, escuela, departamento, etc.
+    department_name text,
+    -- Contexto de selección
+    selection_source text, -- 'comparator', 'program_detail', 'department_page', etc.
+    selection_order int, -- Orden en que fue seleccionado (1, 2, 3...)
+    timestamp timestamp with time zone DEFAULT now()
+);
+
+-- Índices para optimizar consultas
+CREATE INDEX IF NOT EXISTS ix_user_leads_session_id ON user_leads(session_id);
+CREATE INDEX IF NOT EXISTS ix_user_leads_lead_id ON user_leads(lead_id);
+CREATE INDEX IF NOT EXISTS ix_user_leads_created_at ON user_leads(created_at);
+CREATE INDEX IF NOT EXISTS ix_user_navigation_tracking_lead_id ON user_navigation_tracking(lead_id);
+CREATE INDEX IF NOT EXISTS ix_user_navigation_tracking_session_id ON user_navigation_tracking(session_id);
+CREATE INDEX IF NOT EXISTS ix_user_navigation_tracking_timestamp ON user_navigation_tracking(timestamp);
+CREATE INDEX IF NOT EXISTS ix_user_program_selections_lead_id ON user_program_selections(lead_id);
+CREATE INDEX IF NOT EXISTS ix_user_program_selections_session_id ON user_program_selections(session_id);
+CREATE INDEX IF NOT EXISTS ix_user_program_selections_program_id ON user_program_selections(program_id);
+
 -- =========================================================================
 -- CONTENIDO ENRIQUECIDO (DETALLE Y DIDÁCTICAS)
 -- =========================================================================

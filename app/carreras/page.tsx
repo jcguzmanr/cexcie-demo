@@ -62,22 +62,12 @@ export default function CarrerasPage() {
   return (
     <motion.div className="p-6 grid gap-6" variants={containerVariants} initial="hidden" animate="show">
       <Breadcrumb items={[{ label: "Inicio", href: "/" }, { label: "Campus", href: "/campus" }, { label: "Carreras" }]} />
-      {/* Debug panel para validar filtros (visible siempre mientras depuramos) */}
-      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/70 p-3 text-xs">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-          <div><span className="opacity-70">Campus:</span> <span className="font-mono">{campusSel?.id ?? '—'}</span></div>
-          <div><span className="opacity-70">Modalidad:</span> <span className="font-mono">{modalidad}</span></div>
-          <div><span className="opacity-70">Total carreras:</span> <span className="font-mono">{Object.keys(carrerasMap).length}</span></div>
-          <div><span className="opacity-70">Carreras filtradas:</span> <span className="font-mono">{carrerasFiltradas.length}</span></div>
-        </div>
-        <div className="mt-2"><span className="opacity-70">Facultades visibles:</span> <span className="font-mono">{filtered.map(f=>f.id).join(', ') || '—'}</span></div>
-        <div className="mt-1"><span className="opacity-70">Ejemplo carreras filtradas:</span> <span className="font-mono">{carrerasFiltradas.slice(0,8).map(c=>c.id).join(', ') || '—'}</span></div>
-      </div>
       <motion.div variants={itemVariants}>
-        <h1 className="text-2xl font-semibold">Conoce nuestras carreras</h1>
+        <h1 className="text-2xl font-semibold">Explora nuestras carreras</h1>
         {campusSel && (
-          <div className="text-sm opacity-70 mt-1">Campus seleccionado: <span className="font-medium">{campusSel.nombre}</span></div>
+          <div className="text-sm opacity-70 mt-1">Campus: <span className="font-medium">{campusSel.nombre}</span></div>
         )}
+        <p className="text-sm opacity-80 mt-2">Selecciona una modalidad de estudios para ver las facultades disponibles</p>
       </motion.div>
 
       <motion.div className="flex gap-3 flex-wrap" variants={itemVariants}>
@@ -91,9 +81,7 @@ export default function CarrerasPage() {
       </motion.div>
 
       <motion.div className="space-y-8" variants={itemVariants}>
-        <div className="w-full rounded-xl border border-[var(--uc-purple)]/30 bg-gradient-to-r from-[var(--uc-purple)]/10 to-[var(--uc-lilac)]/20 p-3">
-          <ModalidadOverview modalidad={modalidad as typeof modalidad} />
-        </div>
+        <ModalidadOverview modalidad={modalidad as typeof modalidad} />
 
         {/* Listado de facultades */}
         <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4" variants={containerVariants}>
@@ -109,7 +97,7 @@ export default function CarrerasPage() {
             >
               <div className="font-semibold text-lg leading-tight mb-2">{f.nombre}</div>
               <div className="text-sm opacity-70 group-hover:opacity-100 transition-opacity">
-                Haz clic para ver carreras
+                Ver carreras disponibles
               </div>
             </motion.button>
           ))}
@@ -121,11 +109,11 @@ export default function CarrerasPage() {
           key={f.id}
           open={open === f.id}
           onClose={() => setOpen(null)}
-          title={`Carreras: ${f.nombre}`}
+          title={`Carreras de ${f.nombre}`}
           footer={
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                {selectedCarreras.length > 2 && (
+                {selectedCarreras.length > 0 && (
                   <button
                     onClick={() => clearComparador()}
                     className="inline-flex px-4 py-2 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--uc-lilac)]/10 font-medium text-sm transition-colors"
@@ -136,17 +124,19 @@ export default function CarrerasPage() {
               </div>
               <div className="flex items-center gap-3">
                 <Link href={selectedCarreras.length === 1 ? `/carrera/${selectedCarreras[0].id}` : "#"} className={selectedCarreras.length !== 1 ? "pointer-events-none opacity-50" : undefined}>
-                  <span className="inline-flex px-6 py-3 rounded-full border bg-[var(--uc-sky)] text-black font-medium">Ver carrera</span>
+                  <span className="inline-flex px-6 py-3 rounded-full border bg-[var(--uc-sky)] text-black font-medium">Ver detalles</span>
                 </Link>
                 <Link href="/comparador" className={selectedCarreras.length < 2 ? "pointer-events-none opacity-50" : undefined}>
-                  <span className="inline-flex px-6 py-3 rounded-full border bg-[var(--uc-purple)] text-white font-medium">Comparar ({selectedCarreras.length}/3)</span>
+                  <span className="inline-flex px-6 py-3 rounded-full border bg-[var(--uc-purple)] text-white font-medium">Comparar carreras ({selectedCarreras.length}/3)</span>
                 </Link>
               </div>
             </div>
           }
         >
           <div className="mb-6">
-            <div className="text-left text-base opacity-80 mb-6 font-medium">Toca para seleccionar (hasta 3). Con 1 activo, puedes ver la carrera.</div>
+            <div className="text-left text-base opacity-80 mb-6 font-medium">
+              Selecciona las carreras que te interesan (máximo 3). Con una seleccionada puedes ver los detalles, con dos o más puedes compararlas.
+            </div>
           </div>
           
           <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6" variants={containerVariants} initial="hidden" animate="show">

@@ -1,125 +1,87 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Modal } from "@/components/Modal";
 import { Button } from "@/components/Button";
-import { cx } from "@/lib/ui";
-import { ThankYouModal } from "./ThankYouModal";
-import { useTelemetryEvents } from "@/lib/useTelemetry";
-import { Carrera } from "@/data/schemas";
+import { ThankYouModal } from "@/components/ThankYouModal";
+import { Telemetry } from "@/lib/telemetry";
+import type { Carrera } from "@/data/schemas";
 
-type Props = { 
-  open: boolean; 
-  onClose: () => void; 
+type Props = {
+  open: boolean;
+  onClose: () => void;
   careerNames: string[];
   source?: "career" | "comparator";
   selectedCarreras?: Carrera[];
 };
 
-// Shape mínima del JSON de comparador para evitar `any`
-type ComparadorUI = { ui?: { cta?: { helper?: string; label?: string } } };
+export function SendResultsModal({ open, onClose, careerNames, source = "career", selectedCarreras = [] }: Props) {
+  const sessionId = useMemo(() => Telemetry.events.getSessionId(), []);
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [leadId, setLeadId] = useState<string | undefined>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-function validateEmail(value: string) {
-  return /.+@.+\..+/.test(value);
-}
-
-function validatePhone(value: string) {
-  return /^\+?\d[\d\s-]{6,}$/.test(value);
-}
-
-function Field({ label, value, onChange, type = "text", placeholder, error }: { label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string; error?: string }) {
-  return (
-    <label className="grid gap-1">
-      <span className="text-sm font-medium opacity-80">{label}</span>
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        type={type}
-        placeholder={placeholder}
-        className={cx("px-4 py-3 rounded-xl border bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)]", error ? "border-red-500 focus-visible:ring-red-500/40" : undefined)}
-      />
-      {error && <span className="text-xs text-red-600">{error}</span>}
-    </label>
-  );
-}
-
-function SelectField({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
-  return (
-    <label className="grid gap-1">
-      <span className="text-sm font-medium opacity-80">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="px-4 py-3 rounded-xl border bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)]"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>{o.label}</option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-export function SendResultsModal({ 
-  open, 
-  onClose, 
-  careerNames, 
-  source = "career",
-  selectedCarreras = []
-}: Props) {
+  // Simple contact form
   const [name, setName] = useState("");
   const [dni, setDni] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [contactMethod, setContactMethod] = useState<"whatsapp" | "correo">("whatsapp");
-  const [sent, setSent] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; dni?: string; phone?: string; email?: string }>({});
-  const [leadId, setLeadId] = useState<string>("");
-  const [showThankYou, setShowThankYou] = useState(false);
+  const [method, setMethod] = useState<"whatsapp" | "correo">("whatsapp");
 
-  const [cta, setCta] = useState<{ helper?: string; label?: string } | null>(null);
-  const { trackCustomEvent } = useTelemetryEvents();
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const newLeadId = crypto.randomUUID();
+      const programSelections = selectedCarreras.map((c, index) => ({
+        program_id: c.id,
+        program_name: c.nombre,
+        program_type: "career",
+        department_id: c.facultadId || undefined,
+        department_name: undefined,
+        selection_source: source,
+        selection_order: index + 1,
+      }));
 
-  useEffect(() => {
-    fetch("/data/comparador-data.json")
-      .then((r) => r.json())
-      .then((j: ComparadorUI) => setCta(j.ui?.cta ?? null))
-      .catch(() => {});
-  }, []);
+      const payload = {
+        nombre_completo: name,
+        dni,
+        telefono: phone,
+        email,
+        metodo_contacto: method,
+        session_id: sessionId,
+        lead_id: newLeadId,
+        source: source === "comparator" ? "comparison" : "program",
+        institution_type: "university",
+        telemetry_events: [],
+        program_selections: programSelections,
+      };
 
-  function handleSend() {
-    const next: { name?: string; dni?: string; phone?: string; email?: string } = {};
-    if (name.trim().length < 2) next.name = "Ingresa tu nombre completo.";
-    if (dni.trim().length < 8) next.dni = "Ingresa tu DNI (mínimo 8 dígitos).";
-    if (!validatePhone(phone)) next.phone = "Ingresa un teléfono válido (e.g., +51 999 999 999).";
-    if (!validateEmail(email)) next.email = "Ingresa un email válido.";
-    setErrors(next);
-    
-    if (Object.keys(next).length === 0) {
-      // Generar leadId único
-      const newLeadId = `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      setLeadId(newLeadId);
-      
-      // Track lead submission
-      trackCustomEvent("lead_submitted", {
-        source,
-        leadId: newLeadId,
-        contactMethod,
-        careerCount: careerNames.length,
-        dni: dni.trim()
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-      
-      setSent(true);
+
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j?.message || "No se pudo guardar el lead");
+      }
+
+      setLeadId(newLeadId);
       setShowThankYou(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error inesperado");
+    } finally {
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleThankYouClose = () => {
     setShowThankYou(false);
-    setSent(false);
     onClose();
   };
 
-  // Si ya se envió y se debe mostrar el ThankYou, mostrar ese modal
   if (showThankYou) {
     return (
       <ThankYouModal
@@ -135,94 +97,49 @@ export function SendResultsModal({
 
   return (
     <Modal open={open} onClose={onClose} title="Enviar resultados">
-      {sent ? (
-        <div className="grid gap-4">
-          <div className="flex items-center gap-3">
-            <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-700">✓</div>
-            <div>
-              <div className="font-semibold">¡Gracias! Hemos enviado tus resultados</div>
-              <div className="text-sm opacity-80">Pronto nos pondremos en contacto contigo para resolver tus dudas y acompañarte en el proceso de admisión.</div>
-            </div>
-          </div>
-          <div className="text-sm opacity-80">
-            {contactMethod === "correo" ? (
-              <>Se enviará un resumen a <strong>{email}</strong>.</>
-            ) : (
-              <>Te contactaremos por WhatsApp al <strong>{phone}</strong>.</>
-            )}
-          </div>
-          <div className="text-sm opacity-70">
-            DNI registrado: <strong>{dni}</strong>
-          </div>
-          <div className="flex justify-end">
-            <Button onClick={onClose}>Cerrar</Button>
-          </div>
+      <div className="grid gap-4">
+        {/* Highlight: resumen de selección */}
+        <div className="text-center">
+          <div className="text-lg font-semibold">Enviar resultados</div>
+          <div className="opacity-70 text-sm">Se enviará un resumen de tu selección{source === "comparator" ? " (comparación)" : ""}.</div>
         </div>
-      ) : (
-        <div className="grid gap-4">
-          <div className="text-center mb-4">
-            <div className="text-2xl font-semibold mb-2">Información de contacto</div>
-            <div className="opacity-70">
-              {cta?.helper || "Completa tus datos para recibir información detallada"}
-            </div>
+        {selectedCarreras.length > 0 && (
+          <div className="text-sm opacity-90 p-3 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+            <div className="font-medium mb-1">Seleccionadas:</div>
+            <ul className="list-disc pl-6 space-y-1">
+              {selectedCarreras.map((c) => (
+                <li key={c.id}>{c.nombre}</li>
+              ))}
+            </ul>
           </div>
+        )}
 
-          <Field
-            label="Nombre completo"
-            value={name}
-            onChange={setName}
-            placeholder="Tu nombre completo"
-            error={errors.name}
-          />
-
-          <Field
-            label="DNI"
-            value={dni}
-            onChange={setDni}
-            placeholder="12345678"
-            error={errors.dni}
-          />
-
-          <Field
-            label="Teléfono"
-            value={phone}
-            onChange={setPhone}
-            type="tel"
-            placeholder="+51 999 999 999"
-            error={errors.phone}
-          />
-
-          <Field
-            label="Email"
-            value={email}
-            onChange={setEmail}
-            type="email"
-            placeholder="tu@email.com"
-            error={errors.email}
-          />
-
-          <SelectField
-            label="Método de contacto preferido"
-            value={contactMethod}
-            onChange={(v) => setContactMethod(v as "whatsapp" | "correo")}
-            options={[
-              { value: "whatsapp", label: "WhatsApp" },
-              { value: "correo", label: "Correo electrónico" }
-            ]}
-          />
-
-          <div className="flex gap-3 pt-4">
-            <Button variant="secondary" onClick={onClose} className="flex-1">
-              Cancelar
-            </Button>
-            <Button onClick={handleSend} className="flex-1">
-              {cta?.label || "Enviar"}
-            </Button>
+        {/* Formulario mínimo */}
+        <div className="grid gap-3">
+          <input className="px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)]" placeholder="Nombre completo" value={name} onChange={(e) => setName(e.target.value)} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input className="px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)]" placeholder="DNI" value={dni} onChange={(e) => setDni(e.target.value)} />
+            <input className="px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)]" placeholder="Teléfono" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <input className="px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)]" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
+          <div className="flex gap-3">
+            <label className="flex items-center gap-2 text-sm opacity-80">
+              <input type="radio" name="method" checked={method === "whatsapp"} onChange={() => setMethod("whatsapp")} /> WhatsApp
+            </label>
+            <label className="flex items-center gap-2 text-sm opacity-80">
+              <input type="radio" name="method" checked={method === "correo"} onChange={() => setMethod("correo")} /> Correo
+            </label>
+          </div>
+          {error && <div className="text-sm text-red-400">{error}</div>}
         </div>
-      )}
+
+        <div className="flex justify-end gap-3">
+          <Button variant="secondary" onClick={onClose}>Cerrar</Button>
+          <Button onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? "Enviando..." : "Aceptar"}
+          </Button>
+        </div>
+      </div>
     </Modal>
   );
 }
-
-

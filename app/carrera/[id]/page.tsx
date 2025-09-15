@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Modal } from "@/components/Modal";
 import { SendResultsModal } from "@/components/SendResultsModal";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { ModalidadComparison } from "@/components/ModalidadComparison";
+import { ModalidadOverviewTable } from "@/components/ModalidadOverviewTable";
 import { ModalidadComparison as ModalidadComparisonType } from "@/data/schemas";
 
 type DetalleCarrera = {
@@ -157,39 +157,50 @@ export default function CarreraDetallePage() {
         <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
         <div className="grid gap-3">
           {["sobre", "planEstudios", "internacional", "beneficios", "costos", "testimonios", "modalidades"].map((k) => (
-            <Button key={k} variant={tab === k ? "primary" : "secondary"} shape="pill" className="justify-center" onClick={() => setTab(k as typeof tab)}>
-              <span className={tab === k ? "text-white" : "text-[var(--uc-purple)]"}>
-                {k === "sobre" && "Sobre la carrera"}
-                {k === "planEstudios" && "Plan de estudios"}
-                {k === "internacional" && "Internacional"}
-                {k === "beneficios" && "Beneficios"}
-                {k === "costos" && "Costos"}
-                {k === "testimonios" && "Testimonios"}
-                {k === "modalidades" && "Modalidades"}
-              </span>
-            </Button>
+            <button
+              key={k}
+              onClick={() => setTab(k as typeof tab)}
+              className={`px-4 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
+                tab === k
+                  ? "bg-[var(--uc-purple)] text-white"
+                  : "bg-[var(--surface)] text-white border border-[var(--border)] hover:bg-[var(--uc-lilac)]/10 hover:border-[var(--uc-purple)]/30"
+              }`}
+            >
+              {k === "sobre" && "Sobre la carrera"}
+              {k === "planEstudios" && "Plan de estudios"}
+              {k === "internacional" && "Internacional"}
+              {k === "beneficios" && "Beneficios"}
+              {k === "costos" && "Costos"}
+              {k === "testimonios" && "Testimonios"}
+              {k === "modalidades" && "Modalidades"}
+            </button>
           ))}
         </div>
 
         <div className="rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-4 min-h-[360px] overflow-hidden text-[var(--foreground)]">
-          {tab === "sobre" && (
+          {!detalle && (
+            <div className="text-center py-12">
+              <div className="text-lg opacity-70">Data aún a ser ingresada vía CMS.</div>
+            </div>
+          )}
+          {detalle && tab === "sobre" && (
             <div className="grid gap-6">
-              <div className="text-lg font-semibold">{detalle?.secciones.sobre.titulo ?? "Sobre la carrera"}</div>
+              <div className="text-lg font-semibold">{detalle?.secciones?.sobre?.titulo ?? "Sobre la carrera"}</div>
               
               {/* Imagen y descripción */}
               <div className="grid gap-4">
-                {detalle?.secciones.sobre.media?.type === "image" && detalle.secciones.sobre.media.src && (
+                {detalle?.secciones?.sobre?.media?.type === "image" && detalle?.secciones?.sobre?.media?.src && (
                   <div className="relative w-full max-w-[560px] aspect-[16/9] rounded-xl overflow-hidden">
-                    <Image src={detalle.secciones.sobre.media.src} alt={detalle.secciones.sobre.media.alt ?? ""} fill className="object-cover" />
+                    <Image src={detalle?.secciones?.sobre?.media?.src} alt={detalle?.secciones?.sobre?.media?.alt ?? ""} fill className="object-cover" />
                   </div>
                 )}
-                <p className="max-w-3xl opacity-85">{detalle?.secciones.sobre.descripcion}</p>
+                <p className="max-w-3xl opacity-85">{detalle?.secciones?.sobre?.descripcion}</p>
               </div>
-
+              
               {/* Anclas informativas */}
-              {detalle?.secciones.sobre.infoCards && (
+              {detalle?.secciones?.sobre?.infoCards && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {detalle.secciones.sobre.infoCards.map((card) => (
+                  {(detalle?.secciones?.sobre?.infoCards ?? []).map((card) => (
                     <div
                       key={card.id}
                       id={card.id}
@@ -232,7 +243,7 @@ export default function CarreraDetallePage() {
             </div>
           )}
 
-          {tab === "planEstudios" && (
+          {detalle && tab === "planEstudios" && (
             <div className="grid gap-4">
               <div className="text-lg font-semibold">PLAN DE ESTUDIOS</div>
               {/* Ciclos agrupados por etapas */}
@@ -252,7 +263,7 @@ export default function CarreraDetallePage() {
                     >
                       <span 
                         className="inline-block w-3 h-3 rounded-full" 
-                        style={{ background: detalle?.secciones.planEstudios.legendEtapas?.adaptacion?.color ?? "#B9E1FF" }}
+                        style={{ background: detalle?.secciones?.planEstudios?.legendEtapas?.adaptacion?.color ?? "#B9E1FF" }}
                       />
                       <span>Etapa de Adaptación</span>
                     </button>
@@ -269,7 +280,7 @@ export default function CarreraDetallePage() {
                     >
                       <span 
                         className="inline-block w-3 h-3 rounded-full" 
-                        style={{ background: detalle?.secciones.planEstudios.legendEtapas?.profundizacion?.color ?? "#9169FF" }}
+                        style={{ background: detalle?.secciones?.planEstudios?.legendEtapas?.profundizacion?.color ?? "#9169FF" }}
                       />
                       <span>Etapa de Profundización</span>
                     </button>
@@ -286,7 +297,7 @@ export default function CarreraDetallePage() {
                     >
                       <span 
                         className="inline-block w-3 h-3 rounded-full" 
-                        style={{ background: detalle?.secciones.planEstudios.legendEtapas?.consolidacion?.color ?? "#FAAAFA" }}
+                        style={{ background: detalle?.secciones?.planEstudios?.legendEtapas?.consolidacion?.color ?? "#FAAAFA" }}
                       />
                       <span>Etapa de Consolidación</span>
                     </button>
@@ -301,7 +312,7 @@ export default function CarreraDetallePage() {
                       <div className="flex items-center gap-3 mb-4">
                         <span 
                           className="inline-block w-4 h-4 rounded-sm" 
-                          style={{ background: detalle?.secciones.planEstudios.legendEtapas?.adaptacion?.color ?? "#B9E1FF" }}
+                          style={{ background: detalle?.secciones?.planEstudios?.legendEtapas?.adaptacion?.color ?? "#B9E1FF" }}
                         />
                         <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Adaptación</h3>
                       </div>
@@ -309,10 +320,10 @@ export default function CarreraDetallePage() {
                         {detalle?.secciones.planEstudios.legendEtapas?.adaptacion?.descripcion || "Desarrolla las bases sólidas que necesitas para construir tu carrera profesional con confianza."}
                       </p>
                       <div className="grid grid-cols-1 gap-4">
-                        {detalle?.secciones.planEstudios.ciclos
+                        {(detalle?.secciones?.planEstudios?.ciclos ?? [])
                           .filter(c => c.etapa === "adaptacion")
                           .map((c) => {
-                            const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                            const etapaColor = detalle?.secciones?.planEstudios?.legendEtapas?.[c.etapa]?.color ?? "#EEE";
                             return (
                               <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
                                 <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
@@ -338,7 +349,7 @@ export default function CarreraDetallePage() {
                       <div className="flex items-center gap-3 mb-4">
                         <span 
                           className="inline-block w-4 h-4 rounded-sm" 
-                          style={{ background: detalle?.secciones.planEstudios.legendEtapas?.profundizacion?.color ?? "#9169FF" }}
+                          style={{ background: detalle?.secciones?.planEstudios?.legendEtapas?.profundizacion?.color ?? "#9169FF" }}
                         />
                         <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Profundización</h3>
                       </div>
@@ -346,10 +357,10 @@ export default function CarreraDetallePage() {
                         {detalle?.secciones.planEstudios.legendEtapas?.profundizacion?.descripcion || "Adquiere conocimientos especializados que te permitirán destacar en el mercado laboral."}
                       </p>
                       <div className="grid grid-cols-1 gap-4">
-                        {detalle?.secciones.planEstudios.ciclos
+                        {(detalle?.secciones?.planEstudios?.ciclos ?? [])
                           .filter(c => c.etapa === "profundizacion")
                           .map((c) => {
-                            const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                            const etapaColor = detalle?.secciones?.planEstudios?.legendEtapas?.[c.etapa]?.color ?? "#EEE";
                             return (
                               <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
                                 <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
@@ -375,7 +386,7 @@ export default function CarreraDetallePage() {
                       <div className="flex items-center gap-3 mb-4">
                         <span 
                           className="inline-block w-4 h-4 rounded-sm" 
-                          style={{ background: detalle?.secciones.planEstudios.legendEtapas?.consolidacion?.color ?? "#FAAAFA" }}
+                          style={{ background: detalle?.secciones?.planEstudios?.legendEtapas?.consolidacion?.color ?? "#FAAAFA" }}
                         />
                         <h3 className="text-lg font-semibold text-[var(--foreground)]">Etapa de Consolidación</h3>
                       </div>
@@ -383,10 +394,10 @@ export default function CarreraDetallePage() {
                         {detalle?.secciones.planEstudios.legendEtapas?.consolidacion?.descripcion || "Integra todo tu aprendizaje en proyectos reales que definirán tu futuro profesional."}
                       </p>
                       <div className="grid grid-cols-1 gap-4">
-                        {detalle?.secciones.planEstudios.ciclos
+                        {(detalle?.secciones?.planEstudios?.ciclos ?? [])
                           .filter(c => c.etapa === "consolidacion")
                           .map((c) => {
-                            const etapaColor = detalle?.secciones.planEstudios.legendEtapas?.[c.etapa]?.color ?? "#EEE";
+                            const etapaColor = detalle?.secciones?.planEstudios?.legendEtapas?.[c.etapa]?.color ?? "#EEE";
                             return (
                               <div key={c.numero} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3">
                                 <div className="text-sm font-semibold mb-3 text-[var(--foreground)] text-right">Ciclo {String(c.numero).padStart(2, "0")} · Total de créditos {c.creditos}</div>
@@ -412,11 +423,11 @@ export default function CarreraDetallePage() {
             </div>
           )}
 
-          {tab === "internacional" && (
+          {detalle && tab === "internacional" && (
             <div className="grid gap-6">
               <div className="text-lg font-semibold">INTERNACIONAL</div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {detalle?.secciones.internacional.cards.map((card, i) => (
+                {(detalle?.secciones?.internacional?.cards ?? []).map((card, i) => (
                   <div key={i} className="rounded-2xl bg-[var(--surface)] text-[var(--foreground)] p-6 border border-[var(--border)] hover:shadow-lg hover:border-[var(--uc-purple)]/30 transition-all duration-300 group">
                     <div className="text-xl font-semibold mb-3 text-[var(--foreground)] group-hover:text-[var(--uc-purple)] transition-colors">
                       {card.titulo}
@@ -441,9 +452,9 @@ export default function CarreraDetallePage() {
             </div>
           )}
 
-          {tab === "beneficios" && (
+          {detalle && tab === "beneficios" && (
             <div className="w-full flex gap-4 overflow-x-auto pb-2">
-              {detalle?.secciones.beneficios.bloques.map((b, i) => (
+              {(detalle?.secciones?.beneficios?.bloques ?? []).map((b, i) => (
                 <div key={i} className="shrink-0 w-[380px] rounded-2xl bg-[var(--surface)] text-[var(--foreground)] p-4 border border-[var(--border)]">
                   <div className="text-lg font-semibold mb-2">{b.titulo}</div>
                   <ul className="list-disc pl-5 space-y-1">
@@ -456,7 +467,7 @@ export default function CarreraDetallePage() {
             </div>
           )}
 
-                    {tab === "costos" && (
+          {detalle && tab === "costos" && (
             <div className="grid gap-4">
               <div className="text-lg font-semibold">Información sobre costos y escalas</div>
               
@@ -557,7 +568,7 @@ export default function CarreraDetallePage() {
             </div>
           )}
 
-          {tab === "testimonios" && (
+          {detalle && tab === "testimonios" && (
             <div className="grid gap-6">
               <div className="text-lg font-semibold">Testimonios</div>
               
@@ -678,43 +689,55 @@ export default function CarreraDetallePage() {
             </div>
           )}
 
-          {tab === "modalidades" && (
+          {detalle && tab === "modalidades" && (
             <div className="grid gap-4">
-              {modalidadComparison ? (
-                <div className="overflow-x-auto">
-                  <ModalidadComparison comparison={modalidadComparison} />
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="text-lg opacity-70">Comparación de modalidades no disponible para esta carrera.</div>
-                </div>
-              )}
+              <div className="overflow-x-auto">
+                <ModalidadOverviewTable />
+              </div>
             </div>
           )}
         </div>
       </div>
 
       <div className="sticky bottom-4 inset-x-0">
-        <div className="max-w-6xl mx-auto rounded-2xl bg-gradient-to-r from-[var(--uc-lilac)]/30 to-[var(--uc-sky)]/30 p-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3 border">
-          <div className="flex flex-wrap gap-3">
-            <Button
-              onClick={() => {
-                // Reinicia selección con la carrera actual, siempre preseleccionada
-                clearComparador();
-                toggleCarrera(carrera);
-                setSelectOpen(true);
-              }}
-              size="lg"
-              shape="pill"
-              disabled={!puedeComparar}
-              title={!puedeComparar ? "Esta carrera no tiene suficientes cursos para comparar" : undefined}
-            >
-              Comparar carreras
-            </Button>
-          </div>
-          <div>
-            <Button size="lg" shape="pill" onClick={() => setSendOpen(true)}>Quiero la información</Button>
-          </div>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-4">
+          {/* Botón secundario - Comparar carreras */}
+          <Button
+            onClick={() => {
+              // Reinicia selección con la carrera actual, siempre preseleccionada
+              clearComparador();
+              toggleCarrera(carrera);
+              setSelectOpen(true);
+            }}
+            variant="secondary"
+            size="lg"
+            shape="pill"
+            disabled={!puedeComparar}
+            title={!puedeComparar ? "Esta carrera no tiene suficientes cursos para comparar" : undefined}
+            className="flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Comparar carreras
+          </Button>
+
+          {/* Botón principal - Quiero la información */}
+          <Button
+            onClick={() => setSendOpen(true)}
+            variant="primary"
+            size="lg"
+            shape="pill"
+            className="flex items-center gap-2 bg-gradient-to-r from-[var(--uc-purple)] to-[var(--uc-lilac)] hover:from-[var(--uc-purple)]/90 hover:to-[var(--uc-lilac)]/90 shadow-lg shadow-[var(--uc-purple)]/25 hover:shadow-xl hover:shadow-[var(--uc-purple)]/40 transform hover:scale-105 transition-all duration-200"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Quiero la información
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </Button>
         </div>
       </div>
 

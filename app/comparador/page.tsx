@@ -56,6 +56,51 @@ export default function ComparadorPage() {
 
   const careerNames = useMemo(() => selected.map((c) => c.nombre), [selected]);
 
+  // Cargar detalles desde la API/BD para las carreras seleccionadas
+  type CarreraDetalleMin = {
+    id: string;
+    nombre?: string;
+    secciones?: { sobre?: { descripcion?: string } };
+  };
+  const [detailsById, setDetailsById] = useState<Record<string, CarreraDetalleMin | null>>({});
+  const [loadingDetails, setLoadingDetails] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadDetails() {
+      if (selected.length === 0) {
+        setDetailsById({});
+        return;
+      }
+      setLoadingDetails(true);
+      try {
+        const results = await Promise.all(
+          selected.map(async (c) => {
+            try {
+              const res = await fetch(`/api/carrera/${c.id}`);
+              if (!res.ok) return [c.id, null] as const;
+              const data = (await res.json()) as CarreraDetalleMin;
+              return [c.id, data] as const;
+            } catch {
+              return [c.id, null] as const;
+            }
+          })
+        );
+        if (!cancelled) {
+          const map: Record<string, CarreraDetalleMin | null> = {};
+          for (const [id, d] of results) map[id] = d;
+          setDetailsById(map);
+        }
+      } finally {
+        if (!cancelled) setLoadingDetails(false);
+      }
+    }
+    loadDetails();
+    return () => {
+      cancelled = true;
+    };
+  }, [selected]);
+
   // Control de selección inicial
   const [openFacs, setOpenFacs] = useState(selected.length < 2);
   const [openCarrerasOf, setOpenCarrerasOf] = useState<string | null>(null);
@@ -111,21 +156,20 @@ export default function ComparadorPage() {
           </div>
 
           <div className={`grid gap-6 ${selected.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
-            {section.careers.slice(0, selected.length).map((card, idx) => (
-              <div key={card.id} className="rounded-3xl p-6 bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] shadow-sm">
-                <div className="text-lg font-semibold text-center mb-3">
-                  {interpolate(card.name, careerNames) || selected[idx]?.nombre || `Carrera ${idx + 1}`}
+            {selected.map((c, idx) => {
+              const det = detailsById[c.id];
+              const description = det?.secciones?.sobre?.descripcion;
+              return (
+                <div key={c.id} className="rounded-3xl p-6 bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] shadow-sm">
+                  <div className="text-lg font-semibold text-center mb-3">
+                    {c.nombre}
+                  </div>
+                  <p className="text-sm opacity-80 leading-relaxed mb-4">
+                    {loadingDetails && !det ? 'Cargando…' : (description || 'Data aún a ser ingresada vía CMS')}
+                  </p>
                 </div>
-                <p className="text-sm opacity-80 leading-relaxed mb-4">
-                  {interpolate(card.summary, careerNames)}
-                </p>
-                <ul className="list-disc pl-6 space-y-1">
-                  {card.bullets.map((b, i) => (
-                    <li key={i} className="text-sm">{interpolate(b, careerNames)}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ) : (
@@ -135,12 +179,37 @@ export default function ComparadorPage() {
       {/* CTA inferior */}
       {cfg && (
         <div className="sticky bottom-4 inset-x-0">
-          <div className="max-w-6xl mx-auto rounded-2xl bg-gradient-to-r from-[var(--uc-lilac)]/30 to-[var(--uc-sky)]/30 p-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3 border">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-4">
             <div className="flex items-center gap-3 justify-center md:justify-start">
-              <Button variant="primary" size="lg" shape="pill" onClick={() => { clearComparador(); setOpenFacs(true); }}>Elegir carreras</Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                shape="pill"
+                className="flex items-center gap-2"
+                onClick={() => { clearComparador(); setOpenFacs(true); }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Elegir carreras
+              </Button>
             </div>
             <div className="flex items-center justify-center">
-              <Button onClick={() => setSendOpen(true)} size="lg" shape="pill">{cfg.ui.cta.label}</Button>
+              <Button
+                onClick={() => setSendOpen(true)}
+                variant="primary"
+                size="lg"
+                shape="pill"
+                className="flex items-center gap-2 bg-gradient-to-r from-[var(--uc-purple)] to-[var(--uc-lilac)] hover:from-[var(--uc-purple)]/90 hover:to-[var(--uc-lilac)]/90 shadow-lg shadow-[var(--uc-purple)]/25 hover:shadow-xl hover:shadow-[var(--uc-purple)]/40 transform hover:scale-105 transition-all duration-200"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {cfg.ui.cta.label}
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Button>
             </div>
           </div>
         </div>

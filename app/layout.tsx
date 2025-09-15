@@ -64,19 +64,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-      <Script
-        id="theme-init"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `(() => {
-  try {
-    // Always use dark mode for CExCIE
-    document.documentElement.setAttribute('data-theme', 'dark');
-  } catch (_) {}
-})();`,
-        }}
-      />
+    <html lang="es" data-theme="dark">
+      <head>
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen`}>
         <DataProviderProvider>
           <RouteTransition>
