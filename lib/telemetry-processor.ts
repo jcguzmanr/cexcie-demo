@@ -1,4 +1,4 @@
-import { TelemetryEvent } from './telemetry';
+import { Telemetry } from './telemetry';
 
 /**
  * Procesa los eventos de telemetría para extraer datos relevantes para el lead
