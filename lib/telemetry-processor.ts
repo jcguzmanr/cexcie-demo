@@ -59,6 +59,7 @@ export function processTelemetryForLead(sessionId: string): {
   // Obtener datos de carreras seleccionadas del localStorage o parámetros
   type CarreraStore = { id: string; nombre: string; facultadId?: string };
   type FacultadStore = { id: string; nombre: string };
+  let selectedCarreras: Array<{ id: string; nombre: string }> = [];
   let carrerasMap: Record<string, CarreraStore> = {};
   let facultadesMap: Record<string, FacultadStore> = {};
   
