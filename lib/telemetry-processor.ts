@@ -80,7 +80,9 @@ export function processTelemetryForLead(sessionId: string): {
 
   selectedCarreras.forEach((carrera, index) => {
     const carreraData = carrerasMap[carrera.id];
-    const facultadData = carreraData ? facultadesMap[carreraData.facultadId] : null;
+    const facultadData = carreraData?.facultadId
+      ? facultadesMap[carreraData.facultadId]
+      : undefined;
     
     // Determinar la fuente de selección basada en los eventos
     let selectionSource = 'unknown';
